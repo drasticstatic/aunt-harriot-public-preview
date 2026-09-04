@@ -1,107 +1,203 @@
-/* Aunt Harriot — shared design tokens, reset, nav/footer.
-   Two registers, one identity: "Harriet's Magic Hats" (warm, mentorship) on paper pages,
-   "March Harriet" (stranger, looking-glass) on the void/portal pages. See
-   AGENT_IDENTITY_REFERENCE.md for where these two pseudonyms come from. */
+/* Aunt Harriot — design system.
+   Identity: "March Harriet" — the stranger, looking-glass register (see
+   AGENT_IDENTITY_REFERENCE.md). Neutral scale is "gloaming" (dusk violet, not
+   pure black/white — deliberately not too dark or too bright either register).
+   Four named accent ramps carry the Wonderland references without ever
+   spelling them out as decoration:
+     queen       — Queen of Hearts crimson-magenta, the signature accent
+     cheshire    — the grin: jade-teal
+     hatter      — tea-party gold, used sparingly (iamoneself already owns amber as ITS signature)
+     caterpillar — hookah-smoke periwinkle-violet
+   Distinct from david-amaringo's azure/tangerine/verdant/orchid Amazonian set and
+   iamoneself's amber-halo signature — same "named full ramp" discipline, different family.
+   Toggle mechanic matches the fleet convention: a `.dark`/`.light` class on <html>,
+   not prefers-color-scheme alone, persisted to localStorage (see iamoneself's SettingsModal). */
 
-@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
-  /* void register — landing + workspace */
-  --void: #1b1030;
-  --void-deep: #120a22;
-  --void-raised: #271a46;
-  --ink-on-void: #f6eeff;
-  --ink-on-void-soft: #c9b8e8;
-  --line-on-void: rgba(246, 238, 255, 0.16);
+  /* gloaming — neutral scale, dusk violet */
+  --gloaming-950: #150b28;
+  --gloaming-900: #1e1138;
+  --gloaming-800: #2a1a4c;
+  --gloaming-700: #3a2568;
+  --gloaming-600: #503488;
+  --gloaming-500: #6d48a8;
 
-  /* paper register — about/FAQ */
-  --paper: #faf4e6;
-  --paper-raised: #fffbf1;
-  --ink-on-paper: #241534;
-  --ink-on-paper-soft: #5b4b74;
-  --line-on-paper: rgba(36, 21, 52, 0.14);
+  /* paper — light-mode neutral, muted parchment, never stark white */
+  --paper-100: #efe6d4;
+  --paper-50: #f6efe1;
+  --paper-ink: #241534;
+  --paper-ink-soft: #5b4b74;
+  --paper-line: rgba(36, 21, 52, 0.15);
 
-  /* shared accents — glow variants for void bg, deep variants for paper bg */
-  --magenta-glow: #ef4d95;
-  --magenta-deep: #b8215f;
-  --teal-glow: #35d6c0;
-  --teal-deep: #128577;
-  --gold-glow: #f4bb3d;
-  --gold-deep: #a6720a;
-  --violet-glow: #8b5cf6;
-  --violet-deep: #6428c9;
+  /* queen — signature accent, crimson-magenta */
+  --queen-900: #4d0a2e;
+  --queen-700: #93165a;
+  --queen-500: #d81f7f;
+  --queen-400: #ef4d95;
+  --queen-300: #f584bb;
+  --queen-100: #fbdcec;
 
-  --font-display: 'Bungee', system-ui, sans-serif;
+  /* cheshire — jade-teal */
+  --cheshire-900: #063f3a;
+  --cheshire-700: #0d6e63;
+  --cheshire-500: #17a695;
+  --cheshire-400: #35d6c0;
+  --cheshire-300: #7ee8da;
+  --cheshire-100: #d3f7f1;
+
+  /* hatter — tea-party gold, sparing use */
+  --hatter-900: #4a2c05;
+  --hatter-700: #83500a;
+  --hatter-500: #c9860f;
+  --hatter-400: #f4bb3d;
+  --hatter-300: #f9d685;
+  --hatter-100: #fdf0d3;
+
+  /* caterpillar — hookah-smoke periwinkle */
+  --caterpillar-900: #1c1f4a;
+  --caterpillar-700: #333a82;
+  --caterpillar-500: #5c63b8;
+  --caterpillar-400: #8b90d6;
+  --caterpillar-300: #b6baea;
+  --caterpillar-100: #e6e8f8;
+
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+}
+
+/* ---- registers: dark (default) vs light, class-driven ---- */
+html.dark {
+  --bg: var(--gloaming-950);
+  --bg-raised: var(--gloaming-900);
+  --bg-inset: var(--gloaming-800);
+  --ink: #f3ecff;
+  --ink-soft: #c3aee0;
+  --line: rgba(243, 236, 255, 0.14);
+  --signature: var(--queen-400);
+}
+
+html.light {
+  --bg: var(--paper-100);
+  --bg-raised: var(--paper-50);
+  --bg-inset: #e4d9c1;
+  --ink: var(--paper-ink);
+  --ink-soft: var(--paper-ink-soft);
+  --line: var(--paper-line);
+  --signature: var(--queen-500);
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-body);
   line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-body.register-void { background: var(--void); color: var(--ink-on-void); }
-body.register-paper { background: var(--paper); color: var(--ink-on-paper); }
-
-a { text-decoration: none; }
-a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid var(--gold-glow);
+a { text-decoration: none; color: inherit; }
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--hatter-400);
   outline-offset: 3px;
 }
-
 img { max-width: 100%; }
+code { font-family: var(--font-mono); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
-/* ---- shared nav ---- */
-.site-nav {
+/* ============================================================
+   The window — every page is framed as one open workspace.
+   ============================================================ */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 18px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.titlebar .dots { display: flex; gap: 6px; flex: 0 0 auto; }
+.titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.titlebar .dots .d1 { background: var(--queen-400); }
+.titlebar .dots .d2 { background: var(--hatter-400); }
+.titlebar .dots .d3 { background: var(--cheshire-400); }
+
+.titlebar .filename {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  flex: 0 0 auto;
+}
+.titlebar .filename b { color: var(--ink); font-weight: 700; }
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  flex: 1 1 auto;
+  overflow-x: auto;
+}
+
+.tabs a {
+  font-size: 0.85rem;
+  padding: 7px 16px;
+  color: var(--ink-soft);
+  border-radius: 8px 8px 0 0;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current] {
+  color: var(--ink);
+  background: var(--bg);
+  border-bottom-color: var(--signature);
+}
+
+.theme-toggle {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--signature); }
+
+main { flex: 1 0 auto; }
+
+.statusbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 24px 24px 0;
-  font-size: 0.95rem;
-}
-
-.site-nav .wordmark {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  letter-spacing: 0.01em;
-}
-
-.register-void .site-nav .wordmark { color: var(--ink-on-void); }
-.register-paper .site-nav .wordmark { color: var(--ink-on-paper); }
-
-.site-nav .links { display: flex; gap: 22px; }
-
-.register-void .site-nav a { color: var(--ink-on-void-soft); }
-.register-void .site-nav a:hover, .register-void .site-nav a[aria-current] { color: var(--teal-glow); }
-
-.register-paper .site-nav a { color: var(--ink-on-paper-soft); }
-.register-paper .site-nav a:hover, .register-paper .site-nav a[aria-current] { color: var(--magenta-deep); }
-
-/* ---- shared footer ---- */
-.site-footer {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 40px 24px 56px;
-  font-size: 0.85rem;
-  display: flex;
+  gap: 16px;
+  padding: 8px 18px;
+  background: var(--signature);
+  color: var(--gloaming-950);
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
   flex-wrap: wrap;
-  gap: 8px 20px;
-  justify-content: space-between;
 }
-
-.register-void .site-footer { color: var(--ink-on-void-soft); border-top: 1px solid var(--line-on-void); }
-.register-paper .site-footer { color: var(--ink-on-paper-soft); border-top: 1px solid var(--line-on-paper); }
-
-.site-footer a { text-decoration: underline; text-underline-offset: 2px; }
+html.light .statusbar { color: var(--paper-50); }
+.statusbar a { text-decoration: underline; text-underline-offset: 2px; }
+.statusbar .branch::before { content: "⑂ "; }

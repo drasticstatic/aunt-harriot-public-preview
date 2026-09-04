@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>Aunt Harriot</title>
 <meta name="description" content="A forkable Claude Code harness, authenticated by your own Anthropic API key — first built for Kenney's work on iamoneself and david-amaringo.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
@@ -10,7 +11,7 @@
 <style>
   .hero {
     position: relative;
-    min-height: 88vh;
+    min-height: 82vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,159 +21,149 @@
 
   .swirl {
     position: absolute;
-    inset: -20%;
+    inset: -25%;
     z-index: -1;
     background:
-      repeating-radial-gradient(circle at 50% 42%,
+      repeating-radial-gradient(circle at 50% 40%,
         transparent 0, transparent 34px,
-        rgba(139, 92, 246, 0.10) 35px, rgba(139, 92, 246, 0.10) 36px),
-      conic-gradient(from 0deg at 50% 42%,
-        var(--void) 0deg,
-        var(--violet-deep) 40deg,
-        var(--void) 90deg,
-        var(--magenta-deep) 150deg,
-        var(--void) 200deg,
-        var(--teal-deep) 260deg,
-        var(--void) 320deg,
-        var(--violet-deep) 360deg);
-    animation: spin 90s linear infinite;
+        rgba(139, 144, 214, 0.10) 35px, rgba(139, 144, 214, 0.10) 36px),
+      conic-gradient(from 0deg at 50% 40%,
+        var(--bg) 0deg,
+        var(--caterpillar-700) 40deg,
+        var(--bg) 90deg,
+        var(--queen-700) 150deg,
+        var(--bg) 200deg,
+        var(--cheshire-700) 260deg,
+        var(--bg) 320deg,
+        var(--caterpillar-700) 360deg);
+    animation: spin 110s linear infinite;
   }
+  html.light .swirl { opacity: 0.55; }
 
   .vignette {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: radial-gradient(circle at 50% 42%, transparent 0%, var(--void) 68%);
+    background: radial-gradient(circle at 50% 40%, transparent 0%, var(--bg) 70%);
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .hero-content {
-    text-align: center;
-    max-width: 640px;
-    padding: 0 24px;
+  .hero-content { text-align: center; max-width: 660px; padding: 0 24px; }
+
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
   }
 
   .hero h1 {
     font-family: var(--font-display);
-    font-size: clamp(2.6rem, 8vw, 4.8rem);
-    line-height: 1.05;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 9vw, 5.2rem);
+    line-height: 1;
     margin: 0 0 18px;
-    text-shadow: 0 0 40px rgba(239, 77, 149, 0.35);
+    letter-spacing: -0.02em;
   }
 
-  .hero .lede {
-    font-size: 1.15rem;
-    color: var(--ink-on-void-soft);
-    margin: 0 0 34px;
-  }
+  .hero .lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 34px; }
+  .hero .lede strong { color: var(--ink); font-weight: 600; }
 
-  .hero .lede strong { color: var(--ink-on-void); font-weight: 600; }
-
-  .cta-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
   .cta {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.98rem;
-    padding: 13px 24px;
-    border-radius: 999px;
-    border: 1px solid var(--line-on-void);
-    color: var(--ink-on-void);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    font-size: 0.96rem;
+    padding: 12px 22px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
   .cta:hover { transform: translateY(-2px); }
+  .cta.primary { background: var(--signature); border-color: var(--signature); color: var(--gloaming-950); }
+  html.light .cta.primary { color: var(--paper-50); }
+  .cta.primary:hover { background: var(--hatter-400); border-color: var(--hatter-400); color: var(--gloaming-950); }
+  .cta.secondary:hover { border-color: var(--cheshire-400); color: var(--cheshire-400); }
 
-  .cta.primary { background: var(--magenta-glow); border-color: var(--magenta-glow); color: #1b1030; }
-  .cta.primary:hover { background: var(--gold-glow); border-color: var(--gold-glow); }
-  .cta.secondary:hover { border-color: var(--teal-glow); color: var(--teal-glow); }
-
-  section.explainer {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-  }
-
-  section.explainer p {
-    font-size: 1.02rem;
-    color: var(--ink-on-void-soft);
-  }
-
-  section.explainer p strong { color: var(--ink-on-void); font-weight: 600; }
+  section.explainer { max-width: 700px; margin: 0 auto; padding: 36px 24px 60px; }
+  section.explainer p { font-size: 1.02rem; color: var(--ink-soft); }
+  section.explainer p strong { color: var(--ink); font-weight: 600; }
 
   .status-strip {
     max-width: 700px;
-    margin: 0 auto 80px;
-    padding: 22px 24px;
-    border: 1px solid var(--line-on-void);
-    border-radius: 12px;
+    margin: 0 auto 60px;
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
+    font-size: 0.9rem;
   }
-
-  .status-strip .label { font-size: 0.9rem; color: var(--ink-on-void-soft); }
-  .status-strip .label b { color: var(--teal-glow); }
-  .status-strip a { color: var(--ink-on-void); font-weight: 600; border-bottom: 1px solid var(--line-on-void); }
+  .status-strip .label { color: var(--ink-soft); }
+  .status-strip .label b { color: var(--cheshire-400); }
+  html.light .status-strip .label b { color: var(--cheshire-700); }
+  .status-strip a { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--line); }
 </style>
 </head>
-<body class="register-void">
+<body>
 
-  <nav class="site-nav">
-    <span class="wordmark">🎩 Aunt Harriot</span>
-    <span class="links">
+  <div class="titlebar">
+    <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
+    <span class="filename"><b>harriot</b>/index.workspace</span>
+    <nav class="tabs">
       <a href="index.html" aria-current="page">Home</a>
       <a href="workspace.html">Workspace preview</a>
       <a href="about.html">How it works &amp; FAQ</a>
-    </span>
-  </nav>
-
-  <section class="hero">
-    <div class="swirl" aria-hidden="true"></div>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="hero-content">
-      <h1>Aunt Harriot</h1>
-      <p class="lede">
-        A build-your-own Claude Code harness — <strong>you bring your own Anthropic API key</strong>,
-        Harriot brings the git know-how. First stop: helping Kenney edit
-        <strong>iamoneself</strong> and <strong>david-amaringo</strong> without ever touching a
-        terminal.
-      </p>
-      <div class="cta-row">
-        <a class="cta primary" href="workspace.html">Peek into the workspace</a>
-        <a class="cta secondary" href="about.html">Read the full story</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="explainer">
-    <p>
-      Think of Harriot as the domesticated cousin of Christopher's other Claude Code agents —
-      same underlying know-how, but built to run for <strong>someone who isn't Christopher</strong>.
-      You log in with a one-time link, add your own API key, and describe what you want changed
-      in plain English. Harriot makes the edit on a branch of her own; Christopher reviews it
-      before anything goes live.
-    </p>
-  </section>
-
-  <div class="status-strip">
-    <span class="label">Current phase: <b>building the front end you're looking at right now</b></span>
-    <a href="about.html#roadmap">See the full roadmap</a>
+    </nav>
+    <button class="theme-toggle" type="button"></button>
   </div>
 
-  <footer class="site-footer">
-    <span>Built by Christopher Wilson (<a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a>) with Claude Code.</span>
-    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a></span>
-  </footer>
+  <main>
+    <section class="hero">
+      <div class="swirl" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">a Claude Code harness, opened just for you</p>
+        <h1>Aunt Harriot</h1>
+        <p class="lede">
+          <strong>You bring your own Anthropic API key</strong> — Harriot brings the git
+          know-how. First stop: helping Kenney edit <strong>iamoneself</strong> and
+          <strong>david-amaringo</strong> without ever touching a terminal.
+        </p>
+        <div class="cta-row">
+          <a class="cta primary" href="workspace.html">Peek into the workspace</a>
+          <a class="cta secondary" href="about.html">Read the full story</a>
+        </div>
+      </div>
+    </section>
 
+    <section class="explainer">
+      <p>
+        Think of Harriot as the domesticated cousin of Christopher's other Claude Code agents —
+        same underlying know-how, built to run for <strong>someone who isn't Christopher</strong>.
+        You log in with a one-time link, add your own API key, and describe what you want changed
+        in plain English. Harriot makes the edit on a branch of her own; Christopher reviews it
+        before anything goes live.
+      </p>
+    </section>
+
+    <div class="status-strip">
+      <span class="label">Current phase: <b>building the front end you're looking at right now</b></span>
+      <a href="about.html#roadmap">See the full roadmap</a>
+    </div>
+  </main>
+
+  <div class="statusbar">
+    <span class="branch">main · built with Claude Code</span>
+    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+  </div>
+
+  <script src="assets/site.js"></script>
 </body>
 </html>

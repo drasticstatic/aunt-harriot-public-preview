@@ -3,129 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>How It Works &amp; FAQ — Aunt Harriot</title>
 <meta name="description" content="The full technical story: how Harriot authenticates, how changes get reviewed, where things stand right now, and answers to the questions you'll actually have.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  .page-head {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 44px 24px 8px;
-  }
-  .page-head h1 {
-    font-family: var(--font-display);
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    margin: 0 0 10px;
-    color: var(--ink-on-paper);
-  }
-  .page-head .dateline { color: var(--ink-on-paper-soft); font-size: 0.9rem; margin: 0 0 4px; }
-  .page-head .lede { color: var(--ink-on-paper-soft); font-size: 1.05rem; max-width: 62ch; }
+  .page-head { max-width: 720px; margin: 0 auto; padding: 40px 24px 8px; }
+  .page-head h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .page-head .dateline { color: var(--ink-soft); font-size: 0.88rem; margin: 0 0 4px; font-family: var(--font-mono); }
+  .page-head .lede { color: var(--ink-soft); font-size: 1.05rem; max-width: 62ch; }
 
-  .toc {
-    max-width: 720px;
-    margin: 0 auto 40px;
-    padding: 16px 24px;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    font-size: 0.9rem;
-  }
-  .toc a { color: var(--violet-deep); border-bottom: 1px solid transparent; }
-  .toc a:hover { border-color: var(--violet-deep); }
+  .toc { max-width: 720px; margin: 0 auto 36px; padding: 14px 24px; display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.88rem; font-family: var(--font-mono); }
+  .toc a { color: var(--signature); border-bottom: 1px solid transparent; }
+  .toc a:hover { border-color: currentColor; }
 
-  main { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  main > .content { max-width: 720px; margin: 0 auto; padding: 0 24px 60px; }
 
-  section { padding: 36px 0; border-top: 1px solid var(--line-on-paper); }
+  section { padding: 34px 0; border-top: 1px solid var(--line); }
   section:first-of-type { border-top: none; }
+  section h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; margin: 0 0 18px; }
+  section h3 { font-size: 1.02rem; font-weight: 600; margin: 22px 0 6px; }
 
-  section h2 {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    margin: 0 0 18px;
-    color: var(--ink-on-paper);
-  }
-
-  section h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: 24px 0 6px;
-    color: var(--ink-on-paper);
-  }
-
-  p, li { color: var(--ink-on-paper-soft); font-size: 0.98rem; }
+  p, li { color: var(--ink-soft); font-size: 0.98rem; }
   p { max-width: 64ch; }
-  strong { color: var(--ink-on-paper); font-weight: 600; }
-  code { background: var(--paper-raised); border: 1px solid var(--line-on-paper); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+  strong { color: var(--ink); font-weight: 600; }
+  code { background: var(--bg-inset); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; }
 
-  /* roadmap list */
-  .roadmap-item { display: flex; gap: 14px; margin-bottom: 20px; align-items: baseline; }
-  .roadmap-item .tab {
-    flex: 0 0 auto;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .tab.done { background: var(--teal-deep); color: #fff; }
-  .tab.building { background: var(--gold-deep); color: #fff; }
-  .tab.later { background: transparent; border: 1px solid var(--line-on-paper); color: var(--ink-on-paper-soft); }
+  .roadmap-item { display: flex; gap: 14px; margin-bottom: 18px; align-items: baseline; }
+  .roadmap-item .tab { flex: 0 0 auto; font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 4px; white-space: nowrap; font-family: var(--font-mono); }
+  .tab.done { background: var(--cheshire-700); color: #fff; }
+  .tab.building { background: var(--hatter-700); color: #fff; }
+  .tab.later { background: transparent; border: 1px solid var(--line); color: var(--ink-soft); }
   .roadmap-item .body h3 { margin: 0 0 4px; }
   .roadmap-item .body p { margin: 0; }
 
-  /* faq */
-  details {
-    border-bottom: 1px solid var(--line-on-paper);
-    padding: 14px 0;
-  }
-  details summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--ink-on-paper);
-    font-size: 1rem;
-  }
+  details { border-bottom: 1px solid var(--line); padding: 13px 0; }
+  details summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 1rem; }
   details p { margin: 10px 0 0; }
 
   .not-decided {
-    display: inline-block;
-    font-size: 0.78rem;
-    color: var(--magenta-deep);
-    border: 1px solid var(--magenta-deep);
-    border-radius: 999px;
-    padding: 1px 9px;
-    margin-left: 6px;
+    display: inline-block; font-size: 0.76rem; color: var(--queen-400);
+    border: 1px solid var(--queen-400); border-radius: 4px; padding: 1px 8px; margin-left: 6px;
+    font-family: var(--font-mono);
   }
+  html.light .not-decided { color: var(--queen-700); border-color: var(--queen-700); }
 </style>
 </head>
-<body class="register-paper">
+<body>
 
-  <nav class="site-nav">
-    <span class="wordmark">🎩 Aunt Harriot</span>
-    <span class="links">
+  <div class="titlebar">
+    <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
+    <span class="filename"><b>harriot</b>/about.md</span>
+    <nav class="tabs">
       <a href="index.html">Home</a>
       <a href="workspace.html">Workspace preview</a>
       <a href="about.html" aria-current="page">How it works &amp; FAQ</a>
-    </span>
-  </nav>
-
-  <div class="page-head">
-    <h1>How Harriot actually works</h1>
-    <p class="dateline">Last updated September 4, 2026</p>
-    <p class="lede">
-      The plain landing page keeps things light on purpose. This is the page for going as deep as
-      you want — the real mechanics, honestly marked where something's still an open question, plus
-      where the build actually stands and the questions we figured you'd ask.
-    </p>
-  </div>
-
-  <div class="toc">
-    <a href="#mechanics">The mechanics</a>
-    <a href="#roadmap">Roadmap</a>
-    <a href="#faq">FAQ</a>
+    </nav>
+    <button class="theme-toggle" type="button"></button>
   </div>
 
   <main>
+    <div class="page-head">
+      <h1>How Harriot actually works</h1>
+      <p class="dateline">Last updated September 4, 2026</p>
+      <p class="lede">
+        The plain landing page keeps things light on purpose. This is the page for going as deep as
+        you want — the real mechanics, honestly marked where something's still an open question, plus
+        where the build actually stands and the questions we figured you'd ask.
+      </p>
+    </div>
+
+    <div class="toc">
+      <a href="#mechanics">The mechanics</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+    <div class="content">
     <section id="mechanics">
       <h2>The mechanics</h2>
 
@@ -187,7 +142,7 @@
       </div>
 
       <div class="roadmap-item">
-        <span class="tab building">Building now</span>
+        <span class="tab done">Done</span>
         <div class="body">
           <h3>This site</h3>
           <p>The landing page, this deep-dive, and the workspace preview — a real, hosted place
@@ -262,12 +217,14 @@
         built; see the roadmap above for exactly what's left.</p>
       </details>
     </section>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <span>Built by Christopher Wilson (<a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a>) with Claude Code.</span>
-    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a></span>
-  </footer>
+  <div class="statusbar">
+    <span class="branch">main · docs</span>
+    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+  </div>
 
+  <script src="assets/site.js"></script>
 </body>
 </html>
