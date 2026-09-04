@@ -92,6 +92,12 @@ html.light {
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
+/* Safety net: a component overflowing its container (long unbroken text,
+   a wide diff line, etc.) should clip, not force the whole page to
+   scroll sideways. Fix the component too when this trips — this is a
+   backstop, not a substitute for the component wrapping properly. */
+body { overflow-x: hidden; }
+
 body {
   margin: 0;
   background: var(--bg);

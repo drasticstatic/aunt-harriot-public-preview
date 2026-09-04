@@ -16,7 +16,8 @@ document.querySelectorAll('.hamburger').forEach(function (btn) {
 document.querySelectorAll('.theme-toggle').forEach(function (btn) {
   function render() {
     var isDark = document.documentElement.classList.contains('dark');
-    btn.textContent = isDark ? '☾' : '☼';
+    // shows the icon for what clicking it switches TO, not the current state
+    btn.textContent = isDark ? '☼' : '☾';
     btn.setAttribute('aria-label', isDark ? 'Switch to the light workspace' : 'Switch to the dark workspace');
   }
   render();
