@@ -15,6 +15,11 @@
 > 🪪 Named after **Harriet Cooper** — Alfred Pennyworth's Batman-comics/1960s-TV domestic
 > counterpart, who moved into Wayne Manor to help raise Dick Grayson. Fitting sibling name for a
 > repo that's a domesticated, API-key-authenticated counterpart to `anthropas-argus-alfred`.
+>
+> See [`AGENT_IDENTITY_REFERENCE.md`](https://github.com/drasticstatic/anthropas-argus-alfred-public-preview/blob/main/sandbox/AGENT_IDENTITY_REFERENCE.md)
+> for how Aunt Harriot fits alongside Christopher's other agent personas (Kavanah, Alfred, Fortuna,
+> Mystarch) — including two additional pseudonyms drafted for her specifically: the wholesome
+> **Harriet's Magic Hats** register and the stranger **March Harriet** one.
 
 ---
 

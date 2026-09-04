@@ -1,0 +1,107 @@
+/* Aunt Harriot — shared design tokens, reset, nav/footer.
+   Two registers, one identity: "Harriet's Magic Hats" (warm, mentorship) on paper pages,
+   "March Harriet" (stranger, looking-glass) on the void/portal pages. See
+   AGENT_IDENTITY_REFERENCE.md for where these two pseudonyms come from. */
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  /* void register — landing + workspace */
+  --void: #1b1030;
+  --void-deep: #120a22;
+  --void-raised: #271a46;
+  --ink-on-void: #f6eeff;
+  --ink-on-void-soft: #c9b8e8;
+  --line-on-void: rgba(246, 238, 255, 0.16);
+
+  /* paper register — about/FAQ */
+  --paper: #faf4e6;
+  --paper-raised: #fffbf1;
+  --ink-on-paper: #241534;
+  --ink-on-paper-soft: #5b4b74;
+  --line-on-paper: rgba(36, 21, 52, 0.14);
+
+  /* shared accents — glow variants for void bg, deep variants for paper bg */
+  --magenta-glow: #ef4d95;
+  --magenta-deep: #b8215f;
+  --teal-glow: #35d6c0;
+  --teal-deep: #128577;
+  --gold-glow: #f4bb3d;
+  --gold-deep: #a6720a;
+  --violet-glow: #8b5cf6;
+  --violet-deep: #6428c9;
+
+  --font-display: 'Bungee', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+body.register-void { background: var(--void); color: var(--ink-on-void); }
+body.register-paper { background: var(--paper); color: var(--ink-on-paper); }
+
+a { text-decoration: none; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--gold-glow);
+  outline-offset: 3px;
+}
+
+img { max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---- shared nav ---- */
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  font-size: 0.95rem;
+}
+
+.site-nav .wordmark {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.register-void .site-nav .wordmark { color: var(--ink-on-void); }
+.register-paper .site-nav .wordmark { color: var(--ink-on-paper); }
+
+.site-nav .links { display: flex; gap: 22px; }
+
+.register-void .site-nav a { color: var(--ink-on-void-soft); }
+.register-void .site-nav a:hover, .register-void .site-nav a[aria-current] { color: var(--teal-glow); }
+
+.register-paper .site-nav a { color: var(--ink-on-paper-soft); }
+.register-paper .site-nav a:hover, .register-paper .site-nav a[aria-current] { color: var(--magenta-deep); }
+
+/* ---- shared footer ---- */
+.site-footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 56px;
+  font-size: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: space-between;
+}
+
+.register-void .site-footer { color: var(--ink-on-void-soft); border-top: 1px solid var(--line-on-void); }
+.register-paper .site-footer { color: var(--ink-on-paper-soft); border-top: 1px solid var(--line-on-paper); }
+
+.site-footer a { text-decoration: underline; text-underline-offset: 2px; }

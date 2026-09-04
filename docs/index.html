@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aunt Harriot</title>
+<meta name="description" content="A forkable Claude Code harness, authenticated by your own Anthropic API key — first built for Kenney's work on iamoneself and david-amaringo.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .swirl {
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    background:
+      repeating-radial-gradient(circle at 50% 42%,
+        transparent 0, transparent 34px,
+        rgba(139, 92, 246, 0.10) 35px, rgba(139, 92, 246, 0.10) 36px),
+      conic-gradient(from 0deg at 50% 42%,
+        var(--void) 0deg,
+        var(--violet-deep) 40deg,
+        var(--void) 90deg,
+        var(--magenta-deep) 150deg,
+        var(--void) 200deg,
+        var(--teal-deep) 260deg,
+        var(--void) 320deg,
+        var(--violet-deep) 360deg);
+    animation: spin 90s linear infinite;
+  }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle at 50% 42%, transparent 0%, var(--void) 68%);
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 640px;
+    padding: 0 24px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 8vw, 4.8rem);
+    line-height: 1.05;
+    margin: 0 0 18px;
+    text-shadow: 0 0 40px rgba(239, 77, 149, 0.35);
+  }
+
+  .hero .lede {
+    font-size: 1.15rem;
+    color: var(--ink-on-void-soft);
+    margin: 0 0 34px;
+  }
+
+  .hero .lede strong { color: var(--ink-on-void); font-weight: 600; }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.98rem;
+    padding: 13px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--line-on-void);
+    color: var(--ink-on-void);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .cta:hover { transform: translateY(-2px); }
+
+  .cta.primary { background: var(--magenta-glow); border-color: var(--magenta-glow); color: #1b1030; }
+  .cta.primary:hover { background: var(--gold-glow); border-color: var(--gold-glow); }
+  .cta.secondary:hover { border-color: var(--teal-glow); color: var(--teal-glow); }
+
+  section.explainer {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  section.explainer p {
+    font-size: 1.02rem;
+    color: var(--ink-on-void-soft);
+  }
+
+  section.explainer p strong { color: var(--ink-on-void); font-weight: 600; }
+
+  .status-strip {
+    max-width: 700px;
+    margin: 0 auto 80px;
+    padding: 22px 24px;
+    border: 1px solid var(--line-on-void);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .status-strip .label { font-size: 0.9rem; color: var(--ink-on-void-soft); }
+  .status-strip .label b { color: var(--teal-glow); }
+  .status-strip a { color: var(--ink-on-void); font-weight: 600; border-bottom: 1px solid var(--line-on-void); }
+</style>
+</head>
+<body class="register-void">
+
+  <nav class="site-nav">
+    <span class="wordmark">🎩 Aunt Harriot</span>
+    <span class="links">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="workspace.html">Workspace preview</a>
+      <a href="about.html">How it works &amp; FAQ</a>
+    </span>
+  </nav>
+
+  <section class="hero">
+    <div class="swirl" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1>Aunt Harriot</h1>
+      <p class="lede">
+        A build-your-own Claude Code harness — <strong>you bring your own Anthropic API key</strong>,
+        Harriot brings the git know-how. First stop: helping Kenney edit
+        <strong>iamoneself</strong> and <strong>david-amaringo</strong> without ever touching a
+        terminal.
+      </p>
+      <div class="cta-row">
+        <a class="cta primary" href="workspace.html">Peek into the workspace</a>
+        <a class="cta secondary" href="about.html">Read the full story</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="explainer">
+    <p>
+      Think of Harriot as the domesticated cousin of Christopher's other Claude Code agents —
+      same underlying know-how, but built to run for <strong>someone who isn't Christopher</strong>.
+      You log in with a one-time link, add your own API key, and describe what you want changed
+      in plain English. Harriot makes the edit on a branch of her own; Christopher reviews it
+      before anything goes live.
+    </p>
+  </section>
+
+  <div class="status-strip">
+    <span class="label">Current phase: <b>building the front end you're looking at right now</b></span>
+    <a href="about.html#roadmap">See the full roadmap</a>
+  </div>
+
+  <footer class="site-footer">
+    <span>Built by Christopher Wilson (<a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a>) with Claude Code.</span>
+    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a></span>
+  </footer>
+
+</body>
+</html>

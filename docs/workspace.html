@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workspace Preview — Aunt Harriot</title>
+<meta name="description" content="A preview of what it'll feel like to hand Harriot a task in plain English and review the change she proposes.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .preview-banner {
+    max-width: 1080px;
+    margin: 18px auto 0;
+    padding: 12px 20px;
+    border: 1px dashed var(--gold-glow);
+    border-radius: 10px;
+    color: var(--ink-on-void);
+    font-size: 0.9rem;
+  }
+  .preview-banner b { color: var(--gold-glow); }
+
+  .workspace {
+    max-width: 1080px;
+    margin: 20px auto 80px;
+    border: 1px solid var(--line-on-void);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--void-deep);
+  }
+
+  .workspace-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line-on-void);
+    background: var(--void-raised);
+  }
+
+  .workspace-topbar .brand {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+  }
+
+  .badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(244, 187, 61, 0.16);
+    color: var(--gold-glow);
+    border: 1px solid var(--gold-glow);
+  }
+
+  .workspace-body {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 480px;
+  }
+
+  @media (max-width: 680px) {
+    .workspace-body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  .sidebar {
+    border-right: 1px solid var(--line-on-void);
+    padding: 18px 16px;
+  }
+
+  .sidebar .heading {
+    font-size: 0.78rem;
+    color: var(--ink-on-void-soft);
+    margin: 0 0 10px;
+  }
+
+  .sidebar .session {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--ink-on-void-soft);
+    margin-bottom: 4px;
+  }
+  .sidebar .session.active {
+    background: var(--void-raised);
+    color: var(--ink-on-void);
+    border-left: 2px solid var(--teal-glow);
+  }
+
+  .sidebar .new-request {
+    margin-top: 16px;
+    display: block;
+    text-align: center;
+    padding: 8px;
+    border: 1px dashed var(--line-on-void);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--ink-on-void-soft);
+  }
+
+  .chat {
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .msg { max-width: 560px; }
+  .msg .who {
+    font-size: 0.78rem;
+    color: var(--ink-on-void-soft);
+    margin: 0 0 4px;
+  }
+  .msg.kenney { align-self: flex-start; }
+  .msg .bubble {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
+  .msg.kenney .bubble { background: var(--void-raised); }
+  .msg.harriot .bubble { background: rgba(139, 92, 246, 0.12); border: 1px solid var(--line-on-void); }
+
+  .diff-card {
+    margin-top: 8px;
+    border: 1px solid var(--line-on-void);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.85rem;
+  }
+  .diff-card .file {
+    padding: 8px 14px;
+    background: var(--void-raised);
+    color: var(--ink-on-void-soft);
+  }
+  .diff-card .line { padding: 4px 14px; font-family: 'Space Grotesk', monospace; }
+  .diff-card .line.remove { background: rgba(239, 77, 149, 0.12); color: #f0a9c6; }
+  .diff-card .line.add { background: rgba(53, 214, 192, 0.12); color: #a6ece1; }
+
+  .action-row { display: flex; gap: 10px; margin-top: 10px; }
+  .action-row button {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line-on-void);
+    background: transparent;
+    color: var(--ink-on-void);
+    cursor: not-allowed;
+  }
+  .action-row button.primary { background: var(--teal-glow); border-color: var(--teal-glow); color: #10231f; }
+
+  .msg.harriot .note {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: var(--ink-on-void-soft);
+  }
+</style>
+</head>
+<body class="register-void">
+
+  <nav class="site-nav">
+    <span class="wordmark">🎩 Aunt Harriot</span>
+    <span class="links">
+      <a href="index.html">Home</a>
+      <a href="workspace.html" aria-current="page">Workspace preview</a>
+      <a href="about.html">How it works &amp; FAQ</a>
+    </span>
+  </nav>
+
+  <p class="preview-banner">
+    <b>Preview, not live yet.</b> This is a mock of a real conversation, showing the shape the
+    actual workspace will take once the backend is wired up. Nothing on this page is clickable.
+  </p>
+
+  <div class="workspace">
+    <div class="workspace-topbar">
+      <span class="brand">🎩 Harriot's Workbench</span>
+      <span class="badge">PREVIEW</span>
+    </div>
+    <div class="workspace-body">
+      <aside class="sidebar">
+        <p class="heading">Your repos</p>
+        <span class="session active">iamoneself</span>
+        <span class="session">david-amaringo</span>
+        <span class="new-request">+ New request</span>
+      </aside>
+      <div class="chat">
+        <div class="msg kenney">
+          <p class="who">Kenney</p>
+          <p class="bubble">Can you update the retreat dates on the homepage to March 15–17?</p>
+        </div>
+        <div class="msg harriot">
+          <p class="who">Harriot</p>
+          <div class="bubble">
+            Found it — here's the change I'd make to <code>src/pages/Home.tsx</code>:
+            <div class="diff-card">
+              <div class="file">src/pages/Home.tsx</div>
+              <div class="line remove">− &lt;p&gt;Join us February 8–10&lt;/p&gt;</div>
+              <div class="line add">+ &lt;p&gt;Join us March 15–17&lt;/p&gt;</div>
+            </div>
+            <div class="action-row">
+              <button class="primary">Looks good — open the PR</button>
+              <button>Change something first</button>
+            </div>
+            <p class="note">Christopher reviews and merges every change before it goes live — you'll never push straight to the site.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>Built by Christopher Wilson (<a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a>) with Claude Code.</span>
+    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a></span>
+  </footer>
+
+</body>
+</html>
