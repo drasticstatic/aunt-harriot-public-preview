@@ -70,7 +70,7 @@
     </div>
     <nav class="tabs">
       <a href="index.html">Home</a>
-      <a href="workspace.html">Workspace preview</a>
+      <a href="workspace.html">Workspace</a>
       <a href="about.html">FAQ</a>
     </nav>
     <div class="tb-right">
@@ -80,7 +80,7 @@
   </div>
   <nav class="mobile-menu" id="mobile-menu">
     <a href="index.html">Home</a>
-    <a href="workspace.html">Workspace preview</a>
+    <a href="workspace.html">Workspace</a>
     <a href="about.html">FAQ</a>
     <button class="theme-toggle" type="button"></button>
   </nav>
@@ -92,7 +92,7 @@
         <a href="doc.html?doc=how-it-works">How it works</a>
         <a href="doc.html?doc=sustainability">Sustainability</a>
       </div>
-      <p class="doc-source">Rendered live from <code id="doc-file-label">…</code> in the public repo — <a id="doc-raw-link" href="#" target="_blank" rel="noopener">view raw on GitHub</a>.</p>
+      <p class="doc-source">Rendered live from <code id="doc-file-label">…</code> in the public repo — <a id="doc-raw-link" href="#" target="_blank" rel="noopener">view on GitHub</a>.</p>
       <div class="doc-overflow-x">
         <div class="markdown-body" id="doc-content">
           <p class="doc-state">Loading…</p>
@@ -102,8 +102,20 @@
   </main>
 
   <div class="statusbar">
-    <span class="branch">main · docs</span>
-    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+    <span class="status-left">
+      <span class="branch">
+        <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        main
+      </span>
+      <span class="sep">·</span> <a href="index.html">home</a>
+      <span class="sep">·</span> <a href="workspace.html">terminal</a>
+      <span class="sep">·</span> <a href="doc.html">docs</a>
+    </span>
+    <span class="status-right">
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <span class="sep">·</span>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+    </span>
   </div>
 
   <script src="assets/site.js"></script>
@@ -113,7 +125,9 @@
       'how-it-works':  { file: 'HOW-IT-WORKS.md',   label: 'How it works' },
       'sustainability':{ file: 'SUSTAINABILITY.md',  label: 'Sustainability' }
     };
-    var RAW_BASE = 'https://raw.githubusercontent.com/drasticstatic/aunt-harriot-public-preview/main/';
+    var REPO = 'drasticstatic/aunt-harriot-public-preview';
+    var RAW_BASE = 'https://raw.githubusercontent.com/' + REPO + '/main/';
+    var BLOB_BASE = 'https://github.com/' + REPO + '/blob/main/';
 
     var params = new URLSearchParams(window.location.search);
     var key = params.get('doc');
@@ -127,7 +141,8 @@
     document.title = doc.label + ' — Aunt Harriot';
     document.getElementById('doc-file-label').textContent = doc.file;
     var rawUrl = RAW_BASE + doc.file;
-    document.getElementById('doc-raw-link').href = rawUrl;
+    var blobUrl = BLOB_BASE + doc.file;
+    document.getElementById('doc-raw-link').href = blobUrl;
 
     fetch(rawUrl)
       .then(function (res) { if (!res.ok) throw new Error('fetch failed'); return res.text(); })
@@ -136,7 +151,7 @@
       })
       .catch(function () {
         document.getElementById('doc-content').innerHTML =
-          '<p class="doc-state">Couldn\'t load this page live — <a href="' + rawUrl + '" target="_blank" rel="noopener">read ' + doc.file + ' directly on GitHub</a> instead.</p>';
+          '<p class="doc-state">Couldn\'t load this page live — <a href="' + blobUrl + '" target="_blank" rel="noopener">read ' + doc.file + ' directly on GitHub</a> instead.</p>';
       });
   </script>
 </body>

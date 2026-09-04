@@ -21,8 +21,13 @@
   .doc-cards a {
     display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px;
     color: var(--ink); background: var(--bg-raised);
+    transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease, border-color 0.25s ease;
   }
-  .doc-cards a:hover { border-color: var(--signature); }
+  .doc-cards a:hover, .doc-cards a:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--signature);
+    box-shadow: 0 10px 26px -12px var(--signature), 0 0 0 1px var(--signature);
+  }
   .doc-cards .t { font-weight: 700; font-size: 0.95rem; margin: 0 0 4px; }
   .doc-cards .d { color: var(--ink-soft); font-size: 0.82rem; }
 
@@ -46,7 +51,7 @@
     </div>
     <nav class="tabs">
       <a href="index.html">Home</a>
-      <a href="workspace.html">Workspace preview</a>
+      <a href="workspace.html">Workspace</a>
       <a href="about.html" aria-current="page">FAQ</a>
     </nav>
     <div class="tb-right">
@@ -56,7 +61,7 @@
   </div>
   <nav class="mobile-menu" id="mobile-menu">
     <a href="index.html">Home</a>
-    <a href="workspace.html">Workspace preview</a>
+    <a href="workspace.html">Workspace</a>
     <a href="about.html" aria-current="page">FAQ</a>
     <button class="theme-toggle" type="button"></button>
   </nav>
@@ -130,8 +135,20 @@
   </main>
 
   <div class="statusbar">
-    <span class="branch">main · docs</span>
-    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+    <span class="status-left">
+      <span class="branch">
+        <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        main
+      </span>
+      <span class="sep">·</span> <a href="index.html">home</a>
+      <span class="sep">·</span> <a href="workspace.html">terminal</a>
+      <span class="sep">·</span> <a href="doc.html">docs</a>
+    </span>
+    <span class="status-right">
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <span class="sep">·</span>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+    </span>
   </div>
 
   <script src="assets/site.js"></script>

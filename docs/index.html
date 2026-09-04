@@ -120,7 +120,7 @@
     </div>
     <nav class="tabs">
       <a href="index.html" aria-current="page">Home</a>
-      <a href="workspace.html">Workspace preview</a>
+      <a href="workspace.html">Workspace</a>
       <a href="about.html">FAQ</a>
     </nav>
     <div class="tb-right">
@@ -130,7 +130,7 @@
   </div>
   <nav class="mobile-menu" id="mobile-menu">
     <a href="index.html" aria-current="page">Home</a>
-    <a href="workspace.html">Workspace preview</a>
+    <a href="workspace.html">Workspace</a>
     <a href="about.html">FAQ</a>
     <button class="theme-toggle" type="button"></button>
   </nav>
@@ -171,8 +171,20 @@
   </main>
 
   <div class="statusbar">
-    <span class="branch">main · built with Claude Code</span>
-    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+    <span class="status-left">
+      <span class="branch">
+        <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        main
+      </span>
+      <span class="sep">·</span> <a href="index.html">home</a>
+      <span class="sep">·</span> <a href="workspace.html">terminal</a>
+      <span class="sep">·</span> <a href="doc.html">docs</a>
+    </span>
+    <span class="status-right">
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <span class="sep">·</span>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+    </span>
   </div>
 
   <script src="assets/site.js"></script>
