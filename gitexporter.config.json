@@ -1,0 +1,22 @@
+{
+  "_note": "Local gitexporter config — for on-demand preview before sync-public.yml has its PUBLIC_REPO_TOKEN secret set. Strip list mirrors .github/workflows/sync-public.yml (source of truth: ROADMAP.md §2). Run: npx gitexporter gitexporter.config.json",
+  "_docs": "https://github.com/open-condo-software/gitexporter",
+  "forceReCreateRepo": true,
+  "sourceRepoPath": ".",
+  "targetRepoPath": "../aunt-harriot-public-preview",
+  "ignoredPaths": [
+    "CLAUDE.md",
+    "AGENTS.md",
+    "AGENTS.override.md",
+    ".augmentignore",
+    ".gitignore",
+    ".graphifyignore",
+    ".github/",
+    "AGENT-SYNC/",
+    "specs/",
+    "graphify-out/",
+    "server/config/allowlist.json",
+    "gitexporter.config.json",
+    ".claude/"
+  ]
+}

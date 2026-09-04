@@ -9,6 +9,12 @@ scoped repos without needing a GitHub account or ever touching git directly.
 This is a **planning document, not a build log** — nothing described here exists as working code
 yet. See `README.md` for the one-paragraph pitch.
 
+**Session start pointer (added 2026-09-04):** before building, read
+`augment-intent-properties/AGENT-SYNC/created-by-mystarch/HANDOFF_20260904_HARRIOT_MAGIC_ROADMAP.md`
+— it captures scope decisions (native suggestion feature, no Intent-bridge dependency, BYOK
+deferred, PR-reviewer-chief role built here on plain `git`/`gh`) and reference UI patterns found in
+`pir-devine-news`/`iamoneself` worth reusing, so they don't get re-derived or re-opened.
+
 ---
 
 ## 1. Branch & remote structure
