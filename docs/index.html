@@ -114,15 +114,26 @@
 <body>
 
   <div class="titlebar">
-    <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
-    <span class="filename"><b>harriot</b>/index.workspace</span>
+    <div class="tb-left">
+      <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
+      <span class="filename"><b>harriot</b>/index.html</span>
+    </div>
     <nav class="tabs">
       <a href="index.html" aria-current="page">Home</a>
       <a href="workspace.html">Workspace preview</a>
-      <a href="about.html">How it works &amp; FAQ</a>
+      <a href="about.html">FAQ</a>
     </nav>
-    <button class="theme-toggle" type="button"></button>
+    <div class="tb-right">
+      <button class="theme-toggle" type="button"></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
   </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html" aria-current="page">Home</a>
+    <a href="workspace.html">Workspace preview</a>
+    <a href="about.html">FAQ</a>
+    <button class="theme-toggle" type="button"></button>
+  </nav>
 
   <main>
     <section class="hero">
@@ -155,7 +166,7 @@
 
     <div class="status-strip">
       <span class="label">Current phase: <b>building the front end you're looking at right now</b></span>
-      <a href="about.html#roadmap">See the full roadmap</a>
+      <a href="doc.html?doc=roadmap">See the full roadmap</a>
     </div>
   </main>
 

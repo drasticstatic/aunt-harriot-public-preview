@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
+<title>Docs — Aunt Harriot</title>
+<meta name="description" content="Roadmap, sustainability, and how-it-works — rendered straight from the public repo's own markdown.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.2/marked.min.js"></script>
+<style>
+  .doc-wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .doc-switch { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 28px; font-family: var(--font-mono); font-size: 0.82rem; }
+  .doc-switch a {
+    padding: 6px 13px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink-soft);
+  }
+  .doc-switch a[aria-current] { color: var(--ink); background: var(--bg-inset); border-color: var(--signature); }
+  .doc-switch a:hover { color: var(--ink); }
+
+  .doc-source {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin: 0 0 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .doc-source a { color: var(--signature); }
+
+  .doc-state { color: var(--ink-soft); font-size: 0.95rem; }
+
+  /* rendered markdown */
+  .markdown-body h1 { font-family: var(--font-display); font-weight: 800; font-size: 2rem; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .markdown-body h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 34px 0 14px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .markdown-body h2:first-of-type { border-top: none; padding-top: 0; }
+  .markdown-body h3 { font-size: 1.02rem; font-weight: 700; margin: 22px 0 8px; }
+  .markdown-body h4 { font-size: 0.95rem; font-weight: 700; margin: 18px 0 6px; color: var(--ink-soft); }
+  .markdown-body p, .markdown-body li { color: var(--ink-soft); font-size: 0.96rem; line-height: 1.65; }
+  .markdown-body p { margin: 0 0 14px; }
+  .markdown-body strong { color: var(--ink); font-weight: 600; }
+  .markdown-body a { color: var(--signature); border-bottom: 1px solid var(--line); }
+  .markdown-body a:hover { border-color: var(--signature); }
+  .markdown-body code { background: var(--bg-inset); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; }
+  .markdown-body pre { background: var(--bg-inset); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; overflow-x: auto; }
+  .markdown-body pre code { background: none; border: none; padding: 0; }
+  .markdown-body blockquote {
+    margin: 16px 0; padding: 4px 18px; border-left: 3px solid var(--signature);
+    color: var(--ink-soft); background: var(--bg-inset); border-radius: 0 8px 8px 0;
+  }
+  .markdown-body blockquote p:last-child { margin-bottom: 0; }
+  .markdown-body hr { border: none; border-top: 1px solid var(--line); margin: 28px 0; }
+  .markdown-body table { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-size: 0.9rem; }
+  .markdown-body th, .markdown-body td { text-align: left; padding: 8px 12px; border: 1px solid var(--line); }
+  .markdown-body th { background: var(--bg-inset); font-family: var(--font-mono); font-size: 0.8rem; }
+  .markdown-body ul, .markdown-body ol { padding-left: 22px; margin: 0 0 14px; }
+  .markdown-body li { margin-bottom: 4px; }
+  .markdown-body img { border-radius: 8px; }
+
+  .doc-overflow-x { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+  <div class="titlebar">
+    <div class="tb-left">
+      <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
+      <span class="filename" id="doc-filename"><b>harriot</b>/doc.html</span>
+    </div>
+    <nav class="tabs">
+      <a href="index.html">Home</a>
+      <a href="workspace.html">Workspace preview</a>
+      <a href="about.html">FAQ</a>
+    </nav>
+    <div class="tb-right">
+      <button class="theme-toggle" type="button"></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="workspace.html">Workspace preview</a>
+    <a href="about.html">FAQ</a>
+    <button class="theme-toggle" type="button"></button>
+  </nav>
+
+  <main>
+    <div class="doc-wrap">
+      <div class="doc-switch" id="doc-switch">
+        <a href="doc.html?doc=roadmap">Roadmap</a>
+        <a href="doc.html?doc=how-it-works">How it works</a>
+        <a href="doc.html?doc=sustainability">Sustainability</a>
+      </div>
+      <p class="doc-source">Rendered live from <code id="doc-file-label">…</code> in the public repo — <a id="doc-raw-link" href="#" target="_blank" rel="noopener">view raw on GitHub</a>.</p>
+      <div class="doc-overflow-x">
+        <div class="markdown-body" id="doc-content">
+          <p class="doc-state">Loading…</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="statusbar">
+    <span class="branch">main · docs</span>
+    <span><a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">Source on GitHub</a> · <a href="https://github.com/drasticstatic" target="_blank" rel="noopener">drasticstatic</a></span>
+  </div>
+
+  <script src="assets/site.js"></script>
+  <script>
+    var DOCS = {
+      'roadmap':       { file: 'ROADMAP.md',        label: 'Roadmap' },
+      'how-it-works':  { file: 'HOW-IT-WORKS.md',   label: 'How it works' },
+      'sustainability':{ file: 'SUSTAINABILITY.md',  label: 'Sustainability' }
+    };
+    var RAW_BASE = 'https://raw.githubusercontent.com/drasticstatic/aunt-harriot-public-preview/main/';
+
+    var params = new URLSearchParams(window.location.search);
+    var key = params.get('doc');
+    if (!DOCS[key]) key = 'roadmap';
+    var doc = DOCS[key];
+
+    document.querySelectorAll('#doc-switch a').forEach(function (a) {
+      if (a.getAttribute('href') === 'doc.html?doc=' + key) a.setAttribute('aria-current', 'page');
+    });
+    document.getElementById('doc-filename').innerHTML = '<b>harriot</b>/' + doc.file;
+    document.title = doc.label + ' — Aunt Harriot';
+    document.getElementById('doc-file-label').textContent = doc.file;
+    var rawUrl = RAW_BASE + doc.file;
+    document.getElementById('doc-raw-link').href = rawUrl;
+
+    fetch(rawUrl)
+      .then(function (res) { if (!res.ok) throw new Error('fetch failed'); return res.text(); })
+      .then(function (md) {
+        document.getElementById('doc-content').innerHTML = marked.parse(md);
+      })
+      .catch(function () {
+        document.getElementById('doc-content').innerHTML =
+          '<p class="doc-state">Couldn\'t load this page live — <a href="' + rawUrl + '" target="_blank" rel="noopener">read ' + doc.file + ' directly on GitHub</a> instead.</p>';
+      });
+  </script>
+</body>
+</html>

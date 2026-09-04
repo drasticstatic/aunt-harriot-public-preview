@@ -121,9 +121,10 @@ code { font-family: var(--font-mono); }
    ============================================================ */
 
 .titlebar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   padding: 10px 18px;
   background: var(--bg-raised);
   border-bottom: 1px solid var(--line);
@@ -131,6 +132,9 @@ code { font-family: var(--font-mono); }
   top: 0;
   z-index: 20;
 }
+
+.tb-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tb-right { display: flex; align-items: center; gap: 8px; justify-self: end; }
 
 .titlebar .dots { display: flex; gap: 6px; flex: 0 0 auto; }
 .titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
@@ -143,14 +147,16 @@ code { font-family: var(--font-mono); }
   font-size: 0.82rem;
   color: var(--ink-soft);
   flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .titlebar .filename b { color: var(--ink); font-weight: 700; }
 
 .tabs {
   display: flex;
   gap: 2px;
-  flex: 1 1 auto;
-  overflow-x: auto;
+  justify-self: center;
 }
 
 .tabs a {
@@ -168,7 +174,7 @@ code { font-family: var(--font-mono); }
   border-bottom-color: var(--signature);
 }
 
-.theme-toggle {
+.theme-toggle, .hamburger {
   flex: 0 0 auto;
   width: 34px;
   height: 34px;
@@ -182,22 +188,57 @@ code { font-family: var(--font-mono); }
   justify-content: center;
   font-size: 1rem;
 }
-.theme-toggle:hover { color: var(--ink); border-color: var(--signature); }
+.theme-toggle:hover, .hamburger:hover { color: var(--ink); border-color: var(--signature); }
+.hamburger { display: none; }
 
-main { flex: 1 0 auto; }
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 18px 14px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 55px;
+  z-index: 19;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  padding: 10px 10px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  border-radius: 6px;
+}
+.mobile-menu a[aria-current] { color: var(--ink); background: var(--bg); }
+.mobile-menu .theme-toggle { align-self: flex-start; margin-top: 8px; }
+
+@media (max-width: 720px) {
+  .tabs { display: none; }
+  .tb-right > .theme-toggle { display: none; }
+  .hamburger { display: flex; }
+}
+
+main { flex: 1 0 auto; padding-bottom: 44px; }
 
 .statusbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 8px 18px;
-  background: var(--signature);
-  color: var(--gloaming-950);
-  font-size: 0.78rem;
+  padding: 7px 18px;
+  background: var(--bg-raised);
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.76rem;
   font-family: var(--font-mono);
   flex-wrap: wrap;
+  z-index: 15;
 }
-html.light .statusbar { color: var(--paper-50); }
-.statusbar a { text-decoration: underline; text-underline-offset: 2px; }
+.statusbar a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+.statusbar a:hover { color: var(--ink); }
+.statusbar .branch { color: var(--signature); }
 .statusbar .branch::before { content: "⑂ "; }

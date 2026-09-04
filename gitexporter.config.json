@@ -15,6 +15,7 @@
     "AGENT-SYNC/",
     "specs/",
     "graphify-out/",
+    "PENDING-TASKS.md",
     "server/config/allowlist.json",
     "gitexporter.config.json",
     ".claude/"

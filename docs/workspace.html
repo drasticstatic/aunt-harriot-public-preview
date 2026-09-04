@@ -5,68 +5,114 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>Workspace Preview — Aunt Harriot</title>
-<meta name="description" content="A preview of what it'll feel like to hand Harriot a task in plain English and review the change she proposes.">
+<meta name="description" content="Play with what it'll actually feel like to hand Harriot a task in plain English and review the change she proposes. Real UI, simulated intelligence — see how-it-works for the honest breakdown.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  .preview-banner {
-    max-width: 1080px;
-    margin: 18px auto 0;
-    padding: 12px 20px;
-    border: 1px dashed var(--hatter-400);
-    border-radius: 8px;
-    font-size: 0.9rem;
+  .intro-banner {
+    max-width: 1080px; margin: 18px auto 0; padding: 12px 20px;
+    border: 1px dashed var(--hatter-400); border-radius: 8px; font-size: 0.88rem;
   }
-  .preview-banner b { color: var(--hatter-400); }
-  html.light .preview-banner b { color: var(--hatter-700); }
+  .intro-banner b { color: var(--hatter-400); }
+  html.light .intro-banner b { color: var(--hatter-700); }
+  .intro-banner a { color: var(--signature); }
 
   .workspace {
-    max-width: 1080px;
-    margin: 20px auto 60px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--bg-raised);
+    max-width: 1080px; margin: 18px auto 0; border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden; background: var(--bg-raised);
   }
 
   .workspace-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--line);
-    background: var(--bg-inset);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--bg-inset);
   }
   .workspace-topbar .brand { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; }
-
-  .badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 4px;
-    background: var(--hatter-900);
-    color: var(--hatter-300);
-    border: 1px solid var(--hatter-500);
-    font-family: var(--font-mono);
-    letter-spacing: 0.03em;
+  .live-badge {
+    font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 4px;
+    background: var(--cheshire-900); color: var(--cheshire-300); border: 1px solid var(--cheshire-500);
+    font-family: var(--font-mono); letter-spacing: 0.03em;
   }
+  html.light .live-badge { background: var(--cheshire-100); color: var(--cheshire-900); }
+
+  /* ── auth gate ── */
+  .gate { padding: 34px 28px; }
+  .gate .steps { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+  .step {
+    border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+  .step.active { opacity: 1; border-color: var(--signature); }
+  .step.done { opacity: 1; }
+  .step .n {
+    display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--bg-inset); color: var(--ink-soft); font-size: 0.72rem;
+    font-family: var(--font-mono); margin-right: 8px;
+  }
+  .step.done .n { background: var(--cheshire-500); color: var(--gloaming-950); }
+  .step h3 { display: inline; font-size: 0.92rem; font-weight: 700; }
+  .step p { margin: 8px 0 12px; font-size: 0.85rem; color: var(--ink-soft); }
+  .step input {
+    width: 100%; padding: 9px 11px; border-radius: 6px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 0.88rem;
+    margin-bottom: 8px;
+  }
+  .step button {
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; padding: 8px 15px;
+    border-radius: 6px; border: 1px solid var(--signature); background: var(--signature);
+    color: var(--gloaming-950); cursor: pointer;
+  }
+  html.light .step button { color: var(--paper-50); }
+  .step button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .step .confirmed { font-size: 0.85rem; color: var(--cheshire-400); }
+  html.light .step .confirmed { color: var(--cheshire-700); }
+  .gate-skip { text-align: center; margin-top: 22px; }
+  .gate-skip a { font-size: 0.85rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); }
+  .gate-skip a:hover { color: var(--ink); }
+
+  /* ── chip ticker ── */
+  .chip-track { overflow: hidden; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .chip-row {
+    display: flex; gap: 10px; padding: 10px 14px; width: max-content;
+    animation: chip-scroll 34s linear infinite;
+  }
+  @keyframes chip-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .chip-row { animation: none; overflow-x: auto; } }
+  .chip {
+    font-size: 0.82rem; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--ink-soft); white-space: nowrap; cursor: pointer; background: var(--bg-raised);
+  }
+  .chip:hover { border-color: var(--signature); color: var(--ink); }
 
   .workspace-body { display: grid; grid-template-columns: 210px 1fr; min-height: 460px; }
   @media (max-width: 680px) { .workspace-body { grid-template-columns: 1fr; } .sidebar { display: none; } }
 
   .sidebar { border-right: 1px solid var(--line); padding: 16px 14px; }
   .sidebar .heading { font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 10px; font-family: var(--font-mono); }
-  .sidebar .session { display: block; padding: 7px 10px; border-radius: 6px; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 4px; }
+  .sidebar .session {
+    display: block; width: 100%; text-align: left; padding: 7px 10px; border-radius: 6px;
+    font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 4px; border: none; background: none;
+    cursor: pointer; font-family: var(--font-body);
+  }
   .sidebar .session.active { background: var(--bg); color: var(--ink); border-left: 2px solid var(--signature); }
+  .sidebar .session:hover { color: var(--ink); }
   .sidebar .new-request { margin-top: 14px; display: block; text-align: center; padding: 8px; border: 1px dashed var(--line); border-radius: 6px; font-size: 0.84rem; color: var(--ink-soft); }
 
-  .chat { padding: 22px 24px; display: flex; flex-direction: column; gap: 18px; }
-  .msg { max-width: 560px; }
-  .msg .who { font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 4px; font-family: var(--font-mono); }
-  .msg .bubble { padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; }
-  .msg.kenney .bubble { background: var(--bg); }
-  .msg.harriot .bubble { background: var(--caterpillar-900); border: 1px solid var(--line); }
-  html.light .msg.harriot .bubble { background: var(--caterpillar-100); }
+  .chat { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; max-height: 560px; overflow-y: auto; }
+  .msg { max-width: 580px; }
+  .msg.agent { align-self: flex-start; }
+  .msg.user { align-self: flex-end; margin-left: auto; }
+  .msg .who { font-size: 0.72rem; color: var(--ink-soft); margin: 0 0 4px; font-family: var(--font-mono); }
+  .msg.user .who { text-align: right; }
+  .msg .bubble { padding: 12px 16px; border-radius: 8px; font-size: 0.94rem; }
+  .msg.user .bubble { background: var(--bg); }
+  .msg.agent .bubble { background: var(--caterpillar-900); border: 1px solid var(--line); }
+  html.light .msg.agent .bubble { background: var(--caterpillar-100); }
+
+  .typing { display: flex; gap: 4px; padding: 4px 0; }
+  .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-soft); animation: typing-bounce 1.1s infinite ease-in-out; }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typing-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
 
   .diff-card { margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; font-size: 0.85rem; }
   .diff-card .file { padding: 7px 14px; background: var(--bg-inset); color: var(--ink-soft); font-family: var(--font-mono); }
@@ -80,63 +126,103 @@
   .action-row button {
     font-family: var(--font-body); font-size: 0.84rem; font-weight: 600;
     padding: 8px 15px; border-radius: 6px; border: 1px solid var(--line);
-    background: transparent; color: var(--ink); cursor: not-allowed;
+    background: transparent; color: var(--ink); cursor: pointer;
   }
   .action-row button.primary { background: var(--cheshire-500); border-color: var(--cheshire-500); color: var(--gloaming-950); }
+  .action-row button:hover:not(.primary) { border-color: var(--signature); }
+  .msg .note { margin-top: 10px; font-size: 0.82rem; color: var(--ink-soft); }
+  .logged-note { font-size: 0.8rem; color: var(--cheshire-400); }
+  html.light .logged-note { color: var(--cheshire-700); }
 
-  .msg.harriot .note { margin-top: 10px; font-size: 0.82rem; color: var(--ink-soft); }
+  .composer { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); }
+  .composer input {
+    flex: 1; padding: 10px 13px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 0.92rem;
+  }
+  .composer button {
+    font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; padding: 10px 18px;
+    border-radius: 8px; border: 1px solid var(--signature); background: var(--signature);
+    color: var(--gloaming-950); cursor: pointer;
+  }
+  html.light .composer button { color: var(--paper-50); }
 </style>
 </head>
 <body>
 
   <div class="titlebar">
-    <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
-    <span class="filename"><b>harriot</b>/workspace.preview</span>
+    <div class="tb-left">
+      <span class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></span>
+      <span class="filename"><b>harriot</b>/workspace.html</span>
+    </div>
     <nav class="tabs">
       <a href="index.html">Home</a>
       <a href="workspace.html" aria-current="page">Workspace preview</a>
-      <a href="about.html">How it works &amp; FAQ</a>
+      <a href="about.html">FAQ</a>
     </nav>
-    <button class="theme-toggle" type="button"></button>
+    <div class="tb-right">
+      <button class="theme-toggle" type="button"></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
   </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="workspace.html" aria-current="page">Workspace preview</a>
+    <a href="about.html">FAQ</a>
+    <button class="theme-toggle" type="button"></button>
+  </nav>
 
   <main>
-    <p class="preview-banner">
-      <b>Preview, not live yet.</b> This is a mock of a real conversation, showing the shape the
-      actual workspace will take once the backend is wired up. Nothing on this page is clickable.
+    <p class="intro-banner">
+      <b>Real UI, simulated intelligence.</b> Sign in below (or skip it) and try the chat — the
+      interface genuinely works. What's faked is the thinking behind it: typed requests are
+      pattern-matched client-side, nothing calls a real model. See
+      <a href="doc.html?doc=how-it-works">how it works</a> for the honest breakdown.
     </p>
 
     <div class="workspace">
       <div class="workspace-topbar">
         <span class="brand">🎩 Harriot's Workbench</span>
-        <span class="badge">PREVIEW</span>
+        <span class="live-badge" id="mode-badge">SIGN-IN DEMO</span>
       </div>
-      <div class="workspace-body">
-        <aside class="sidebar">
-          <p class="heading">YOUR REPOS</p>
-          <span class="session active">iamoneself</span>
-          <span class="session">david-amaringo</span>
-          <span class="new-request">+ New request</span>
-        </aside>
-        <div class="chat">
-          <div class="msg kenney">
-            <p class="who">KENNEY</p>
-            <p class="bubble">Can you update the retreat dates on the homepage to March 15–17?</p>
+
+      <div id="gate" class="gate">
+        <div class="steps">
+          <div class="step active" id="step-1">
+            <div><span class="n">1</span><h3>Sign in</h3></div>
+            <p>Enter any email — this demo simulates the magic link, it doesn't send one.</p>
+            <input type="email" id="gate-email" placeholder="you@example.com" autocomplete="off">
+            <button type="button" id="gate-send">Send magic link</button>
+            <div id="gate-step1-confirm" hidden>
+              <p class="confirmed">✓ Link "sent" — in the real version, check your inbox.</p>
+              <button type="button" id="gate-clicked">I clicked the link</button>
+            </div>
           </div>
-          <div class="msg harriot">
-            <p class="who">HARRIOT</p>
-            <div class="bubble">
-              Found it — here's the change I'd make to <code>src/pages/Home.tsx</code>:
-              <div class="diff-card">
-                <div class="file">src/pages/Home.tsx</div>
-                <div class="line remove">− &lt;p&gt;Join us February 8–10&lt;/p&gt;</div>
-                <div class="line add">+ &lt;p&gt;Join us March 15–17&lt;/p&gt;</div>
-              </div>
-              <div class="action-row">
-                <button class="primary">Looks good — open the PR</button>
-                <button>Change something first</button>
-              </div>
-              <p class="note">Christopher reviews and merges every change before it goes live — you'll never push straight to the site.</p>
+          <div class="step" id="step-2">
+            <div><span class="n">2</span><h3>Bring your own key</h3></div>
+            <p>Your Anthropic API key — kept only in this browser tab for the demo, never sent anywhere.</p>
+            <input type="password" id="gate-key" placeholder="sk-ant-…" autocomplete="off" disabled>
+            <button type="button" id="gate-save" disabled>Save key</button>
+          </div>
+        </div>
+        <p class="gate-skip"><a href="#" id="gate-skip">Skip this — just show me the workspace</a></p>
+      </div>
+
+      <div id="workbench" hidden>
+        <div class="chip-track">
+          <div class="chip-row" id="chip-row"></div>
+        </div>
+        <div class="workspace-body">
+          <aside class="sidebar">
+            <p class="heading">YOUR REPOS</p>
+            <button type="button" class="session active" data-repo="iamoneself">iamoneself</button>
+            <button type="button" class="session" data-repo="david-amaringo">david-amaringo</button>
+            <span class="new-request">+ New request</span>
+          </aside>
+          <div>
+            <div class="chat" id="chat"></div>
+            <div class="composer">
+              <input type="text" id="chat-input" placeholder="Describe what you want changed…" autocomplete="off">
+              <button type="button" id="chat-send">Send</button>
             </div>
           </div>
         </div>
@@ -150,5 +236,6 @@
   </div>
 
   <script src="assets/site.js"></script>
+  <script src="assets/workspace.js"></script>
 </body>
 </html>
