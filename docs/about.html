@@ -13,19 +13,36 @@
   .page-head h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 0 0 10px; letter-spacing: -0.01em; }
   .page-head .lede { color: var(--ink-soft); font-size: 1.05rem; max-width: 62ch; }
 
+  .faq-jump { max-width: 720px; margin: 18px auto 0; padding: 0 24px; }
+  .faq-jump a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft);
+    border-bottom: 1px dashed var(--line);
+  }
+  .faq-jump a:hover { color: var(--ink); border-color: var(--signature); }
+
   .doc-cards {
-    max-width: 720px; margin: 26px auto 44px; padding: 0 24px;
+    max-width: 720px; margin: 14px auto 44px; padding: 0 24px;
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   }
   @media (max-width: 620px) { .doc-cards { grid-template-columns: 1fr; } }
   .doc-cards a {
-    display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px;
-    color: var(--ink); background: var(--bg-raised);
+    display: block; position: relative; padding: 14px 34px 14px 16px;
+    border: 1px solid var(--line); border-top: 3px solid var(--line-accent, var(--line));
+    border-radius: 8px; color: var(--ink); background: var(--bg-raised);
     transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .doc-cards a:nth-child(1) { --line-accent: var(--caterpillar-500); }
+  .doc-cards a:nth-child(2) { --line-accent: var(--queen-500); }
+  .doc-cards a:nth-child(3) { --line-accent: var(--hatter-500); }
+  .doc-cards a::after {
+    content: "→"; position: absolute; top: 16px; right: 14px;
+    color: var(--line-accent); font-size: 0.95rem;
   }
   .doc-cards a:hover, .doc-cards a:focus-visible {
     transform: translateY(-4px);
     border-color: var(--signature);
+    border-top-color: var(--line-accent);
     box-shadow: 0 10px 26px -12px var(--signature), 0 0 0 1px var(--signature);
   }
   .doc-cards .t { font-weight: 700; font-size: 0.95rem; margin: 0 0 4px; }
@@ -74,6 +91,8 @@
         sustainable, read the full docs — rendered straight from the source, not a paraphrase.
       </p>
     </div>
+
+    <p class="faq-jump"><a href="#faq">↓ Skip straight to the FAQ</a></p>
 
     <div class="doc-cards">
       <a href="doc.html?doc=how-it-works">
@@ -142,7 +161,7 @@
       </span>
       <span class="sep">·</span> <a href="index.html">home</a>
       <span class="sep">·</span> <a href="workspace.html">terminal</a>
-      <span class="sep">·</span> <a href="doc.html">docs</a>
+      <span class="sep">·</span> <a href="about.html" aria-current="page">docs</a>
     </span>
     <span class="status-right">
       <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>

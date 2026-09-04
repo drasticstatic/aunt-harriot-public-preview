@@ -121,9 +121,9 @@ code { font-family: var(--font-mono); }
    ============================================================ */
 
 .titlebar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 10px 18px;
   background: var(--bg-raised);
@@ -133,8 +133,8 @@ code { font-family: var(--font-mono); }
   z-index: 20;
 }
 
-.tb-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.tb-right { display: flex; align-items: center; gap: 8px; justify-self: end; }
+.tb-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; }
+.tb-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
 
 .titlebar .dots { display: flex; gap: 6px; flex: 0 0 auto; }
 .titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
@@ -146,17 +146,25 @@ code { font-family: var(--font-mono); }
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--ink-soft);
-  flex: 0 0 auto;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .titlebar .filename b { color: var(--ink); font-weight: 700; }
 
+/* Absolutely positioned so tab position is independent of tb-left/tb-right
+   content width — .titlebar's `position: sticky` establishes the containing
+   block. This is what actually keeps the hamburger pinned right regardless
+   of filename length (a 3-column grid track was tried first and still let a
+   non-shrinking filename force everything wide — flexbox + this is the fix). */
 .tabs {
   display: flex;
   gap: 2px;
-  justify-self: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .tabs a {
@@ -240,6 +248,7 @@ main { flex: 1 0 auto; padding-bottom: 44px; }
 }
 .statusbar a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 .statusbar a:hover { color: var(--ink); }
+.statusbar a[aria-current] { color: var(--signature); font-weight: 700; text-decoration-style: solid; }
 .statusbar .status-left { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .statusbar .branch { color: var(--signature); display: inline-flex; align-items: center; gap: 4px; }
 .statusbar .branch-icon { flex: 0 0 auto; }
