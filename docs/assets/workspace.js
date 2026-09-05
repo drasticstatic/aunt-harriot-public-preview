@@ -82,7 +82,7 @@
       modal.classList.remove('open');
       document.getElementById('workbench').hidden = false;
       var badge = document.getElementById('mode-badge');
-      badge.innerHTML = '<i class="ti ti-virtual-space"></i> PREVIEW ⎙ SIMULATED';
+      badge.innerHTML = '<i class="ti ti-virtual-space"></i> PREVIEW <span class="hg-glyph badge-glyph">⎙</span> SIMULATED';
       renderChips();
       initRepoSwitcher();
       initExamplePicker();
@@ -90,7 +90,13 @@
       initSidebarDrawer();
       initNewRequest();
       addMsg('agent', '⎈ ' + msgTypeIcon('agent') + "You're in — ask for a change in plain English, or try one of the suggestions below");
-      document.getElementById('chat-input').focus();
+      // auto-focus is a nice touch on desktop, but on a real phone it pops
+      // the keyboard and can trigger the OS's own zoom-on-focus the instant
+      // the page loads — before the visitor has even seen the terminal.
+      // Skip it below the same breakpoint the rest of the mobile layout uses.
+      if (!window.matchMedia('(max-width: 720px)').matches) {
+        document.getElementById('chat-input').focus();
+      }
     }
   }
 

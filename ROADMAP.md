@@ -211,3 +211,21 @@ entire reason to be in Next.js instead of Django templates in the first place.
 This repo's front end (`docs/`) stays plain HTML/CSS/JS regardless — that decision was made for a
 static surface with no backend to talk to, and isn't in tension with this. This section is about
 the *real* dashboard once the backend exists, not a plan to rewrite what's live today.
+
+### Sequencing decision (confirmed 2026-09-05)
+
+For getting Kenney into a real beta, the priority is **free and shipped**, not architecturally
+ideal — Django's real cost (an always-on process, not free the way GitHub Pages is) isn't worth
+paying before there's even a first real user. So, in order:
+
+1. **Now, for Kenney's beta**: stay on GitHub Pages, no backend yet. This is the "advanced layers"
+   on top of the plain static site already live — real interactivity built as far as it can go
+   client-side (see the workspace preview) before a server becomes unavoidable.
+2. **Build "Next.js-ready," not Next.js**: when front-end code does get added for real interactivity
+   that static HTML can't do, structure it so a later move to Next.js is a migration, not a
+   rewrite — plain component-shaped files, no framework-specific patterns baked in that would need
+   undoing. Nothing to build differently *today* — this is a constraint on how future work gets
+   structured, not new work now.
+3. **Django (or any real backend) is a later-MVP decision**, made once there's an actual paying
+   or committed reason to carry a non-free hosting cost — not before. See
+   [`SUSTAINABILITY.md`](doc.html?doc=sustainability) for the cost shape if/when that happens.

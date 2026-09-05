@@ -65,7 +65,7 @@ Claude Pro/Max login. Aunt Harriot removes that assumption — she's the same sh
 portal-login, and **bring-your-own-Anthropic-API-key** instead.
 
 **Origin idea:** Christopher had already started an admin agent (for non-technical editors to
-update the `pir-devine-news` front end without his help) and a lead-collection chatbot/submission
+update the [`pir-devine-news`](https://github.com/drasticstatic/pir-devine-news-public) front end without his help) and a lead-collection chatbot/submission
 agent, both powered by `platform.claude.com`/NVIDIA NIM, but never finished wiring the backend —
 NIM's reliability issues echoed the same ACP flakiness this whole ecosystem has been fighting.
 Kenney is now purchasing `platform.claude.com` access to power a similar admin agent for

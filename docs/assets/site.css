@@ -63,6 +63,13 @@
   --caterpillar-300: #b6baea;
   --caterpillar-100: #e6e8f8;
 
+  /* glyph-blue — for standalone decorative unicode glyphs specifically (not
+     tabler icons, not the footer's unicode, which stays as-is on request) —
+     a true sky blue reads as clearly distinct against the violet/purple
+     backdrop, unlike anything else in the four accent ramps above */
+  --glyph-blue: #38bdf8;
+  --glyph-blue-light: #0369a1;
+
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-body: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'Space Mono', ui-monospace, monospace;
@@ -77,6 +84,7 @@ html.dark {
   --ink-soft: #c3aee0;
   --line: rgba(243, 236, 255, 0.14);
   --signature: var(--queen-400);
+  --glyph: var(--glyph-blue);
 }
 
 html.light {
@@ -87,6 +95,7 @@ html.light {
   --ink-soft: var(--paper-ink-soft);
   --line: var(--paper-line);
   --signature: var(--queen-500);
+  --glyph: var(--glyph-blue-light);
 }
 
 * { box-sizing: border-box; }
@@ -123,7 +132,14 @@ code { font-family: var(--font-mono); }
    afterthought punctuation — most usages don't set their own size and
    inherit this; a handful of specific selectors override it deliberately
    (hero, page headings) and take precedence via specificity. */
-.ti { font-size: 1.3em; vertical-align: -0.12em; }
+.ti { font-size: 1.6em; vertical-align: -0.16em; }
+
+/* standalone decorative unicode glyphs (𐃏 ⑂ ⌥ ⎇ ⎈ ⎋ ⎘ ⎉ ⎙ ␣ ⎀ ⌘ etc.) — sized
+   to match the tabler icons above and colored to actually stand out against
+   the violet backdrop. The footer's unicode (branch separators, the git/dev
+   glyphs) is explicitly excluded — it already reads well at its current size
+   and color, so .statusbar overrides this back down below. */
+.hg-glyph { font-size: 1.5em; color: var(--glyph); vertical-align: -0.14em; font-style: normal; }
 
 /* Internal (this site) vs external links get a visibly different color,
    and external links get a trailing icon — so it's clear before you click
@@ -172,10 +188,19 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
 .tb-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
 
 .titlebar .dots { display: flex; gap: 6px; flex: 0 0 auto; }
-.titlebar .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
-.titlebar .dots .d1 { background: var(--queen-400); }
-.titlebar .dots .d2 { background: var(--hatter-400); }
-.titlebar .dots .d3 { background: var(--cheshire-400); }
+.titlebar .dots span {
+  width: 10px; height: 10px; border-radius: 50%; display: block; cursor: pointer;
+  animation: dot-breathe 3.4s ease-in-out infinite;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.titlebar .dots span:hover { transform: scale(1.35); }
+.titlebar .dots .d1 { background: var(--queen-400); animation-delay: 0s; }
+.titlebar .dots .d2 { background: var(--hatter-400); animation-delay: 0.5s; }
+.titlebar .dots .d3 { background: var(--cheshire-400); animation-delay: 1s; }
+.titlebar .dots .d1:hover { box-shadow: 0 0 10px 2px var(--queen-400); }
+.titlebar .dots .d2:hover { box-shadow: 0 0 10px 2px var(--hatter-400); }
+.titlebar .dots .d3:hover { box-shadow: 0 0 10px 2px var(--cheshire-400); }
+@keyframes dot-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
 .titlebar .filename {
   font-family: var(--font-mono);
@@ -232,10 +257,15 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
   font-size: 1.05rem;
 }
 .settings-btn:hover, .hamburger:hover { color: var(--ink); border-color: var(--signature); }
-.hamburger { display: none; }
+/* Hamburger is a real "all pages" menu now, shown at every width right next
+   to Settings — the center tab bar stays the 3 main pages only, this is the
+   quick-access-to-everything-else button. */
 
 .tabs a .ti, .mobile-menu a .ti { margin-right: 5px; font-size: 0.95em; vertical-align: -1px; }
 
+/* Overlays the page instead of pushing content down — position:sticky
+   reserves its own box height in normal flow, which isn't an overlay at all;
+   fixed positioning is what actually floats it above everything below. */
 .mobile-menu {
   display: none;
   flex-direction: column;
@@ -243,9 +273,13 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
   padding: 8px 18px 14px;
   background: var(--bg-raised);
   border-bottom: 1px solid var(--line);
-  position: sticky;
+  position: fixed;
   top: 55px;
-  z-index: 19;
+  left: 0; right: 0;
+  max-height: calc(100vh - 55px);
+  overflow-y: auto;
+  z-index: 50;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a {
@@ -255,6 +289,10 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
   border-radius: 6px;
 }
 .mobile-menu a[aria-current] { color: var(--ink); background: var(--bg); }
+.mobile-menu .menu-divider {
+  margin: 8px 0 2px; padding-top: 8px; border-top: 1px solid var(--line);
+  font-size: 0.72rem; font-family: var(--font-mono); color: var(--ink-soft); text-transform: uppercase;
+}
 /* .settings-btn's base rule fixes it at a 34x34 square for the icon-only desktop
    button — reusing the class here with a text label needs a full override, not
    just alignment tweaks, or the label overflows that tiny fixed box. */
@@ -265,10 +303,12 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
 }
 .mobile-menu .settings-btn:hover { color: var(--ink); border-color: transparent; }
 
+/* Below this width the centered 3-page tab bar would overlap the title-bar's
+   own content — settings + hamburger stay visible at every width, this only
+   hides the redundant center tabs (the hamburger's menu covers the same 3
+   pages plus everything else). */
 @media (max-width: 720px) {
   .tabs { display: none; }
-  .tb-right > .settings-btn { display: none; }
-  .hamburger { display: flex; }
 }
 
 /* ============================================================
@@ -345,27 +385,44 @@ html.light .hg-switch.on .knob { background: var(--paper-50); }
   background: var(--bg-inset); color: var(--ink-soft); border: 1px solid var(--line);
 }
 
-/* force-mobile-view: constrain the page to a phone-width column so a desktop
-   visitor can preview it the way a phone sees it. */
+/* force-mobile-view (desktop browser, previewing mobile): constrain the page
+   to a phone-width column. Wide enough that the footer's "main - home -
+   terminal - docs" segment doesn't wrap to two lines. */
 html.force-mobile body {
-  max-width: 400px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line);
+  max-width: 460px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line);
   box-shadow: 0 0 60px rgba(0,0,0,0.35);
 }
-html.force-mobile .statusbar { max-width: 400px; left: 50%; right: auto; transform: translateX(-50%); }
+html.force-mobile .statusbar { max-width: 460px; left: 50%; right: auto; transform: translateX(-50%); }
 html.force-mobile .tabs { display: none; }
-html.force-mobile .tb-right > .settings-btn { display: none; }
-html.force-mobile .hamburger { display: flex; }
 
-/* flashing cursor in empty text fields — a small terminal-style affordance
-   shown only while the field is empty; typing (or focusing with content)
-   hides it via the :placeholder-shown check. */
+/* force-desktop-view (real mobile device, requesting desktop): the meta
+   viewport tag itself gets rewritten in JS (site.js) to a fixed wide width —
+   that's what actually makes a real phone render the desktop layout. This
+   class just re-enables the center tabs to match, since real mobile hides
+   them via the @media rule above regardless of what the viewport reports. */
+html.force-desktop .tabs { display: flex; }
+
+/* flashing cursor in empty text fields — a small terminal-style affordance.
+   Hidden by default; shown only while the field is both empty AND unfocused.
+   The moment it's focused, the field has the OS's own real text cursor, so
+   ours steps aside rather than blinking alongside it. */
 .hg-cursor-field { position: relative; display: block; width: 100%; }
-.hg-cursor-field input:placeholder-shown ~ .hg-cursor,
 .hg-cursor-field .hg-cursor {
   position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none;
   color: var(--signature); font-family: var(--font-mono); animation: hg-blink 1s steps(1) infinite;
+  opacity: 0; transition: opacity 0.15s ease;
 }
+.hg-cursor-field input:placeholder-shown ~ .hg-cursor { opacity: 1; }
+.hg-cursor-field input:focus ~ .hg-cursor { opacity: 0; }
 @keyframes hg-blink { 50% { opacity: 0; } }
+
+/* iOS/Android auto-zoom on input focus triggers whenever a focused field's
+   font-size is under 16px — this is what was "zooming in on mobile" when the
+   chat input auto-focused. Force every real text input to 16px there;
+   16px reads identically to the current sizes at normal (non-mobile) widths. */
+@media (max-width: 720px) {
+  input[type="text"], input[type="email"], input[type="password"] { font-size: 16px !important; }
+}
 
 /* traffic-light easter egg toast */
 .hg-toast {
@@ -374,7 +431,9 @@ html.force-mobile .hamburger { display: flex; }
   padding: 9px 18px; border-radius: 999px; font-size: 0.88rem; font-weight: 600;
   z-index: 200; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease;
   box-shadow: 0 10px 30px -8px rgba(0,0,0,0.4); pointer-events: none;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
 }
+.hg-toast .ti { color: var(--signature); }
 .hg-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 main { flex: 1 0 auto; padding-bottom: 44px; }
