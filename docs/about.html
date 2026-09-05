@@ -68,9 +68,25 @@
   code { background: var(--bg-inset); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; font-family: var(--font-mono); }
 
   details { border-bottom: 1px solid var(--line); padding: 13px 0; }
-  details summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 1rem; display: flex; align-items: center; gap: 10px; }
-  details summary .ti { flex: 0 0 auto; color: var(--ink-soft); font-size: 1.05em; }
-  details[open] summary .ti { color: var(--signature); }
+  details summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 1rem; display: flex; align-items: center; gap: 10px; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary .faq-icon { flex: 0 0 auto; color: var(--ink-soft); font-size: 1.2em; animation: faq-breathe 3.4s ease-in-out infinite; }
+  details[open] summary .faq-icon { color: var(--signature); }
+  details summary .faq-chevron {
+    flex: 0 0 auto; margin-left: auto; color: var(--ink-soft); font-size: 0.95em;
+    transition: transform 0.2s ease; animation: faq-bounce 1.8s ease-in-out infinite;
+  }
+  details[open] summary .faq-chevron { transform: rotate(180deg); animation: none; }
+  @keyframes faq-breathe {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
+  }
+  @keyframes faq-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+  html.reduce-motion details summary .faq-icon { animation: none; }
+  html.reduce-motion details summary .faq-chevron { animation: none; }
   details p { margin: 10px 0 0 30px; color: var(--ink-soft); font-size: 0.98rem; max-width: 62ch; }
   details p a { color: var(--signature); }
 
@@ -174,13 +190,13 @@
       <h2><i class="ti ti-api-book"></i>FAQ<i class="ti ti-yarn"></i></h2>
 
       <details>
-        <summary><i class="ti ti-brand-github"></i>Do I need a GitHub account?</summary>
+        <summary><i class="faq-icon ti ti-brand-github"></i>Do I need a GitHub account? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>No. That's the whole point — Harriot handles git and GitHub on your behalf, on a
         branch scoped to you, and Christopher merges it. You never need to touch either directly.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-git-pull-request-conflict"></i>What can't Harriot do?</summary>
+        <summary><i class="faq-icon ti ti-git-pull-request-conflict"></i>What can't Harriot do? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>She can't push straight to <code>main</code>, can't touch any repo you weren't
         specifically invited to, and can't merge her own pull requests — every change waits for
         Christopher's review. If she's ever unsure whether something's in scope, the plan is for
@@ -188,7 +204,7 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-filter-dollar"></i>What does this cost me?</summary>
+        <summary><i class="faq-icon ti ti-filter-dollar"></i>What does this cost me? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Whatever your own Anthropic API usage runs — Harriot's thinking is billed to the key
         you provide, not to Christopher's subscription. There's no separate fee for Harriot
         herself. See the <a href="doc.html?doc=sustainability">sustainability doc</a> for the
@@ -196,14 +212,14 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-trash-x"></i>What if I don't like a change she made?</summary>
+        <summary><i class="faq-icon ti ti-trash-x"></i>What if I don't like a change she made? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Nothing goes live without Christopher reviewing it first, so a bad suggestion never
         reaches the real site. You can also just say so in the same conversation and ask for
         something different before it's even proposed as a pull request.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-eye-check"></i>Is any of this live yet?</summary>
+        <summary><i class="faq-icon ti ti-eye-check"></i>Is any of this live yet? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Not the real backend — the <a href="workspace.html">workspace</a> is honestly
         labeled: real, working UI with the intelligence behind it simulated for now. This site and
         the groundwork behind it are real and already built; see the
@@ -211,7 +227,7 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-brand-open-source"></i>Is Harriot open source?</summary>
+        <summary><i class="faq-icon ti ti-brand-open-source"></i>Is Harriot open source? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Yes — this repo is meant to be forked. The exclude-list sync means almost everything
         syncs to the public mirror by default; only governance/agent-config files and anything
         credential-adjacent are held back. See the <a href="doc.html?doc=sustainability">sustainability
@@ -219,21 +235,21 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-brand-codesandbox"></i>Where do I find the code?</summary>
+        <summary><i class="faq-icon ti ti-brand-codesandbox"></i>Where do I find the code? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Right here — the "⬢ git" link in the footer of every page goes straight to the public
         repo. This site itself is plain HTML/CSS/JS in <code>docs/</code>, no build step, so what
         you see rendered is close to exactly what's in the repo.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-thinking-medium"></i>What actually powers Harriot?</summary>
+        <summary><i class="faq-icon ti ti-thinking-medium"></i>What actually powers Harriot? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>The real backend (not built yet) will run on Claude — whichever Anthropic API key the
         visitor supplies. This site you're reading right now doesn't call any model at all; the
         workspace's chat is a client-side simulation, honestly labeled as such.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-world-heart"></i>Does Harriot treat the codebases she touches carefully?</summary>
+        <summary><i class="faq-icon ti ti-world-heart"></i>Does Harriot treat the codebases she touches carefully? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>That's the design goal, not a hope. Harriot's first real assignment is helping Kenney
         edit <a class="ext-link" href="https://github.com/drasticstatic/iamoneself-public-preview" target="_blank" rel="noopener">iamoneself <i class="ti ti-folder-code"></i></a>
         (live at <a class="ext-link" href="https://drasticstatic.github.io/iamoneself-public-preview/" target="_blank" rel="noopener">its public preview <i class="ti ti-external-link"></i></a>)
@@ -246,7 +262,7 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-iceberg"></i>Is this whole site "Harriot"?</summary>
+        <summary><i class="faq-icon ti ti-iceberg"></i>Is this whole site "Harriot"? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>No — this is the visible tip. The front end you're looking at is real and done; the
         actual harness underneath (login, API key handling, a Claude Code agent that reads and
         writes real files) is the much larger mass still below the waterline. See the
@@ -254,35 +270,35 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-cloud-network"></i>Where does this actually run?</summary>
+        <summary><i class="faq-icon ti ti-cloud-network"></i>Where does this actually run? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>GitHub Pages, for free — no server Christopher has to babysit. The real backend's
         hosting hasn't been decided yet; see <a href="doc.html?doc=sustainability">sustainability</a>
         for the current stack and what's still open.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-device-workstation"></i>Can I run my own instance of Harriot?</summary>
+        <summary><i class="faq-icon ti ti-device-workstation"></i>Can I run my own instance of Harriot? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>That's the actual point of building this as a separate, forkable framework instead of
         one-off logic bolted onto <code>iamoneself</code> — fork the repo, point it at your own
         codebase, bring your own API key.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-heartbeat"></i>Is this actively being worked on?</summary>
+        <summary><i class="faq-icon ti ti-heartbeat"></i>Is this actively being worked on? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Yes — check the "Current phase" line on the <a href="index.html">home page</a> or the
         <a href="doc.html?doc=roadmap">roadmap</a>'s own status markers for what's genuinely
         current, since this page doesn't auto-update itself.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-pipeline"></i>How does a change actually reach the live site?</summary>
+        <summary><i class="faq-icon ti ti-pipeline"></i>How does a change actually reach the live site? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Push to the private repo's <code>main</code> → a GitHub Actions workflow strips private
         paths and force-pushes the rest to the public mirror → GitHub Pages rebuilds
         automatically. No manual deploy step, no server to restart.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-battery-eco"></i>Is any of this wasteful?</summary>
+        <summary><i class="faq-icon ti ti-battery-eco"></i>Is any of this wasteful? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Structurally, no — a static site costs nothing to run and nothing to leave idle. The
         real cost, once the backend exists, is whatever API usage an actual conversation burns —
         paid by whoever's using Harriot, for what they actually asked for. See
@@ -290,14 +306,14 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-dna"></i>What makes Harriot different from a generic chatbot?</summary>
+        <summary><i class="faq-icon ti ti-dna"></i>What makes Harriot different from a generic chatbot? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>She's scoped, not general-purpose — bound to specific invited repos, a specific review
         gate, and a specific person's approval before anything ships. A generic chatbot answers
         questions; Harriot is designed to make an actual, reviewable git change.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-logic-xnor"></i>How does the workspace preview "know" what to answer?</summary>
+        <summary><i class="faq-icon ti ti-logic-xnor"></i>How does the workspace preview "know" what to answer? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Plain pattern matching — a handful of regular expressions checking your message for
         keywords, each producing a pre-written, realistic-looking response. It's the same
         "true if it matches, true if it doesn't fall through" logic as a light switch, not
@@ -306,7 +322,7 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-congruent-to"></i>Are you going to rebuild this in React or Next.js?</summary>
+        <summary><i class="faq-icon ti ti-congruent-to"></i>Are you going to rebuild this in React or Next.js? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>It's a genuinely open question, not a decision yet — plain HTML/CSS/JS has been the
         right fit for a front-end surface with no backend to talk to, but a real chatbot admin
         panel (streaming responses, a file-tree explorer, a conversation-tree builder) is a much
@@ -318,85 +334,85 @@
       </details>
 
       <details>
-        <summary><i class="ti ti-shopping-cart-code"></i>Can I buy or sell anything through Harriot?</summary>
+        <summary><i class="faq-icon ti ti-shopping-cart-code"></i>Can I buy or sell anything through Harriot? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>No — and that's deliberate, not a missing feature. GitHub Pages' terms allow donation
         links but not sites built around commercial transactions; nothing Harriot touches is
         set up to process a sale.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-code-dots"></i>Is the code itself tidy?</summary>
+        <summary><i class="faq-icon ti ti-code-dots"></i>Is the code itself tidy? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Plain HTML/CSS/JS, no build step, no framework — deliberately boring so anyone can open
         a file and read exactly what it does. See <a href="doc.html?doc=how-it-works">how it
         works</a> for the shape of it.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-device-desktop-analytics"></i>Do you track my usage or analytics?</summary>
+        <summary><i class="faq-icon ti ti-device-desktop-analytics"></i>Do you track my usage or analytics? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Not on this site. It's static HTML with no backend to send data to — there's nothing
         here to phone home to even if it wanted to.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-user-screen"></i>Who can see what I ask Harriot?</summary>
+        <summary><i class="faq-icon ti ti-user-screen"></i>Who can see what I ask Harriot? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>In the real workflow: you, Harriot, and Christopher (as the reviewer on the resulting
         pull request) — nobody else has a reason to be in that loop.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-canary"></i>Do changes get tested before they're real?</summary>
+        <summary><i class="faq-icon ti ti-canary"></i>Do changes get tested before they're real? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>The review-gate <em>is</em> the test — a human (Christopher) looks at every diff before
         it merges. There's no separate staging environment yet; the PR review is what catches
         a bad change.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-bug-off"></i>What happens if Harriot gets something wrong?</summary>
+        <summary><i class="faq-icon ti ti-bug-off"></i>What happens if Harriot gets something wrong? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>It stays wrong only in a pull request, never on the live site — that's the entire
         purpose of the review step in <a href="doc.html?doc=how-it-works">how it works</a> Part two.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-microscope"></i>How closely does Christopher actually review changes?</summary>
+        <summary><i class="faq-icon ti ti-microscope"></i>How closely does Christopher actually review changes? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Closely enough that it's the real safety net, not a rubber stamp — see the "What if I
         don't like a change" answer above; the same review step covers Christopher's own read of it.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-plug-connected-x"></i>What if my API key stops working mid-conversation?</summary>
+        <summary><i class="faq-icon ti ti-plug-connected-x"></i>What if my API key stops working mid-conversation? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Not built yet, so not yet tested for real — but the intent is a clear error telling you
         the key failed, not a silent hang. Worth holding Christopher to once the backend exists.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-device-mobile-message"></i>Can I use Harriot from my phone?</summary>
+        <summary><i class="faq-icon ti ti-device-mobile-message"></i>Can I use Harriot from my phone? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>This site already works on mobile — try the "Force mobile view" toggle in
         Settings to see it from a desktop browser. The real workbench should too, once it exists;
         nothing about the design assumes a desktop-only visitor.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-api-app"></i>Does Harriot expose an API of her own?</summary>
+        <summary><i class="faq-icon ti ti-api-app"></i>Does Harriot expose an API of her own? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>No plans to — she's a UI over a Claude Code harness for a specific set of invited repos,
         not a general-purpose service other software would integrate against.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-stairs"></i>What does onboarding actually look like, step by step?</summary>
+        <summary><i class="faq-icon ti ti-stairs"></i>What does onboarding actually look like, step by step? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Magic link → API key → describe a change in plain English → review the proposed diff →
         approve → Christopher merges. See <a href="doc.html?doc=how-it-works">how it works</a> for
         the full walkthrough of each step.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-ai-gateway"></i>Will there be a gateway sitting in front of the model?</summary>
+        <summary><i class="faq-icon ti ti-ai-gateway"></i>Will there be a gateway sitting in front of the model? <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>Not decided — this is exactly the kind of thing the Next.js/Django consideration above
         would settle, since a gateway is usually how you keep an API key server-side instead of
         shipping it to a browser.</p>
       </details>
 
       <details>
-        <summary><i class="ti ti-waterpolo"></i>One more thing, in the spirit of every app's terms of service</summary>
+        <summary><i class="faq-icon ti ti-waterpolo"></i>One more thing, in the spirit of every app's terms of service <i class="ti ti-chevron-down faq-chevron"></i></summary>
         <p>By using this preview you agree that Harriot will not coach your waterpolo team,
         officiate your fantasy football league, or perform your taxes — she is, at time of
         writing, scoped to exactly two websites and a sense of humor. Everything else in this FAQ
@@ -416,16 +432,16 @@
     <span class="status-left">
       <span class="branch">
         <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
-        main
+        MAIN
       </span>
       <span class="sep">⑂</span> <a href="index.html">home</a>
       <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
       <span class="sep">⎇</span> <a href="about.html" aria-current="page">docs</a> ⎈
     </span>
     <span class="status-right">
-      <a class="ext-link" href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git <i class="ti ti-folder-code"></i></a>
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
       <span class="sep">·</span>
-      <a class="ext-link" href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev <i class="ti ti-external-link"></i></a>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
     </span>
   </div>
 

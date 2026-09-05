@@ -139,7 +139,7 @@ code { font-family: var(--font-mono); }
    the violet backdrop. The footer's unicode (branch separators, the git/dev
    glyphs) is explicitly excluded — it already reads well at its current size
    and color, so .statusbar overrides this back down below. */
-.hg-glyph { font-size: 1.5em; color: var(--glyph); vertical-align: -0.14em; font-style: normal; }
+.hg-glyph { font-size: 1.6em; color: var(--glyph); vertical-align: -0.16em; font-style: normal; }
 
 /* Internal (this site) vs external links get a visibly different color,
    and external links get a trailing icon — so it's clear before you click
@@ -261,7 +261,7 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
    to Settings — the center tab bar stays the 3 main pages only, this is the
    quick-access-to-everything-else button. */
 
-.tabs a .ti, .mobile-menu a .ti { margin-right: 5px; font-size: 0.95em; vertical-align: -1px; }
+.tabs a .ti, .mobile-menu a .ti { margin-right: 5px; }
 
 /* Overlays the page instead of pushing content down — position:sticky
    reserves its own box height in normal flow, which isn't an overlay at all;
@@ -435,6 +435,13 @@ html.force-desktop .tabs { display: flex; }
 }
 .hg-toast .ti { color: var(--signature); }
 .hg-toast.show { opacity: 1; transform: translate(-50%, 0); }
+.hg-toast .toast-text::after {
+  content: ''; display: inline-block; width: 2px; height: 0.9em; margin-left: 2px;
+  background: var(--signature); vertical-align: -0.1em; animation: toast-caret 0.8s step-end infinite;
+}
+.hg-toast.done .toast-text::after { display: none; }
+@keyframes toast-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+html.reduce-motion .hg-toast .toast-text::after { display: none; }
 
 main { flex: 1 0 auto; padding-bottom: 44px; }
 
@@ -462,4 +469,16 @@ main { flex: 1 0 auto; padding-bottom: 44px; }
 .statusbar .status-left { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .statusbar .branch { color: var(--signature); display: inline-flex; align-items: center; gap: 4px; }
 .statusbar .branch-icon { flex: 0 0 auto; }
-.statusbar .sep { color: var(--line); }
+.statusbar .sep { animation: rainbow-prism 5s linear infinite; }
+@keyframes rainbow-prism {
+  0%   { color: #ef4d95; }
+  20%  { color: #f4bb3d; }
+  40%  { color: #35d6c0; }
+  60%  { color: #8b90d6; }
+  80%  { color: #4fc3f5; }
+  100% { color: #ef4d95; }
+}
+/* reduce-motion already freezes any animation's duration globally (see the
+   html.reduce-motion rule near the top) — this just needs a resting color
+   for that frozen frame instead of getting stuck wherever the cycle was */
+html.reduce-motion .statusbar .sep { color: var(--line); }

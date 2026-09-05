@@ -18,6 +18,7 @@
     "PENDING-TASKS.md",
     "server/config/allowlist.json",
     "gitexporter.config.json",
+    "setup/",
     ".claude/"
   ]
 }

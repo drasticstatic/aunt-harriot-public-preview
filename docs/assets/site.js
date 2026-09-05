@@ -73,6 +73,7 @@ if (motionSwitch) {
     document.documentElement.classList.toggle('reduce-motion', on);
     hgSet('harriot-motion', on ? 'off' : 'on');
     hgSwitchSet(motionSwitch, on);
+    window.dispatchEvent(new Event('hg-motion-change'));
   });
 }
 
@@ -166,26 +167,54 @@ if (notifSwitch) {
 // else could live once there's a reason for it.
 (function () {
   var messages = [
-    { icon: 'eye-search', text: 'curiouser and curiouser' },
-    { icon: 'mood-crazy-happy', text: "we're all mad here" },
-    { icon: 'spade', text: 'off with your bug reports' },
-    { icon: 'arrow-autofit-height', text: 'one side makes you taller' },
-    { icon: 'hourglass-high', text: 'no time to say hello, goodbye' }
+    { icon: 'eye-search', icon2: 'zoom-in-area', text: 'curiouser and curiouser' },
+    { icon: 'mood-crazy-happy', icon2: 'brain', text: "we're all mad here" },
+    { icon: 'spade', icon2: 'cards', text: 'off with your bug reports' },
+    { icon: 'arrow-autofit-height', icon2: 'mushroom', text: 'one side makes you taller' },
+    { icon: 'hourglass-high', icon2: 'clock-hour-3', text: 'no time to say hello, goodbye' }
   ];
   var i = 0;
   document.querySelectorAll('.dots span').forEach(function (dot) {
     dot.addEventListener('click', function () {
       var m = messages[i % messages.length];
       i++;
+      var reduceMotion = document.documentElement.classList.contains('reduce-motion');
       var toast = document.createElement('div');
       toast.className = 'hg-toast';
-      toast.innerHTML = '<i class="ti ti-' + m.icon + '"></i> ' + m.text;
+      var icon1 = document.createElement('i');
+      icon1.className = 'ti ti-' + m.icon;
+      var textSpan = document.createElement('span');
+      textSpan.className = 'toast-text';
+      var icon2 = document.createElement('i');
+      icon2.className = 'ti ti-' + m.icon2;
+      toast.appendChild(icon1);
+      toast.appendChild(textSpan);
+      toast.appendChild(icon2);
       document.body.appendChild(toast);
       requestAnimationFrame(function () { toast.classList.add('show'); });
+
+      var revealMs;
+      if (reduceMotion) {
+        textSpan.textContent = m.text;
+        toast.classList.add('done');
+        revealMs = 0;
+      } else {
+        var ci = 0;
+        var typeInterval = setInterval(function () {
+          ci++;
+          textSpan.textContent = m.text.slice(0, ci);
+          if (ci >= m.text.length) {
+            clearInterval(typeInterval);
+            toast.classList.add('done');
+          }
+        }, 38);
+        revealMs = m.text.length * 38;
+      }
+
       setTimeout(function () {
         toast.classList.remove('show');
         setTimeout(function () { toast.remove(); }, 300);
-      }, 1800);
+      }, revealMs + 1600);
     });
   });
 })();

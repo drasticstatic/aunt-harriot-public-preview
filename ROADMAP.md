@@ -1,7 +1,7 @@
 # Aunt Harriot — Roadmap
 
 Architecture and open-questions doc for the portal/dashboard/harness Christopher asked for on
-2026-09-03: a fork of `anthropas-argus-alfred`'s Claude Code harness pattern, but authenticated by
+2026-09-03: a fork of [`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred-public-preview)'s Claude Code harness pattern, but authenticated by
 a visitor's own Anthropic API key instead of Christopher's subscription, so external collaborators
 (starting with Kenney, for [`iamoneself`](https://github.com/drasticstatic/iamoneself-public-preview) and
 [`david-amaringo`](https://github.com/drasticstatic/david-amaringo-public-preview)) can run an admin agent against
@@ -15,7 +15,8 @@ yet. See `README.md` for the one-paragraph pitch.
 `augment-intent-properties/AGENT-SYNC/created-by-mystarch/HANDOFF_20260904_HARRIOT_MAGIC_ROADMAP.md`
 — it captures scope decisions (native suggestion feature, no Intent-bridge dependency, BYOK
 deferred, PR-reviewer-chief role built here on plain `git`/`gh`) and reference UI patterns found in
-`pir-devine-news`/`iamoneself` worth reusing, so they don't get re-derived or re-opened.
+[`pir-devine-news`](https://github.com/drasticstatic/pir-devine-news-public)/`iamoneself` worth
+reusing, so they don't get re-derived or re-opened.
 
 ---
 
