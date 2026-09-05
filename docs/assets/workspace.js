@@ -21,7 +21,6 @@
     var row = document.getElementById('chip-row');
     if (!row) return;
     var html = '';
-    // duplicated once for a seamless marquee loop (chip-scroll keyframe moves -50%)
     [1, 2].forEach(function () {
       CHIPS.forEach(function (text) {
         html += '<button type="button" class="chip">' + text + '</button>';
@@ -36,8 +35,9 @@
     });
   }
 
-  /* ── auth gate (simulated — see file header) ───────────────────────── */
+  /* ── auth gate (simulated — see file header), now a modal wizard ──────── */
   function initGate() {
+    var modal = document.getElementById('gate-modal');
     var step1 = document.getElementById('step-1');
     var step2 = document.getElementById('step-2');
     var emailInput = document.getElementById('gate-email');
@@ -51,9 +51,8 @@
     sendBtn.addEventListener('click', function () {
       if (!emailInput.value.trim()) { emailInput.focus(); return; }
       sendBtn.disabled = true;
-      sendBtn.textContent = 'Sending…';
       setTimeout(function () {
-        sendBtn.textContent = 'Send magic link';
+        sendBtn.disabled = false;
         confirmBox.hidden = false;
       }, 600);
     });
@@ -78,37 +77,87 @@
       e.preventDefault();
       unlockWorkspace();
     });
+
+    function unlockWorkspace() {
+      modal.classList.remove('open');
+      document.getElementById('workbench').hidden = false;
+      var badge = document.getElementById('mode-badge');
+      badge.innerHTML = '⎙ PREVIEW · SIMULATED';
+      renderChips();
+      initRepoSwitcher();
+      initExamplePicker();
+      initFileTree();
+      initSidebarDrawer();
+      addMsg('agent', '⎈ ' + msgTypeIcon('agent') + "You're in. Ask for a change in plain English, or try one of the suggestions below.");
+      document.getElementById('chat-input').focus();
+    }
   }
 
-  function unlockWorkspace() {
-    document.getElementById('gate').hidden = true;
-    document.getElementById('workbench').hidden = false;
-    var badge = document.getElementById('mode-badge');
-    badge.textContent = 'PREVIEW · SIMULATED';
-    renderChips();
-    initRepoSwitcher();
-    addMsg('agent', "You're in. Ask for a change in plain English, or try one of the suggestions scrolling above.");
-    document.getElementById('chat-input').focus();
-  }
-
-  /* ── repo switcher ──────────────────────────────────────────────────── */
+  /* ── repo switcher + file tree ──────────────────────────────────────── */
   function initRepoSwitcher() {
     document.querySelectorAll('.session[data-repo]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         document.querySelectorAll('.session[data-repo]').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
         currentRepo = btn.getAttribute('data-repo');
-        addMsg('agent', 'Switched to <code>' + currentRepo + '</code>. What would you like to change there?');
+        document.getElementById('tree-iamoneself').hidden = currentRepo !== 'iamoneself';
+        document.getElementById('tree-david-amaringo').hidden = currentRepo !== 'david-amaringo';
+        addMsg('agent', msgTypeIcon('agent') + 'Switched to <code>' + currentRepo + '</code>. What would you like to change there?');
       });
     });
   }
 
+  function initFileTree() {
+    document.querySelectorAll('.file-tree .folder > .node').forEach(function (node) {
+      node.addEventListener('click', function () {
+        node.parentElement.classList.toggle('open');
+        var folderIcon = node.querySelector('.ti-folder, .ti-folder-open');
+        if (folderIcon) {
+          var open = node.parentElement.classList.contains('open');
+          folderIcon.className = open ? 'ti ti-folder-open' : 'ti ti-folder';
+        }
+      });
+    });
+  }
+
+  function initSidebarDrawer() {
+    var toggle = document.getElementById('sidebar-toggle');
+    var sidebar = document.getElementById('sidebar');
+    var backdrop = document.getElementById('sidebar-backdrop');
+    if (!toggle) return;
+    function close() { sidebar.classList.remove('drawer-open'); backdrop.classList.remove('open'); }
+    toggle.addEventListener('click', function () {
+      sidebar.classList.add('drawer-open');
+      backdrop.classList.add('open');
+    });
+    backdrop.addEventListener('click', close);
+  }
+
+  function initExamplePicker() {
+    var select = document.getElementById('example-select');
+    if (!select) return;
+    select.addEventListener('change', function () {
+      if (!select.value) return;
+      document.getElementById('chat-input').value = select.value;
+      select.value = '';
+      send();
+    });
+  }
+
   /* ── chat ───────────────────────────────────────────────────────────── */
+  function msgTypeIcon(who) {
+    return who === 'user'
+      ? '<i class="ti ti-message-user msg-type-icon"></i>'
+      : '<i class="ti ti-message-2-exclamation msg-type-icon"></i>';
+  }
+
   function addMsg(who, html) {
     var chat = document.getElementById('chat');
     var wrap = document.createElement('div');
     wrap.className = 'msg ' + who;
-    wrap.innerHTML = '<p class="who">' + (who === 'user' ? 'YOU' : 'HARRIOT') + '</p><div class="bubble">' + html + '</div>';
+    var whoIcon = who === 'user' ? 'ti-user-edit' : 'ti-robot';
+    var whoLabel = who === 'user' ? 'YOU' : 'HARRIOT';
+    wrap.innerHTML = '<p class="who"><i class="ti ' + whoIcon + '"></i>' + whoLabel + '</p><div class="bubble">' + html + '</div>';
     chat.appendChild(wrap);
     chat.scrollTop = chat.scrollHeight;
     return wrap;
@@ -119,7 +168,7 @@
     var wrap = document.createElement('div');
     wrap.className = 'msg agent';
     wrap.id = 'typing-indicator';
-    wrap.innerHTML = '<p class="who">HARRIOT</p><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    wrap.innerHTML = '<p class="who"><i class="ti ti-robot"></i>HARRIOT</p><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
     chat.appendChild(wrap);
     chat.scrollTop = chat.scrollHeight;
   }
@@ -133,7 +182,7 @@
     var text = input.value.trim();
     if (!text) return;
     input.value = '';
-    addMsg('user', escapeHtml(text));
+    addMsg('user', msgTypeIcon('user') + escapeHtml(text));
     showTyping();
     setTimeout(function () { hideTyping(); respond(text); }, 700 + Math.random() * 500);
   }
@@ -145,13 +194,33 @@
   }
 
   function diffBubble(intro, file, removeLine, addLine, note) {
-    return intro + '<div class="diff-card"><div class="file">' + currentRepo + '/' + file + '</div>' +
+    return msgTypeIcon('agent') + intro + '<div class="diff-card"><div class="file">' + currentRepo + '/' + file + '</div>' +
       (removeLine ? '<div class="line remove">− ' + removeLine + '</div>' : '') +
       '<div class="line add">+ ' + addLine + '</div></div>' +
       '<div class="action-row" data-actions>' +
-      '<button type="button" class="primary" data-approve>Looks good — open the PR</button>' +
-      '<button type="button" data-cancel>Change something first</button>' +
+      '<button type="button" class="primary" data-push><i class="ti ti-cube-send"></i> Push this change</button>' +
+      '<button type="button" data-cancel><i class="ti ti-adjustments-code"></i> Change something first</button>' +
       '</div><p class="note">' + note + '</p>';
+  }
+
+  function wireActions(msgEl) {
+    var actions = msgEl.querySelector('[data-actions]');
+    if (!actions) return;
+    actions.querySelector('[data-push]').addEventListener('click', function () {
+      actions.innerHTML =
+        '<span class="confirm-text">Are you sure?</span>' +
+        '<button type="button" class="confirm" data-yes><i class="ti ti-git-pull-request"></i> Yes, open the PR</button>' +
+        '<button type="button" data-no>Wait, let me reconsider</button>';
+      actions.querySelector('[data-yes]').addEventListener('click', function () {
+        actions.innerHTML = '<span class="logged-note"><i class="ti ti-git-pull-request"></i> Logged (demo) — this will actually open a pull request once the real backend is live.</span>';
+      });
+      actions.querySelector('[data-no]').addEventListener('click', function () {
+        actions.innerHTML = '<span class="logged-note">Cancelled — tell me what you\'d change about it.</span>';
+      });
+    });
+    actions.querySelector('[data-cancel]').addEventListener('click', function () {
+      actions.innerHTML = '<span class="logged-note">Cancelled — tell me what you\'d change about it.</span>';
+    });
   }
 
   function respond(text) {
@@ -207,18 +276,12 @@
         "In the real version I'd point at the actual line I found, not a placeholder."
       );
     } else {
-      addMsg('agent', 'I can help with that. Once the real backend is wired up, I\'d read the actual files in <code>' + currentRepo + '</code> and propose a specific diff. For now, try one of the suggestions scrolling above to see the shape of that response.<p class="note">See <a href="doc.html?doc=how-it-works">how it works</a> for exactly what\'s simulated here and what isn\'t yet.</p>');
+      addMsg('agent', msgTypeIcon('agent') + 'I can help with that. Once the real backend is wired up, I\'d read the actual files in <code>' + currentRepo + '</code> and propose a specific diff. For now, try one of the suggestions below to see the shape of that response.<p class="note">See <a href="doc.html?doc=how-it-works">how it works</a> for exactly what\'s simulated here and what isn\'t yet.</p>');
       return;
     }
 
     var msgEl = addMsg('agent', bubble);
-    var actions = msgEl.querySelector('[data-actions]');
-    actions.querySelector('[data-approve]').addEventListener('click', function () {
-      actions.innerHTML = '<span class="logged-note">✓ Logged (demo) — this will actually open a pull request once the real backend is live.</span>';
-    });
-    actions.querySelector('[data-cancel]').addEventListener('click', function () {
-      actions.innerHTML = '<span class="logged-note">Cancelled — tell me what you\'d change about it.</span>';
-    });
+    wireActions(msgEl);
   }
 
   document.addEventListener('DOMContentLoaded', function () {

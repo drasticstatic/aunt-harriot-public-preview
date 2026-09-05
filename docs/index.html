@@ -6,8 +6,9 @@
 <script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>Aunt Harriot</title>
 <meta name="description" content="A forkable Claude Code harness, authenticated by your own Anthropic API key — first built for Kenney's work on iamoneself and david-amaringo.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍🍳</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <style>
   .hero {
     position: relative;
@@ -65,7 +66,12 @@
     line-height: 1;
     margin: 0 0 18px;
     letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
   }
+  .hero h1 .ti { font-size: 0.6em; color: var(--signature); }
 
   .hero .lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 34px; }
   .hero .lede strong { color: var(--ink); font-weight: 600; }
@@ -81,6 +87,9 @@
     border: 1px solid var(--line);
     color: var(--ink);
     transition: transform 0.15s ease, border-color 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .cta:hover { transform: translateY(-2px); }
   .cta.primary { background: var(--signature); border-color: var(--signature); color: var(--gloaming-950); }
@@ -119,37 +128,63 @@
       <span class="filename"><b>harriot</b>/index.html</span>
     </div>
     <nav class="tabs">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="workspace.html">Workspace</a>
-      <a href="about.html">FAQ</a>
+      <a href="index.html" aria-current="page"><i class="ti ti-home-link"></i>Home</a>
+      <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+      <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
     </nav>
     <div class="tb-right">
-      <button class="theme-toggle" type="button"></button>
-      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false"><i class="ti ti-navigation-search"></i></button>
     </div>
   </div>
   <nav class="mobile-menu" id="mobile-menu">
-    <a href="index.html" aria-current="page">Home</a>
-    <a href="workspace.html">Workspace</a>
-    <a href="about.html">FAQ</a>
-    <button class="theme-toggle" type="button"></button>
+    <a href="index.html" aria-current="page"><i class="ti ti-home-link"></i>Home</a>
+    <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+    <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
+    <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i> Settings</button>
   </nav>
+
+  <div class="hg-modal-overlay" id="settings-modal">
+    <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="hg-modal-head">
+        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
+      </div>
+      <div class="hg-modal-body">
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-carousel-horizontal"></i><span><b>Autoplay examples</b><span class="sub">Scroll the workspace's prompt suggestions</span></span></span>
+          <button class="hg-switch" id="autoplay-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-accessible"></i><span><b>Reduce motion</b><span class="sub">Turns off the hero swirl and other animation</span></span></span>
+          <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
+          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section class="hero">
       <div class="swirl" aria-hidden="true"></div>
       <div class="vignette" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="eyebrow">a Claude Code harness, opened just for you</p>
-        <h1>Aunt Harriot</h1>
+        <p class="eyebrow">𐃏 a Claude Code harness, opened just for you</p>
+        <h1><i class="ti ti-access-point"></i>Aunt Harriot</h1>
         <p class="lede">
           <strong>You bring your own Anthropic API key</strong> — Harriot brings the git
-          know-how. First stop: helping Kenney edit <strong>iamoneself</strong> and
-          <strong>david-amaringo</strong> without ever touching a terminal.
+          know-how, opened for whoever she's invited to help.
         </p>
         <div class="cta-row">
-          <a class="cta primary" href="workspace.html">Peek into the workspace</a>
-          <a class="cta secondary" href="about.html">Read the full story</a>
+          <a class="cta primary" href="workspace.html">Enter into the workspace <i class="ti ti-code"></i></a>
+          <a class="cta secondary" href="about.html">Read the full story <i class="ti ti-code-ai"></i></a>
         </div>
       </div>
     </section>
@@ -176,14 +211,14 @@
         <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
         main
       </span>
-      <span class="sep">·</span> <a href="index.html" aria-current="page">home</a>
-      <span class="sep">·</span> <a href="workspace.html">terminal</a>
-      <span class="sep">·</span> <a href="about.html">docs</a>
+      <span class="sep">⑂</span> <a href="index.html" aria-current="page">home</a>
+      <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
+      <span class="sep">⎇</span> <a href="about.html">docs</a>
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
     </span>
   </div>
 

@@ -6,8 +6,9 @@
 <script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>Workspace — Aunt Harriot</title>
 <meta name="description" content="Play with what it'll actually feel like to hand Harriot a task in plain English and review the change she proposes. Real UI, simulated intelligence — see how-it-works for the honest breakdown.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍🍳</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <style>
   .intro-banner {
     max-width: 1080px; margin: 18px auto 0; padding: 12px 20px;
@@ -23,20 +24,31 @@
   }
 
   .workspace-topbar {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--bg-inset);
   }
-  .workspace-topbar .brand { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; }
+  .workspace-topbar .brand {
+    font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px; min-width: 0;
+  }
+  .workspace-topbar .brand .ti { color: var(--signature); flex: 0 0 auto; }
+  .workspace-topbar .right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
   .live-badge {
     font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 4px;
     background: var(--cheshire-900); color: var(--cheshire-300); border: 1px solid var(--cheshire-500);
-    font-family: var(--font-mono); letter-spacing: 0.03em;
+    font-family: var(--font-mono); letter-spacing: 0.03em; white-space: nowrap;
   }
   html.light .live-badge { background: var(--cheshire-100); color: var(--cheshire-900); }
 
-  /* ── auth gate ── */
-  .gate { padding: 34px 28px; }
-  .gate .steps { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+  .sidebar-toggle {
+    display: none; width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--line);
+    background: transparent; color: var(--ink-soft); cursor: pointer; align-items: center; justify-content: center;
+  }
+
+  /* ── sign-in wizard modal ── */
+  #gate-modal .hg-modal { max-width: 440px; }
+  .gate-body { padding: 22px 24px 26px; }
+  .steps { display: flex; flex-direction: column; gap: 16px; }
   .step {
     border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; opacity: 0.5;
     transition: opacity 0.2s ease;
@@ -59,35 +71,63 @@
   .step button {
     font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; padding: 8px 15px;
     border-radius: 6px; border: 1px solid var(--signature); background: var(--signature);
-    color: var(--gloaming-950); cursor: pointer;
+    color: var(--gloaming-950); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
   }
   html.light .step button { color: var(--paper-50); }
   .step button:disabled { opacity: 0.4; cursor: not-allowed; }
   .step .confirmed { font-size: 0.85rem; color: var(--cheshire-400); }
   html.light .step .confirmed { color: var(--cheshire-700); }
-  .gate-skip { text-align: center; margin-top: 22px; }
-  .gate-skip a { font-size: 0.85rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); }
+  .gate-skip { text-align: center; margin-top: 20px; }
+  .gate-skip a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.85rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line);
+  }
   .gate-skip a:hover { color: var(--ink); }
 
-  /* ── chip ticker ── */
-  .chip-track { overflow: hidden; border-bottom: 1px solid var(--line); background: var(--bg); }
+  /* ── chip ticker + cherry-pick dropdown ── */
+  .example-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .example-picker {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 0 10px;
+    border-right: 1px solid var(--line); color: var(--signature); font-size: 0.9rem;
+  }
+  .example-picker select {
+    background: transparent; border: none; color: var(--ink-soft); font-family: var(--font-body);
+    font-size: 0.78rem; max-width: 90px; cursor: pointer;
+  }
+  .chip-track { overflow: hidden; flex: 1 1 auto; min-width: 0; }
   .chip-row {
     display: flex; gap: 10px; padding: 10px 14px; width: max-content;
     animation: chip-scroll 34s linear infinite;
   }
   @keyframes chip-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .chip-row { animation: none; overflow-x: auto; } }
+  body.no-autoplay .chip-row { animation-play-state: paused; overflow-x: auto; }
   .chip {
     font-size: 0.82rem; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
     color: var(--ink-soft); white-space: nowrap; cursor: pointer; background: var(--bg-raised);
   }
   .chip:hover { border-color: var(--signature); color: var(--ink); }
 
-  .workspace-body { display: grid; grid-template-columns: 210px 1fr; min-height: 460px; }
-  @media (max-width: 680px) { .workspace-body { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .workspace-body { display: grid; grid-template-columns: 220px 1fr; min-height: 460px; min-width: 0; position: relative; }
+  .workspace-body > div { min-width: 0; overflow-x: hidden; }
+  @media (max-width: 680px) {
+    .workspace-body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .sidebar.drawer-open {
+      display: block; position: fixed; top: 0; left: 0; bottom: 0; width: 78vw; max-width: 280px;
+      z-index: 90; background: var(--bg-raised); overflow-y: auto;
+      box-shadow: 20px 0 50px rgba(0,0,0,0.35); border-right: 1px solid var(--line);
+    }
+    .sidebar-backdrop.open { display: block; }
+    .sidebar-toggle { display: flex; }
+  }
+  .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(5,3,10,0.5); z-index: 85; }
 
   .sidebar { border-right: 1px solid var(--line); padding: 16px 14px; }
-  .sidebar .heading { font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 10px; font-family: var(--font-mono); }
+  .sidebar .heading {
+    font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 10px; font-family: var(--font-mono);
+    display: flex; align-items: center; gap: 6px;
+  }
   .sidebar .session {
     display: block; width: 100%; text-align: left; padding: 7px 10px; border-radius: 6px;
     font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 4px; border: none; background: none;
@@ -95,15 +135,34 @@
   }
   .sidebar .session.active { background: var(--bg); color: var(--ink); border-left: 2px solid var(--signature); }
   .sidebar .session:hover { color: var(--ink); }
-  .sidebar .new-request { margin-top: 14px; display: block; text-align: center; padding: 8px; border: 1px dashed var(--line); border-radius: 6px; font-size: 0.84rem; color: var(--ink-soft); }
+
+  .file-tree { margin-top: 16px; font-size: 0.85rem; }
+  .file-tree ul { list-style: none; margin: 0; padding-left: 16px; }
+  .file-tree > ul { padding-left: 0; }
+  .file-tree li { margin: 2px 0; }
+  .file-tree .node {
+    display: flex; align-items: center; gap: 6px; padding: 3px 4px; border-radius: 4px;
+    color: var(--ink-soft); cursor: default; overflow: hidden;
+  }
+  .file-tree .node span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-tree .folder > .node { cursor: pointer; }
+  .file-tree .folder > .node:hover { background: var(--bg); color: var(--ink); }
+  .file-tree .folder .ti-chevron-right { transition: transform 0.15s ease; flex: 0 0 auto; font-size: 0.8em; }
+  .file-tree .folder.open > .node .ti-chevron-right { transform: rotate(90deg); }
+  .file-tree .folder > ul { display: none; }
+  .file-tree .folder.open > ul { display: block; }
+  .file-tree .ti-folder, .file-tree .ti-folder-open { color: var(--hatter-400); flex: 0 0 auto; }
+  .file-tree .file .ti { color: var(--ink-soft); flex: 0 0 auto; }
+  [hidden] { display: none !important; }
 
   .chat { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; max-height: 560px; overflow-y: auto; overflow-x: hidden; }
   .msg { max-width: min(580px, 100%); min-width: 0; }
   .msg.agent { align-self: flex-start; }
   .msg.user { align-self: flex-end; margin-left: auto; }
-  .msg .who { font-size: 0.72rem; color: var(--ink-soft); margin: 0 0 4px; font-family: var(--font-mono); }
-  .msg.user .who { text-align: right; }
+  .msg .who { font-size: 0.72rem; color: var(--ink-soft); margin: 0 0 4px; font-family: var(--font-mono); display: flex; align-items: center; gap: 5px; }
+  .msg.user .who { justify-content: flex-end; }
   .msg .bubble { padding: 12px 16px; border-radius: 8px; font-size: 0.94rem; overflow-wrap: anywhere; }
+  .msg .bubble .msg-type-icon { margin-right: 7px; color: var(--ink-soft); }
   .msg.user .bubble { background: var(--bg); }
   .msg.agent .bubble { background: var(--caterpillar-900); border: 1px solid var(--line); }
   html.light .msg.agent .bubble { background: var(--caterpillar-100); }
@@ -122,27 +181,30 @@
   html.light .diff-card .line.remove { color: var(--queen-900); }
   html.light .diff-card .line.add { color: var(--cheshire-900); }
 
-  .action-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .action-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
   .action-row button {
     font-family: var(--font-body); font-size: 0.84rem; font-weight: 600;
     padding: 8px 15px; border-radius: 6px; border: 1px solid var(--line);
     background: transparent; color: var(--ink); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
   }
   .action-row button.primary { background: var(--cheshire-500); border-color: var(--cheshire-500); color: var(--gloaming-950); }
-  .action-row button:hover:not(.primary) { border-color: var(--signature); }
+  .action-row button.confirm { background: var(--queen-500); border-color: var(--queen-500); color: #fff; }
+  .action-row button:hover:not(.primary):not(.confirm) { border-color: var(--signature); }
+  .action-row .confirm-text { font-size: 0.84rem; color: var(--ink-soft); }
   .msg .note { margin-top: 10px; font-size: 0.82rem; color: var(--ink-soft); }
-  .logged-note { font-size: 0.8rem; color: var(--cheshire-400); }
+  .logged-note { font-size: 0.8rem; color: var(--cheshire-400); display: flex; align-items: center; gap: 6px; }
   html.light .logged-note { color: var(--cheshire-700); }
 
-  .composer { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); }
+  .composer { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); min-width: 0; }
   .composer input {
-    flex: 1; padding: 10px 13px; border-radius: 8px; border: 1px solid var(--line);
+    flex: 1 1 auto; min-width: 0; padding: 10px 13px; border-radius: 8px; border: 1px solid var(--line);
     background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 0.92rem;
   }
   .composer button {
     font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; padding: 10px 18px;
     border-radius: 8px; border: 1px solid var(--signature); background: var(--signature);
-    color: var(--gloaming-950); cursor: pointer;
+    color: var(--gloaming-950); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
   }
   html.light .composer button { color: var(--paper-50); }
 </style>
@@ -155,21 +217,78 @@
       <span class="filename"><b>harriot</b>/workspace.html</span>
     </div>
     <nav class="tabs">
-      <a href="index.html">Home</a>
-      <a href="workspace.html" aria-current="page">Workspace</a>
-      <a href="about.html">FAQ</a>
+      <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+      <a href="workspace.html" aria-current="page"><i class="ti ti-terminal-2"></i>Workspace</a>
+      <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
     </nav>
     <div class="tb-right">
-      <button class="theme-toggle" type="button"></button>
-      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false"><i class="ti ti-navigation-search"></i></button>
     </div>
   </div>
   <nav class="mobile-menu" id="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="workspace.html" aria-current="page">Workspace</a>
-    <a href="about.html">FAQ</a>
-    <button class="theme-toggle" type="button"></button>
+    <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+    <a href="workspace.html" aria-current="page"><i class="ti ti-terminal-2"></i>Workspace</a>
+    <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
+    <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i> Settings</button>
   </nav>
+
+  <div class="hg-modal-overlay" id="settings-modal">
+    <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="hg-modal-head">
+        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
+      </div>
+      <div class="hg-modal-body">
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-carousel-horizontal"></i><span><b>Autoplay examples</b><span class="sub">Scroll the prompt suggestions below</span></span></span>
+          <button class="hg-switch" id="autoplay-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-accessible"></i><span><b>Reduce motion</b><span class="sub">Turns off animation across the site</span></span></span>
+          <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
+          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sign-in wizard -->
+  <div class="hg-modal-overlay open" id="gate-modal">
+    <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+      <div class="hg-modal-head">
+        <h2 id="gate-title"><i class="ti ti-terminal-2"></i> Enter the workbench</h2>
+      </div>
+      <div class="gate-body">
+        <div class="steps">
+          <div class="step active" id="step-1">
+            <div><span class="n">1</span><h3>Sign in ␣</h3></div>
+            <p>Enter any email — this demo simulates the magic link, it doesn't send one.</p>
+            <input type="email" id="gate-email" placeholder="you@example.com" autocomplete="off">
+            <button type="button" id="gate-send"><i class="ti ti-mail-spark"></i> Send magic link</button>
+            <div id="gate-step1-confirm" hidden>
+              <p class="confirmed">✓ Link "sent" — in the real version, check your inbox.</p>
+              <button type="button" id="gate-clicked">I clicked the link</button>
+            </div>
+          </div>
+          <div class="step" id="step-2">
+            <div><span class="n">2</span><h3>Bring your own key ⎀</h3></div>
+            <p>Your Anthropic API key — kept only in this browser tab for the demo, never sent anywhere.</p>
+            <input type="password" id="gate-key" placeholder="sk-ant-…" autocomplete="off" disabled>
+            <button type="button" id="gate-save" disabled><i class="ti ti-user-key"></i> Save key</button>
+          </div>
+        </div>
+        <p class="gate-skip"><a href="#" id="gate-skip">⎋ <i class="ti ti-queue-pop-in"></i> Skip this — just show me the workspace ⎘</a></p>
+      </div>
+    </div>
+  </div>
 
   <main>
     <p class="intro-banner">
@@ -181,48 +300,91 @@
 
     <div class="workspace">
       <div class="workspace-topbar">
-        <span class="brand">🎩 Harriot's Workbench</span>
-        <span class="live-badge" id="mode-badge">SIGN-IN DEMO</span>
-      </div>
-
-      <div id="gate" class="gate">
-        <div class="steps">
-          <div class="step active" id="step-1">
-            <div><span class="n">1</span><h3>Sign in</h3></div>
-            <p>Enter any email — this demo simulates the magic link, it doesn't send one.</p>
-            <input type="email" id="gate-email" placeholder="you@example.com" autocomplete="off">
-            <button type="button" id="gate-send">Send magic link</button>
-            <div id="gate-step1-confirm" hidden>
-              <p class="confirmed">✓ Link "sent" — in the real version, check your inbox.</p>
-              <button type="button" id="gate-clicked">I clicked the link</button>
-            </div>
-          </div>
-          <div class="step" id="step-2">
-            <div><span class="n">2</span><h3>Bring your own key</h3></div>
-            <p>Your Anthropic API key — kept only in this browser tab for the demo, never sent anywhere.</p>
-            <input type="password" id="gate-key" placeholder="sk-ant-…" autocomplete="off" disabled>
-            <button type="button" id="gate-save" disabled>Save key</button>
-          </div>
-        </div>
-        <p class="gate-skip"><a href="#" id="gate-skip">Skip this — just show me the workspace</a></p>
+        <span class="brand"><i class="ti ti-message-chatbot"></i> Harriot's ⌘ Workbench</span>
+        <span class="right">
+          <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Repo files"><i class="ti ti-folder-root"></i></button>
+          <span class="live-badge" id="mode-badge">⎉ SIGN-IN DEMO</span>
+        </span>
       </div>
 
       <div id="workbench" hidden>
-        <div class="chip-track">
-          <div class="chip-row" id="chip-row"></div>
+        <div class="example-row">
+          <label class="example-picker">
+            <i class="ti ti-git-cherry-pick"></i>
+            <select id="example-select">
+              <option value="">examples…</option>
+              <option>Update the retreat dates to March 15–17</option>
+              <option>Add a new FAQ about integration circles</option>
+              <option>Update David's artist bio</option>
+              <option>Change the contact email on the booking page</option>
+              <option>Add a testimonial from a recent retreat</option>
+              <option>Fix a typo in the Plants &amp; Miracles section</option>
+            </select>
+          </label>
+          <div class="chip-track">
+            <div class="chip-row" id="chip-row"></div>
+          </div>
         </div>
         <div class="workspace-body">
-          <aside class="sidebar">
-            <p class="heading">YOUR REPOS</p>
+          <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+          <aside class="sidebar" id="sidebar">
+            <p class="heading"><i class="ti ti-folder-root"></i> YOUR REPOS</p>
             <button type="button" class="session active" data-repo="iamoneself">iamoneself</button>
             <button type="button" class="session" data-repo="david-amaringo">david-amaringo</button>
+
+            <div class="file-tree" id="tree-iamoneself">
+              <ul>
+                <li class="folder open"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>src/app</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>page.tsx</span></div></li>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>retreats/page.tsx</span></div></li>
+                  </ul>
+                </li>
+                <li class="folder"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>src/components</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>AdminPanel.tsx</span></div></li>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>SettingsModal.tsx</span></div></li>
+                  </ul>
+                </li>
+                <li class="folder"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>content</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-code"></i><span>faq.json</span></div></li>
+                    <li class="file"><div class="node"><i class="ti ti-file-code"></i><span>retreats.json</span></div></li>
+                  </ul>
+                </li>
+                <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>package.json</span></div></li>
+              </ul>
+            </div>
+
+            <div class="file-tree" id="tree-david-amaringo" hidden>
+              <ul>
+                <li class="folder open"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>src/app</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>page.tsx</span></div></li>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>patronage/page.tsx</span></div></li>
+                  </ul>
+                </li>
+                <li class="folder"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>src/components/modals</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>PatronageModal.tsx</span></div></li>
+                  </ul>
+                </li>
+                <li class="folder"><div class="node"><i class="ti ti-chevron-right"></i><i class="ti ti-folder"></i><span>content</span></div>
+                  <ul>
+                    <li class="file"><div class="node"><i class="ti ti-file-code"></i><span>artist-bio.md</span></div></li>
+                  </ul>
+                </li>
+                <li class="file"><div class="node"><i class="ti ti-file-text"></i><span>package.json</span></div></li>
+              </ul>
+            </div>
+
             <span class="new-request">+ New request</span>
           </aside>
           <div>
             <div class="chat" id="chat"></div>
             <div class="composer">
-              <input type="text" id="chat-input" placeholder="Describe what you want changed…" autocomplete="off">
-              <button type="button" id="chat-send">Send</button>
+              <input type="text" id="chat-input" placeholder="✧ describe what you want changed ⎄" autocomplete="off">
+              <button type="button" id="chat-send"><i class="ti ti-location-code"></i></button>
             </div>
           </div>
         </div>
@@ -236,14 +398,14 @@
         <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
         main
       </span>
-      <span class="sep">·</span> <a href="index.html">home</a>
-      <span class="sep">·</span> <a href="workspace.html" aria-current="page">terminal</a>
-      <span class="sep">·</span> <a href="about.html">docs</a>
+      <span class="sep">⑂</span> <a href="index.html">home</a>
+      <span class="sep">⌥</span> <a href="workspace.html" aria-current="page">terminal</a>
+      <span class="sep">⎇</span> <a href="about.html">docs</a>
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
     </span>
   </div>
 

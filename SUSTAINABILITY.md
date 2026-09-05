@@ -24,7 +24,7 @@ site simply stays up exactly as it is, indefinitely.
 
 Built under Christopher Wilson's personal GitHub account (`drasticstatic`). Aunt Harriot is
 explicitly designed to be **forked** — the whole point of the bring-your-own-API-key model (see
-[`ROADMAP.md`](ROADMAP.md)) is that anyone can stand up their own instance without needing
+[`ROADMAP.md`](doc.html?doc=roadmap)) is that anyone can stand up their own instance without needing
 Christopher's credentials, subscription, or involvement at all.
 
 ---
@@ -36,7 +36,7 @@ Christopher's credentials, subscription, or involvement at all.
 | **What does this cost Kenney?** | $0 beyond his own Anthropic API usage. Harriot's thinking is billed to whichever key the visitor supplies, not to Christopher. |
 | **What if Christopher moves on?** | The repo can be forked or transferred like any other. Since the front end is plain static HTML/CSS/JS with no build step, anyone can read, edit, and redeploy it without special tooling. |
 | **What if GitHub goes down?** | GitHub Pages has 99.9%+ uptime. Worst case, the static files (`docs/`) can be hosted anywhere — Netlify, Vercel, or any web server — at no cost. |
-| **What if Kenney wants his own instance instead?** | That's the actual design goal, not an edge case — fork the repo, point it at your own repos, bring your own API key. See [`ROADMAP.md`](ROADMAP.md). |
+| **What if Kenney wants his own instance instead?** | That's the actual design goal, not an edge case — fork the repo, point it at your own repos, bring your own API key. See [`ROADMAP.md`](doc.html?doc=roadmap). |
 | **What if Anthropic's API changes pricing?** | The front end you're reading right now runs without any AI subscription at all — it's static HTML. The real backend (not yet built) will need an API key regardless of who's paying for it; that cost is the visitor's own choice, not a fixed platform fee. |
 
 ---
@@ -52,8 +52,28 @@ Christopher's credentials, subscription, or involvement at all.
 
 The real backend — a scoped GitHub App/PAT for Harriot's own git identity, a magic-link + invite
 allowlist login, and wherever the API key gets held — isn't built yet (see
-[`ROADMAP.md`](ROADMAP.md) §5). Its hosting cost isn't decided either, since the hosting platform
+[`ROADMAP.md`](doc.html?doc=roadmap) §5). Its hosting cost isn't decided either, since the hosting platform
 itself is one of the open questions.
+
+---
+
+## The cost shape of the leading backend candidate
+
+Not decided, not built — but worth naming honestly here since it changes the cost picture from
+the table above. Christopher's considering a **Next.js front end paired with a Django backend**
+for the real dashboard (full reasoning: [`HOW-IT-WORKS.md`](doc.html?doc=how-it-works) Part four,
+[`ROADMAP.md`](doc.html?doc=roadmap) §6). If that's the direction:
+
+- **Two codebases means two hosting bills**, not one — a Node process for Next.js and a Python
+  process for Django, likely on different platforms or at least different services. Still modest
+  at Kenney's single-user scale, but not the $0-beyond-API-usage picture the static front end
+  enjoys today.
+- **Django's background-job story (Celery) needs a worker process and a queue** (Redis, typically)
+  if the harness ever does anything heavier than a quick request/response — re-indexing content,
+  retraining, batch operations. Another line item, not free.
+- **What stays true regardless**: the actual thinking still runs on whichever Anthropic API key
+  the visitor supplies. The backend's hosting is Christopher's cost to carry; a visitor's own API
+  usage never becomes his bill.
 
 ---
 
@@ -87,4 +107,4 @@ issue on the public repo.
 ---
 
 *This document is public and intentionally written for both non-technical readers and developers.*
-*Last updated: September 4, 2026.*
+*Last updated: September 5, 2026.*

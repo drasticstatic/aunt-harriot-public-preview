@@ -1,10 +1,13 @@
-# Aunt Harriot 🎩
+# Aunt Harriot 🧑‍🍳
 
-> A fork of `anthropas-argus-alfred`'s Claude Code harness — same admin-agent/skills model, but
-> authenticated by a visitor's own Anthropic API key through a front-end portal instead of
-> Christopher's Claude Pro/Max subscription, so people outside this ecosystem can run their own
-> instance against their own codebases (or, for Kenney specifically, against `iamoneself` and
-> `david-amaringo` on scoped feature branches Christopher reviews and merges).
+> A fork of [`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred)'s
+> Claude Code harness — same admin-agent/skills model, but authenticated by a visitor's own
+> Anthropic API key through a front-end portal instead of Christopher's Claude Pro/Max
+> subscription, so people outside this ecosystem can run their own instance against their own
+> codebases (or, for Kenney specifically, against
+> [`iamoneself`](https://github.com/drasticstatic/iamoneself) and
+> [`david-amaringo`](https://github.com/drasticstatic/david-amaringo) on scoped feature branches
+> Christopher reviews and merges).
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](LICENSE)
 [![Public Preview](https://img.shields.io/badge/%F0%9F%8C%90%20Public%20Preview-Live-brightgreen)](https://drasticstatic.github.io/aunt-harriot-public-preview/)
@@ -54,8 +57,9 @@
 ## 👋 What this is
 
 Christopher already has two working, subscription-authenticated harnesses in this ecosystem:
-Mystarch (app-level, Augment Intent) and Alfred (`anthropas-argus-alfred`, native Claude Code
-CLI, general-purpose). Both assume the person driving the session has Christopher's own
+Mystarch (app-level, Augment Intent) and Alfred
+([`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred), native
+Claude Code CLI, general-purpose). Both assume the person driving the session has Christopher's own
 Claude Pro/Max login. Aunt Harriot removes that assumption — she's the same shape of harness
 (admin dashboard, `.claude/skills`, a `ClaudeCodeHarness`-style agent loop) but front-end,
 portal-login, and **bring-your-own-Anthropic-API-key** instead.
@@ -65,7 +69,7 @@ update the `pir-devine-news` front end without his help) and a lead-collection c
 agent, both powered by `platform.claude.com`/NVIDIA NIM, but never finished wiring the backend —
 NIM's reliability issues echoed the same ACP flakiness this whole ecosystem has been fighting.
 Kenney is now purchasing `platform.claude.com` access to power a similar admin agent for
-`iamoneself` — Aunt Harriot is the shared, reusable version of that idea: prove the `ws.app.*`
+[`iamoneself`](https://github.com/drasticstatic/iamoneself) — Aunt Harriot is the shared, reusable version of that idea: prove the `ws.app.*`
 integration pattern once (see `mystarch_chief-of-staff_acp-spoof`), then give Kenney (and anyone
 else) their own instance instead of rebuilding this per-project.
 
@@ -116,8 +120,8 @@ visitor (same `.dark`-class convention as `iamoneself`/`findyourfeathers`).
 | Page | What it's for |
 |------|---------------|
 | [Home](https://drasticstatic.github.io/aunt-harriot-public-preview/) | The portal — who Harriot is, one paragraph, two doors in |
-| [Workspace preview](https://drasticstatic.github.io/aunt-harriot-public-preview/workspace.html) | A labeled, non-live mock of the actual chat → diff → PR flow |
-| [How it works & FAQ](https://drasticstatic.github.io/aunt-harriot-public-preview/about.html) | The deep-dive for Kenney (a systems engineer) — mechanics, roadmap, FAQ |
+| [Workspace](https://drasticstatic.github.io/aunt-harriot-public-preview/workspace.html) | A real, interactive mock of the chat → diff → PR flow — genuinely working UI, honestly-labeled simulated intelligence |
+| [FAQ](https://drasticstatic.github.io/aunt-harriot-public-preview/about.html) | Answers plus links to the rendered `ROADMAP.md`/`HOW-IT-WORKS.md`/`SUSTAINABILITY.md` docs |
 
 ---
 

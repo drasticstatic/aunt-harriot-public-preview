@@ -6,23 +6,30 @@
 <script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>FAQ — Aunt Harriot</title>
 <meta name="description" content="Answers to the questions you'll actually have — and links to the full mechanics, roadmap, and sustainability docs.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍🍳</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <style>
   .page-head { max-width: 720px; margin: 0 auto; padding: 40px 24px 8px; }
-  .page-head h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .page-head h1 {
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.6rem);
+    margin: 0 0 10px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 12px;
+  }
+  .page-head h1 .ti { color: var(--signature); font-size: 0.85em; flex: 0 0 auto; }
   .page-head .lede { color: var(--ink-soft); font-size: 1.05rem; max-width: 62ch; }
 
-  .faq-jump { max-width: 720px; margin: 18px auto 0; padding: 0 24px; }
+  .faq-jump { max-width: 720px; margin: 20px auto 0; padding: 0 24px; }
   .faq-jump a {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft);
-    border-bottom: 1px dashed var(--line);
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-body); font-weight: 600; font-size: 0.9rem;
+    padding: 10px 18px; border-radius: 6px; border: 1px solid var(--signature);
+    color: var(--ink); background: var(--bg-inset);
   }
-  .faq-jump a:hover { color: var(--ink); border-color: var(--signature); }
+  .faq-jump a:hover { background: var(--signature); color: var(--gloaming-950); }
+  html.light .faq-jump a:hover { color: var(--paper-50); }
 
   .doc-cards {
-    max-width: 720px; margin: 14px auto 44px; padding: 0 24px;
+    max-width: 720px; margin: 22px auto 44px; padding: 0 24px;
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   }
   @media (max-width: 620px) { .doc-cards { grid-template-columns: 1fr; } }
@@ -35,6 +42,8 @@
   .doc-cards a:nth-child(1) { --line-accent: var(--caterpillar-500); }
   .doc-cards a:nth-child(2) { --line-accent: var(--queen-500); }
   .doc-cards a:nth-child(3) { --line-accent: var(--hatter-500); }
+  .doc-cards .t { font-weight: 700; font-size: 0.95rem; margin: 0 0 4px; display: flex; align-items: center; gap: 7px; }
+  .doc-cards .t .ti { color: var(--line-accent); }
   .doc-cards a::after {
     content: "→"; position: absolute; top: 16px; right: 14px;
     color: var(--line-accent); font-size: 0.95rem;
@@ -45,18 +54,25 @@
     border-top-color: var(--line-accent);
     box-shadow: 0 10px 26px -12px var(--signature), 0 0 0 1px var(--signature);
   }
-  .doc-cards .t { font-weight: 700; font-size: 0.95rem; margin: 0 0 4px; }
   .doc-cards .d { color: var(--ink-soft); font-size: 0.82rem; }
 
   main > .content { max-width: 720px; margin: 0 auto; padding: 0 24px 60px; }
   section { padding: 34px 0; border-top: 1px solid var(--line); }
-  section h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; margin: 0 0 18px; }
+  section h2 {
+    font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; margin: 0 0 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  section h2 .ti { color: var(--signature); }
+  section h2 .ti-yarn { margin-left: -2px; font-size: 0.85em; color: var(--hatter-400); }
 
   code { background: var(--bg-inset); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; font-size: 0.88em; font-family: var(--font-mono); }
 
   details { border-bottom: 1px solid var(--line); padding: 13px 0; }
-  details summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 1rem; }
-  details p { margin: 10px 0 0; color: var(--ink-soft); font-size: 0.98rem; max-width: 64ch; }
+  details summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+  details summary .ti { flex: 0 0 auto; color: var(--ink-soft); font-size: 1.05em; }
+  details[open] summary .ti { color: var(--signature); }
+  details p { margin: 10px 0 0 30px; color: var(--ink-soft); font-size: 0.98rem; max-width: 62ch; }
+  details p a { color: var(--signature); }
 </style>
 </head>
 <body>
@@ -67,60 +83,87 @@
       <span class="filename"><b>harriot</b>/about.html</span>
     </div>
     <nav class="tabs">
-      <a href="index.html">Home</a>
-      <a href="workspace.html">Workspace</a>
-      <a href="about.html" aria-current="page">FAQ</a>
+      <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+      <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+      <a href="about.html" aria-current="page"><i class="ti ti-message-question"></i>FAQ</a>
     </nav>
     <div class="tb-right">
-      <button class="theme-toggle" type="button"></button>
-      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false"><i class="ti ti-navigation-search"></i></button>
     </div>
   </div>
   <nav class="mobile-menu" id="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="workspace.html">Workspace</a>
-    <a href="about.html" aria-current="page">FAQ</a>
-    <button class="theme-toggle" type="button"></button>
+    <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+    <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+    <a href="about.html" aria-current="page"><i class="ti ti-message-question"></i>FAQ</a>
+    <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i> Settings</button>
   </nav>
+
+  <div class="hg-modal-overlay" id="settings-modal">
+    <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="hg-modal-head">
+        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
+      </div>
+      <div class="hg-modal-body">
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-carousel-horizontal"></i><span><b>Autoplay examples</b><span class="sub">Scroll the workspace's prompt suggestions</span></span></span>
+          <button class="hg-switch" id="autoplay-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-accessible"></i><span><b>Reduce motion</b><span class="sub">Turns off the hero swirl and other animation</span></span></span>
+          <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
+          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main>
     <div class="page-head">
-      <h1>Questions you'll actually have</h1>
+      <h1><i class="ti ti-report-search"></i>Questions you'll actually&nbsp;have</h1>
       <p class="lede">
         Quick answers below. For the real mechanics, the roadmap, or how this is hosted and kept
         sustainable, read the full docs — rendered straight from the source, not a paraphrase.
       </p>
     </div>
 
-    <p class="faq-jump"><a href="#faq">↓ Skip straight to the FAQ</a></p>
+    <p class="faq-jump"><a href="#faq"><i class="ti ti-arrow-down"></i> Skip straight to the FAQ</a></p>
 
     <div class="doc-cards">
       <a href="doc.html?doc=how-it-works">
-        <p class="t">How it works</p>
+        <p class="t"><i class="ti ti-message-question"></i>How it works</p>
         <p class="d">The actual mechanics, for a technical reader</p>
       </a>
       <a href="doc.html?doc=roadmap">
-        <p class="t">Roadmap</p>
+        <p class="t"><i class="ti ti-map-route"></i>Roadmap</p>
         <p class="d">What's done, what's next, in order</p>
       </a>
       <a href="doc.html?doc=sustainability">
-        <p class="t">Sustainability</p>
+        <p class="t"><i class="ti ti-wash-eco"></i>Sustainability</p>
         <p class="d">Hosting, cost, what happens if Christopher moves on</p>
       </a>
     </div>
 
     <div class="content">
     <section id="faq">
-      <h2>FAQ</h2>
+      <h2><i class="ti ti-api-book"></i>FAQ<i class="ti ti-yarn"></i></h2>
 
       <details>
-        <summary>Do I need a GitHub account?</summary>
+        <summary><i class="ti ti-brand-github"></i>Do I need a GitHub account?</summary>
         <p>No. That's the whole point — Harriot handles git and GitHub on your behalf, on a
         branch scoped to you, and Christopher merges it. You never need to touch either directly.</p>
       </details>
 
       <details>
-        <summary>What can't Harriot do?</summary>
+        <summary><i class="ti ti-git-pull-request-conflict"></i>What can't Harriot do?</summary>
         <p>She can't push straight to <code>main</code>, can't touch any repo you weren't
         specifically invited to, and can't merge her own pull requests — every change waits for
         Christopher's review. If she's ever unsure whether something's in scope, the plan is for
@@ -128,7 +171,7 @@
       </details>
 
       <details>
-        <summary>What does this cost me?</summary>
+        <summary><i class="ti ti-filter-dollar"></i>What does this cost me?</summary>
         <p>Whatever your own Anthropic API usage runs — Harriot's thinking is billed to the key
         you provide, not to Christopher's subscription. There's no separate fee for Harriot
         herself. See the <a href="doc.html?doc=sustainability">sustainability doc</a> for the
@@ -136,18 +179,133 @@
       </details>
 
       <details>
-        <summary>What if I don't like a change she made?</summary>
+        <summary><i class="ti ti-trash-x"></i>What if I don't like a change she made?</summary>
         <p>Nothing goes live without Christopher reviewing it first, so a bad suggestion never
         reaches the real site. You can also just say so in the same conversation and ask for
         something different before it's even proposed as a pull request.</p>
       </details>
 
       <details>
-        <summary>Is any of this live yet?</summary>
-        <p>Not the real backend — the <a href="workspace.html">workspace preview</a> is honestly
+        <summary><i class="ti ti-eye-check"></i>Is any of this live yet?</summary>
+        <p>Not the real backend — the <a href="workspace.html">workspace</a> is honestly
         labeled: real, working UI with the intelligence behind it simulated for now. This site and
         the groundwork behind it are real and already built; see the
         <a href="doc.html?doc=roadmap">roadmap</a> for exactly what's left.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-brand-open-source"></i>Is Harriot open source?</summary>
+        <p>Yes — this repo is meant to be forked. The exclude-list sync means almost everything
+        syncs to the public mirror by default; only governance/agent-config files and anything
+        credential-adjacent are held back. See the <a href="doc.html?doc=sustainability">sustainability
+        doc</a> for what that actually means for someone forking this.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-brand-codesandbox"></i>Where do I find the code?</summary>
+        <p>Right here — the "⬢ git" link in the footer of every page goes straight to the public
+        repo. This site itself is plain HTML/CSS/JS in <code>docs/</code>, no build step, so what
+        you see rendered is close to exactly what's in the repo.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-thinking-medium"></i>What actually powers Harriot?</summary>
+        <p>The real backend (not built yet) will run on Claude — whichever Anthropic API key the
+        visitor supplies. This site you're reading right now doesn't call any model at all; the
+        workspace's chat is a client-side simulation, honestly labeled as such.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-world-heart"></i>Does Harriot treat the codebases she touches carefully?</summary>
+        <p>That's the design goal, not a hope. Harriot's first real assignment is helping Kenney
+        edit <a href="https://github.com/drasticstatic/iamoneself" target="_blank" rel="noopener">iamoneself</a>
+        (live at <a href="https://drasticstatic.github.io/iamoneself-public-preview/" target="_blank" rel="noopener">its public preview</a>)
+        and <a href="https://github.com/drasticstatic/david-amaringo" target="_blank" rel="noopener">david-amaringo</a>
+        (live at <a href="https://drasticstatic.github.io/david-amaringo-public-preview/" target="_blank" rel="noopener">its public preview</a>) —
+        two sites that matter to real people, not throwaway test repos. Every change lands on a
+        branch scoped to the person who asked for it, never touches <code>main</code> directly,
+        and waits for Christopher's review before it's live. Care isn't a value statement here,
+        it's the actual mechanism.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-iceberg"></i>Is this whole site "Harriot"?</summary>
+        <p>No — this is the visible tip. The front end you're looking at is real and done; the
+        actual harness underneath (login, API key handling, a Claude Code agent that reads and
+        writes real files) is the much larger mass still below the waterline. See the
+        <a href="doc.html?doc=roadmap">roadmap</a> for what's still submerged.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-cloud-network"></i>Where does this actually run?</summary>
+        <p>GitHub Pages, for free — no server Christopher has to babysit. The real backend's
+        hosting hasn't been decided yet; see <a href="doc.html?doc=sustainability">sustainability</a>
+        for the current stack and what's still open.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-device-workstation"></i>Can I run my own instance of Harriot?</summary>
+        <p>That's the actual point of building this as a separate, forkable framework instead of
+        one-off logic bolted onto <code>iamoneself</code> — fork the repo, point it at your own
+        codebase, bring your own API key.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-heartbeat"></i>Is this actively being worked on?</summary>
+        <p>Yes — check the "Current phase" line on the <a href="index.html">home page</a> or the
+        <a href="doc.html?doc=roadmap">roadmap</a>'s own status markers for what's genuinely
+        current, since this page doesn't auto-update itself.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-pipeline"></i>How does a change actually reach the live site?</summary>
+        <p>Push to the private repo's <code>main</code> → a GitHub Actions workflow strips private
+        paths and force-pushes the rest to the public mirror → GitHub Pages rebuilds
+        automatically. No manual deploy step, no server to restart.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-battery-eco"></i>Is any of this wasteful?</summary>
+        <p>Structurally, no — a static site costs nothing to run and nothing to leave idle. The
+        real cost, once the backend exists, is whatever API usage an actual conversation burns —
+        paid by whoever's using Harriot, for what they actually asked for. See
+        <a href="doc.html?doc=sustainability">sustainability</a>.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-dna"></i>What makes Harriot different from a generic chatbot?</summary>
+        <p>She's scoped, not general-purpose — bound to specific invited repos, a specific review
+        gate, and a specific person's approval before anything ships. A generic chatbot answers
+        questions; Harriot is designed to make an actual, reviewable git change.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-logic-xnor"></i>How does the workspace preview "know" what to answer?</summary>
+        <p>Plain pattern matching — a handful of regular expressions checking your message for
+        keywords, each producing a pre-written, realistic-looking response. It's the same
+        "true if it matches, true if it doesn't fall through" logic as a light switch, not
+        anything resembling understanding. See <a href="doc.html?doc=how-it-works">how it
+        works</a> for the actual code's shape.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-congruent-to"></i>Are you going to rebuild this in React or Next.js?</summary>
+        <p>It's a genuinely open question, not a decision yet — plain HTML/CSS/JS has been the
+        right fit for a front-end surface with no backend to talk to, but a real chatbot admin
+        panel (streaming responses, a file-tree explorer, a conversation-tree builder) is a much
+        better fit for React/Next.js's component and real-time ecosystem. Christopher's
+        considering a Next.js front end paired with a Django backend once the real harness gets
+        built — see <a href="doc.html?doc=roadmap">roadmap</a>, <a href="doc.html?doc=how-it-works">how
+        it works</a>, and <a href="doc.html?doc=sustainability">sustainability</a> for the
+        trade-offs as currently understood. Nothing here has committed to it yet.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-waterpolo"></i>One more thing, in the spirit of every app's terms of service</summary>
+        <p>By using this preview you agree that Harriot will not coach your waterpolo team,
+        officiate your fantasy football league, or perform your taxes — she is, at time of
+        writing, scoped to exactly two websites and a sense of humor. Everything else in this FAQ
+        is the actual, honest scope. This entry is the joke; the rest isn't.</p>
       </details>
     </section>
     </div>
@@ -159,14 +317,14 @@
         <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
         main
       </span>
-      <span class="sep">·</span> <a href="index.html">home</a>
-      <span class="sep">·</span> <a href="workspace.html">terminal</a>
-      <span class="sep">·</span> <a href="about.html" aria-current="page">docs</a>
+      <span class="sep">⑂</span> <a href="index.html">home</a>
+      <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
+      <span class="sep">⎇</span> <a href="about.html" aria-current="page">docs</a>
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
     </span>
   </div>
 

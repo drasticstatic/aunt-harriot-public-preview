@@ -90,13 +90,15 @@ html.light {
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 /* Safety net: a component overflowing its container (long unbroken text,
    a wide diff line, etc.) should clip, not force the whole page to
    scroll sideways. Fix the component too when this trips — this is a
-   backstop, not a substitute for the component wrapping properly. */
-body { overflow-x: hidden; }
+   backstop, not a substitute for the component wrapping properly.
+   Set on both html and body: overflow set only on body doesn't reliably
+   propagate to the viewport's actual scrolling box in every engine. */
+body { overflow-x: hidden; max-width: 100vw; }
 
 body {
   margin: 0;
@@ -120,6 +122,16 @@ code { font-family: var(--font-mono); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Same effect as the OS-level media query above, but as an explicit opt-in
+   from the settings modal — some visitors want it off without changing their
+   whole system preference. */
+html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 /* ============================================================
@@ -188,7 +200,7 @@ code { font-family: var(--font-mono); }
   border-bottom-color: var(--signature);
 }
 
-.theme-toggle, .hamburger {
+.settings-btn, .hamburger {
   flex: 0 0 auto;
   width: 34px;
   height: 34px;
@@ -200,10 +212,12 @@ code { font-family: var(--font-mono); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
-.theme-toggle:hover, .hamburger:hover { color: var(--ink); border-color: var(--signature); }
+.settings-btn:hover, .hamburger:hover { color: var(--ink); border-color: var(--signature); }
 .hamburger { display: none; }
+
+.tabs a .ti, .mobile-menu a .ti { margin-right: 5px; font-size: 0.95em; vertical-align: -1px; }
 
 .mobile-menu {
   display: none;
@@ -224,12 +238,74 @@ code { font-family: var(--font-mono); }
   border-radius: 6px;
 }
 .mobile-menu a[aria-current] { color: var(--ink); background: var(--bg); }
-.mobile-menu .theme-toggle { align-self: flex-start; margin-top: 8px; }
+.mobile-menu .settings-btn { align-self: flex-start; margin-top: 8px; }
 
 @media (max-width: 720px) {
   .tabs { display: none; }
-  .tb-right > .theme-toggle { display: none; }
+  .tb-right > .settings-btn { display: none; }
   .hamburger { display: flex; }
+}
+
+/* ============================================================
+   Generic modal — used by the settings modal (every page) and
+   the sign-in wizard (workspace.html).
+   ============================================================ */
+.hg-modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(5, 3, 10, 0.6);
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.hg-modal-overlay.open { display: flex; }
+.hg-modal {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
+}
+.hg-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; border-bottom: 1px solid var(--line);
+}
+.hg-modal-head h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+.hg-modal-close {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--line);
+  background: transparent; color: var(--ink-soft); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.hg-modal-close:hover { color: var(--ink); border-color: var(--signature); }
+.hg-modal-body { padding: 18px; }
+
+.hg-setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line);
+}
+.hg-setting-row:last-child { border-bottom: none; }
+.hg-setting-row .label { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; }
+.hg-setting-row .label .sub { display: block; font-size: 0.78rem; color: var(--ink-soft); font-weight: 400; }
+.hg-setting-row .label b { font-weight: 600; }
+
+.hg-switch {
+  position: relative; width: 42px; height: 24px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--bg); cursor: pointer; flex: 0 0 auto;
+}
+.hg-switch .knob {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--ink-soft); transition: transform 0.2s ease, background 0.2s ease;
+}
+.hg-switch.on { border-color: var(--signature); background: var(--signature); }
+.hg-switch.on .knob { transform: translateX(18px); background: var(--gloaming-950); }
+html.light .hg-switch.on .knob { background: var(--paper-50); }
+.hg-switch[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+.hg-badge-soon {
+  font-family: var(--font-mono); font-size: 0.65rem; padding: 1px 6px; border-radius: 4px;
+  background: var(--bg-inset); color: var(--ink-soft); border: 1px solid var(--line);
 }
 
 main { flex: 1 0 auto; padding-bottom: 44px; }

@@ -4,8 +4,8 @@
 
 This page explains the actual mechanics — written so a technical reader (or anyone curious) can
 see exactly what happens, not just the plain-language version on the [FAQ page](about.html). See
-[`ROADMAP.md`](ROADMAP.md) for where this is headed and [`SUSTAINABILITY.md`](SUSTAINABILITY.md)
-for how it's hosted and what it costs.
+[`ROADMAP.md`](doc.html?doc=roadmap) for where this is headed and
+[`SUSTAINABILITY.md`](doc.html?doc=sustainability) for how it's hosted and what it costs.
 
 ---
 
@@ -23,7 +23,7 @@ Nothing here is built yet (see Status at the bottom), but the design is settled:
    whether the address was checked against anything. The magic-link endpoint is rate-limited so it
    can't be used to enumerate the allowlist.
 
-Full design: [`ROADMAP.md`](ROADMAP.md) §4.
+Full design: [`ROADMAP.md`](doc.html?doc=roadmap) §4.
 
 ---
 
@@ -69,10 +69,46 @@ eventually touch.
 
 ---
 
+## Part four — a stack question that's genuinely still open
+
+This site is plain HTML/CSS/JS, no build step — the right fit for a front end with no backend to
+talk to yet. The real backend won't stay that simple. A chatbot admin panel needs things a static
+site structurally can't do: streaming responses token-by-token, a file-tree explorer, complex
+state (which repo, which conversation, what's pending review), and a rich component ecosystem for
+things like a visual diff viewer or a conversation-tree builder.
+
+**React or Next.js is the strong front-end answer for that**, for reasons specific to a chatbot
+admin panel rather than general "we should use a framework" instinct:
+
+- **The AI SDK ecosystem ships React-first.** OpenAI, LangChain, and Stream Chat all provide a
+  native React SDK before anything else — Harriot's real backend would be swimming with the
+  current, not against it.
+- **Next.js unifies the dashboard and its own API layer** in one codebase, with native
+  Server-Sent Events/WebSocket support — exactly what streaming a live response token-by-token
+  needs, the same way ChatGPT's own UI does it.
+- **Rich, code-shaped UI** (a drag-and-drop conversation-tree builder, a live diff viewer) has
+  mature React libraries (React Flow, for one) with no equivalent in a plain-template stack.
+
+Christopher's actually considering **pairing that Next.js front end with a Django backend** —
+not for the front end itself, but because a real Claude Code harness needs a real place to run
+Python-ecosystem tooling (LangChain, LlamaIndex, embeddings), background jobs (re-indexing,
+retraining), and a database Django's own ORM/admin already understands well. The trade-off is
+real and worth naming plainly: **two codebases, two deployment pipelines, two local
+environments** (Node for Next.js, Python for Django), and Django's own built-in admin panel
+becomes something you no longer get for free — the whole point of building it in Next.js is a
+custom UI, not the Django admin's default tables and forms.
+
+**Nothing about this repo has committed to that stack.** It's the leading candidate for *when*
+the real backend gets built, not a decision that's shipped. See [`ROADMAP.md`](doc.html?doc=roadmap)
+§5 and [`SUSTAINABILITY.md`](doc.html?doc=sustainability) for how this same consideration threads
+through the hosting and cost questions.
+
+---
+
 ## Status
 
 This site (the public front end you're reading right now) is real and live. The backend described
-in Parts one and two is **not built yet** — see [`ROADMAP.md`](ROADMAP.md) for exactly what's left
-and in what order.
+in Parts one, two, and four above is **not built yet** — see
+[`ROADMAP.md`](doc.html?doc=roadmap) for exactly what's left and in what order.
 
-*Last updated: September 4, 2026.*
+*Last updated: September 5, 2026.*

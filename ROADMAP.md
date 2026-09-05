@@ -3,8 +3,10 @@
 Architecture and open-questions doc for the portal/dashboard/harness Christopher asked for on
 2026-09-03: a fork of `anthropas-argus-alfred`'s Claude Code harness pattern, but authenticated by
 a visitor's own Anthropic API key instead of Christopher's subscription, so external collaborators
-(starting with Kenney, for `iamoneself` and `david-amaringo`) can run an admin agent against
-scoped repos without needing a GitHub account or ever touching git directly.
+(starting with Kenney, for [`iamoneself`](https://github.com/drasticstatic/iamoneself) and
+[`david-amaringo`](https://github.com/drasticstatic/david-amaringo)) can run an admin agent against
+scoped repos without needing a GitHub account or ever touching git directly. (Links to source
+throughout this doc point at GitHub, not the live sites — this is a build document, not a tour.)
 
 This is a **planning document, not a build log** — nothing described here exists as working code
 yet. See `README.md` for the one-paragraph pitch.
@@ -183,3 +185,29 @@ access is a one-line change instead of a password rotation for everyone.
   target; not scoped yet, revisit once `-public-preview` proves the framework works end-to-end.
 - **Concurrent-edit handling** (§1.6) — only worth solving once multiple invited users are
   actually active on the same repo at once; not blocking for a single-user (Kenney) prototype.
+- **Front-end/backend stack for the real dashboard** (added 2026-09-05) — see §6 below.
+
+---
+
+## 6. Stack consideration: Next.js front end, Django backend
+
+Not decided, not started — this is the leading candidate, recorded here so it doesn't get
+re-derived from scratch once building starts. Full reasoning: [`HOW-IT-WORKS.md`](doc.html?doc=how-it-works)
+Part four and [`SUSTAINABILITY.md`](doc.html?doc=sustainability).
+
+**Why this pairing, specifically for a chatbot admin panel** (not a generic "use a framework"
+preference): streaming a response token-by-token, a file-tree explorer, and a visual diff/PR
+review UI are all things React's component ecosystem already has mature answers for, and every
+major AI SDK (OpenAI, LangChain, Stream Chat) ships a React integration first. Next.js adds the
+API layer (SSE/WebSocket-native) in the same codebase. Django earns its place on the *backend*
+side specifically because the real harness needs the Python AI ecosystem (LangChain, LlamaIndex,
+embeddings) and Django's ORM/background-job story (Celery) for anything heavier than a quick
+request/response — not because Django is a natural pair with a React front end by default.
+
+**Named trade-off, not hidden**: two codebases, two deploy pipelines, two local dev environments
+(Node + Python), and Django's own built-in admin panel stops being free — the custom UI is the
+entire reason to be in Next.js instead of Django templates in the first place.
+
+This repo's front end (`docs/`) stays plain HTML/CSS/JS regardless — that decision was made for a
+static surface with no backend to talk to, and isn't in tension with this. This section is about
+the *real* dashboard once the backend exists, not a plan to rewrite what's live today.

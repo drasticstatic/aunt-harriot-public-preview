@@ -6,14 +6,16 @@
 <script>(function(){try{var t=localStorage.getItem('harriot-theme');document.documentElement.classList.add(t==='light'?'light':'dark');}catch(e){document.documentElement.classList.add('dark');}})();</script>
 <title>Docs — Aunt Harriot</title>
 <meta name="description" content="Roadmap, sustainability, and how-it-works — rendered straight from the public repo's own markdown.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍🍳</text></svg>">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.2/marked.min.js"></script>
 <style>
   .doc-wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 60px; }
 
   .doc-switch { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 28px; font-family: var(--font-mono); font-size: 0.82rem; }
   .doc-switch a {
+    display: inline-flex; align-items: center; gap: 6px;
     padding: 6px 13px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink-soft);
   }
   .doc-switch a[aria-current] { color: var(--ink); background: var(--bg-inset); border-color: var(--signature); }
@@ -69,28 +71,55 @@
       <span class="filename" id="doc-filename"><b>harriot</b>/doc.html</span>
     </div>
     <nav class="tabs">
-      <a href="index.html">Home</a>
-      <a href="workspace.html">Workspace</a>
-      <a href="about.html">FAQ</a>
+      <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+      <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+      <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
     </nav>
     <div class="tb-right">
-      <button class="theme-toggle" type="button"></button>
-      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i></button>
+      <button class="hamburger" type="button" aria-label="Menu" aria-expanded="false"><i class="ti ti-navigation-search"></i></button>
     </div>
   </div>
   <nav class="mobile-menu" id="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="workspace.html">Workspace</a>
-    <a href="about.html">FAQ</a>
-    <button class="theme-toggle" type="button"></button>
+    <a href="index.html"><i class="ti ti-home-link"></i>Home</a>
+    <a href="workspace.html"><i class="ti ti-terminal-2"></i>Workspace</a>
+    <a href="about.html"><i class="ti ti-message-question"></i>FAQ</a>
+    <button class="settings-btn" type="button" aria-label="Settings"><i class="ti ti-settings-question"></i> Settings</button>
   </nav>
+
+  <div class="hg-modal-overlay" id="settings-modal">
+    <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="hg-modal-head">
+        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
+      </div>
+      <div class="hg-modal-body">
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-carousel-horizontal"></i><span><b>Autoplay examples</b><span class="sub">Scroll the workspace's prompt suggestions</span></span></span>
+          <button class="hg-switch" id="autoplay-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-accessible"></i><span><b>Reduce motion</b><span class="sub">Turns off the hero swirl and other animation</span></span></span>
+          <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
+          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main>
     <div class="doc-wrap">
       <div class="doc-switch" id="doc-switch">
-        <a href="doc.html?doc=roadmap">Roadmap</a>
-        <a href="doc.html?doc=how-it-works">How it works</a>
-        <a href="doc.html?doc=sustainability">Sustainability</a>
+        <a href="doc.html?doc=roadmap"><i class="ti ti-map-route"></i>Roadmap</a>
+        <a href="doc.html?doc=how-it-works"><i class="ti ti-message-question"></i>How it works</a>
+        <a href="doc.html?doc=sustainability"><i class="ti ti-wash-eco"></i>Sustainability</a>
       </div>
       <p class="doc-source">Rendered live from <code id="doc-file-label">…</code> in the public repo — <a id="doc-raw-link" href="#" target="_blank" rel="noopener">view on GitHub</a>.</p>
       <div class="doc-overflow-x">
@@ -107,14 +136,14 @@
         <svg class="branch-icon" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="3" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="4" cy="13" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 4.6V11.4" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M4 8.5c0-2.5 2-3 4-3h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
         main
       </span>
-      <span class="sep">·</span> <a href="index.html">home</a>
-      <span class="sep">·</span> <a href="workspace.html">terminal</a>
-      <span class="sep">·</span> <a href="about.html" aria-current="page">docs</a>
+      <span class="sep">⑂</span> <a href="index.html">home</a>
+      <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
+      <span class="sep">⎇</span> <a href="about.html" aria-current="page">docs</a>
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">&lt;&gt; source</a>
+      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">developer</a>
+      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
     </span>
   </div>
 
