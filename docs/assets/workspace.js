@@ -81,8 +81,6 @@
     function unlockWorkspace() {
       modal.classList.remove('open');
       document.getElementById('workbench').hidden = false;
-      var badge = document.getElementById('mode-badge');
-      badge.innerHTML = '<i class="ti ti-virtual-space"></i> PREVIEW <span class="hg-glyph badge-glyph">⎙</span> SIMULATED';
       renderChips();
       initRepoSwitcher();
       initExamplePicker();
@@ -151,13 +149,35 @@
   }
 
   function initExamplePicker() {
-    var select = document.getElementById('example-select');
-    if (!select) return;
-    select.addEventListener('change', function () {
-      if (!select.value) return;
-      document.getElementById('chat-input').value = select.value;
-      select.value = '';
-      send();
+    var trigger = document.getElementById('example-trigger');
+    var menu = document.getElementById('example-menu');
+    if (!trigger || !menu) return;
+
+    function close() {
+      menu.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function open() {
+      menu.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (menu.hidden) open(); else close();
+    });
+    menu.querySelectorAll('button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.getElementById('chat-input').value = btn.textContent;
+        close();
+        send();
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== trigger) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
     });
   }
 

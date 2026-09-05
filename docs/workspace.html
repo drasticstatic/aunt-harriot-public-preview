@@ -10,27 +10,22 @@
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <style>
-  .intro-banner {
-    max-width: 1080px; margin: 18px auto 0; padding: 12px 20px;
-    border: 1px dashed var(--hatter-400); border-radius: 8px; font-size: 0.88rem;
-  }
-  .intro-banner b { color: var(--hatter-400); }
-  html.light .intro-banner b { color: var(--hatter-700); }
-  .intro-banner a { color: var(--signature); }
+  .matrix-rain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.55; }
+  html.light .matrix-rain { opacity: 0.32; }
+  html.reduce-motion .matrix-rain { display: none; }
 
   .workspace {
     max-width: 1080px; margin: 18px auto 0; border: 1px solid var(--line);
-    border-radius: 10px; overflow: hidden; overflow-x: hidden; background: var(--bg-raised);
-    min-width: 0; position: relative; z-index: 0;
+    border-radius: 10px; overflow: hidden; overflow-x: hidden;
+    background: rgba(var(--bg-raised-rgb), 0.95);
+    min-width: 0; display: flex; flex-direction: column;
+    min-height: calc(100vh - 110px);
   }
-  .matrix-rain { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5; }
-  html.light .matrix-rain { opacity: 0.28; }
-  html.reduce-motion .matrix-rain { display: none; }
 
   .workspace-topbar {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--bg-inset);
-    flex-wrap: wrap; row-gap: 8px; overflow: hidden;
+    flex-wrap: wrap; row-gap: 8px; overflow: hidden; flex: 0 0 auto;
   }
   .workspace-topbar .brand {
     font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
@@ -40,12 +35,11 @@
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
   }
   .workspace-topbar .brand .ti { color: var(--signature); flex: 0 0 auto; }
-  .workspace-topbar .right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; min-width: 0; }
   .live-badge {
     font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 4px;
     background: var(--cheshire-900); color: var(--cheshire-300); border: 1px solid var(--cheshire-500);
     font-family: var(--font-mono); letter-spacing: 0.03em; white-space: nowrap;
-    max-width: 45vw; overflow: hidden; text-overflow: ellipsis;
+    max-width: 160px; overflow: hidden; text-overflow: ellipsis; flex: 0 0 auto;
   }
   html.light .live-badge { background: var(--cheshire-100); color: var(--cheshire-900); }
   /* the badge is a tight single-line chip — the full .hg-glyph size would get
@@ -69,7 +63,20 @@
 
   /* ── sign-in wizard modal ── */
   #gate-modal .hg-modal { max-width: 440px; }
+  #gate-modal .hg-modal-head { flex-wrap: wrap; row-gap: 6px; }
   .gate-body { padding: 22px 24px 26px; }
+  .gate-disclaimer {
+    text-align: center; font-size: 0.85rem; color: var(--ink-soft); margin: 0 0 20px;
+    padding-bottom: 18px; border-bottom: 1px dashed var(--line);
+  }
+  .gate-disclaimer b { color: var(--hatter-400); }
+  html.light .gate-disclaimer b { color: var(--hatter-700); }
+  .gate-disclaimer a { color: var(--signature); }
+  .gate-disclaimer .gate-skip-link {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 8px;
+    color: var(--ink-soft); border-bottom: 1px dashed var(--line); font-weight: 600;
+  }
+  .gate-disclaimer .gate-skip-link:hover { color: var(--ink); }
   .steps { display: flex; flex-direction: column; gap: 16px; }
   .step {
     border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; opacity: 0.5;
@@ -99,29 +106,38 @@
   .step button:disabled { opacity: 0.4; cursor: not-allowed; }
   .step .confirmed { font-size: 0.85rem; color: var(--cheshire-400); }
   html.light .step .confirmed { color: var(--cheshire-700); }
-  .gate-skip { text-align: center; margin-top: 20px; }
-  .gate-skip a {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 0.85rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line);
-  }
-  .gate-skip a:hover { color: var(--ink); }
 
   /* ── chip ticker + cherry-pick dropdown ── */
-  .example-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); background: var(--bg); }
-  .example-picker {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 0 12px;
-    border-right: 1px solid var(--line); color: var(--signature); font-size: 0.9rem;
-    font-weight: 700; background: var(--bg-inset);
+  .example-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); background: var(--bg); flex: 0 0 auto; }
+  .example-picker { position: relative; flex: 0 0 auto; }
+  .example-trigger {
+    height: 100%; display: flex; align-items: center; gap: 6px; padding: 0 12px;
+    border: none; border-right: 1px solid var(--line); color: var(--signature); font-size: 0.9rem;
+    font-weight: 700; background: var(--bg-inset); font-family: var(--font-body); cursor: pointer;
+    white-space: nowrap; animation: cta-pulse-bg 2.2s ease-in-out infinite;
   }
-  .example-picker .ti-git-cherry-pick { animation: cta-pulse 2.2s ease-in-out infinite; }
+  .example-trigger:hover { filter: brightness(1.1); }
+  html.reduce-motion .example-trigger { animation: none; }
+  .example-trigger .ti-git-cherry-pick { animation: cta-pulse 2.2s ease-in-out infinite; }
   @keyframes cta-pulse {
     0%, 100% { text-shadow: 0 0 0 transparent; }
     50% { text-shadow: 0 0 9px var(--signature); }
   }
-  .example-picker select {
-    background: transparent; border: none; color: var(--ink-soft); font-family: var(--font-body);
-    font-size: 0.78rem; max-width: 90px; cursor: pointer;
+  html.reduce-motion .example-trigger .ti-git-cherry-pick { animation: none; }
+  .example-trigger .ti-selector { color: var(--ink-soft); font-size: 0.85em; }
+  @media (max-width: 460px) { .example-trigger span { display: none; } }
+  .example-menu {
+    position: absolute; top: 100%; left: 0; margin: 4px 0 0; padding: 6px; list-style: none;
+    min-width: 240px; max-width: 80vw; background: var(--bg-raised); border: 1px solid var(--signature);
+    border-radius: 8px; box-shadow: 0 14px 34px -10px rgba(0,0,0,0.5); z-index: 60;
   }
+  .example-menu li + li { margin-top: 2px; }
+  .example-menu button {
+    display: block; width: 100%; text-align: left; padding: 8px 10px; border-radius: 6px;
+    border: none; background: transparent; color: var(--ink-soft); font-family: var(--font-body);
+    font-size: 0.82rem; cursor: pointer; line-height: 1.35;
+  }
+  .example-menu button:hover { background: var(--bg-inset); color: var(--ink); }
   .chip-track { overflow: hidden; flex: 1 1 auto; min-width: 0; }
   .chip-row {
     display: flex; gap: 10px; padding: 10px 14px; width: max-content;
@@ -142,8 +158,10 @@
     50% { box-shadow: 0 0 8px -1px var(--signature); }
   }
 
-  .workspace-body { display: grid; grid-template-columns: 250px 1fr; min-height: 460px; min-width: 0; position: relative; }
+  #workbench { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+  .workspace-body { display: grid; grid-template-columns: 250px 1fr; flex: 1 1 auto; min-height: 0; min-width: 0; position: relative; }
   .workspace-body > div { min-width: 0; overflow-x: hidden; }
+  .chat-pane { display: flex; flex-direction: column; min-height: 0; }
   @media (max-width: 680px) {
     .workspace-body { grid-template-columns: 1fr; }
     .sidebar { display: none; }
@@ -157,7 +175,7 @@
   }
   .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(5,3,10,0.5); z-index: 85; }
 
-  .sidebar { border-right: 1px solid var(--line); padding: 16px 14px; }
+  .sidebar { border-right: 1px solid var(--line); padding: 16px 14px; min-height: 0; overflow-y: auto; }
   .sidebar-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
   .sidebar .heading {
     font-size: 0.76rem; color: var(--ink-soft); margin: 0; font-family: var(--font-mono);
@@ -203,7 +221,7 @@
   .file-tree .file .ti { color: var(--ink-soft); flex: 0 0 auto; }
   [hidden] { display: none !important; }
 
-  .chat { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; max-height: 560px; overflow-y: auto; overflow-x: hidden; }
+  .chat { padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; }
   .msg { max-width: min(580px, 100%); min-width: 0; }
   .msg.agent { align-self: flex-start; }
   .msg.user { align-self: flex-end; margin-left: auto; }
@@ -244,7 +262,10 @@
   .logged-note { font-size: 0.8rem; color: var(--cheshire-400); display: flex; align-items: center; gap: 6px; }
   html.light .logged-note { color: var(--cheshire-700); }
 
-  .composer { display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); min-width: 0; }
+  .composer {
+    display: flex; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--line); min-width: 0;
+    flex: 0 0 auto; background: rgba(var(--bg-raised-rgb), 1);
+  }
   .composer input {
     /* the input is wrapped in .hg-cursor-field (for the flashing-cursor
        effect) now, so it's no longer a direct flex child of .composer —
@@ -263,6 +284,8 @@
 </style>
 </head>
 <body>
+
+  <canvas id="matrix-rain" class="matrix-rain" aria-hidden="true"></canvas>
 
   <div class="titlebar">
     <div class="tb-left">
@@ -316,7 +339,7 @@
           <button class="hg-switch on" id="notif-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-device-mobile-code"></i><span><b>Force mobile view</b><span class="sub">Preview the site the way a phone sees it</span></span></span>
+          <span class="label"><i class="ti ti-device-mobile-code" id="viewport-icon"></i><span><b id="viewport-label">Force mobile view</b><span class="sub" id="viewport-sub">Preview the site the way a phone sees it</span></span></span>
           <button class="hg-switch" id="viewport-switch" type="button" role="switch"></button>
         </div>
       </div>
@@ -328,8 +351,17 @@
     <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="gate-title">
       <div class="hg-modal-head">
         <h2 id="gate-title"><i class="ti ti-terminal-2"></i> Enter the workbench <i class="ti ti-infinity-2"></i></h2>
+        <span class="live-badge" id="mode-badge"><i class="ti ti-augmented-reality"></i> SIGN-IN <span class="hg-glyph badge-glyph">⎉</span> DEMO</span>
       </div>
       <div class="gate-body">
+        <p class="gate-disclaimer">
+          <b>Real UI, simulated intelligence.</b> Sign in below (or skip it) and try the chat —
+          the interface genuinely works. What's faked is the thinking behind it: typed requests
+          are pattern-matched client-side, nothing calls a real model. See
+          <a href="doc.html?doc=how-it-works">how it works</a> for the honest breakdown.
+          <br>
+          <a href="#" id="gate-skip" class="gate-skip-link"><span class="hg-glyph">⎋</span> Skip this <i class="ti ti-queue-pop-in"></i> just show me the workspace</a>
+        </p>
         <div class="steps">
           <div class="step active" id="step-1">
             <div><span class="n">1</span><h3>Sign in <span class="hg-glyph">␣</span></h3></div>
@@ -348,45 +380,34 @@
             <button type="button" id="gate-save" disabled><i class="ti ti-user-key"></i> Save key</button>
           </div>
         </div>
-        <p class="gate-skip"><a href="#" id="gate-skip"><span class="hg-glyph">⎋</span> Skip this <span class="hg-glyph">⎘</span> just show me the workspace <i class="ti ti-queue-pop-in"></i></a></p>
       </div>
     </div>
   </div>
 
   <main>
-    <p class="intro-banner">
-      <b>Real UI, simulated intelligence.</b> Sign in below (or skip it) and try the chat — the
-      interface genuinely works. What's faked is the thinking behind it: typed requests are
-      pattern-matched client-side, nothing calls a real model. See
-      <a href="doc.html?doc=how-it-works">how it works</a> for the honest breakdown.
-    </p>
-
     <div class="workspace">
-      <canvas id="matrix-rain" class="matrix-rain" aria-hidden="true"></canvas>
       <div class="workspace-topbar">
         <span class="brand"><i class="ti ti-message-chatbot"></i><span>Harriot's <span class="hg-glyph" style="font-size:1.1em">⌘</span> Center</span><i class="ti ti-infinity"></i></span>
-        <span class="right">
-          <span class="live-badge" id="mode-badge"><i class="ti ti-augmented-reality"></i> SIGN-IN <span class="hg-glyph badge-glyph">⎉</span> DEMO</span>
-        </span>
       </div>
 
       <div id="workbench" hidden>
         <div class="example-row">
           <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Your repos">
-            <i class="ti ti-folder-root"></i> <span>Your repos</span>
+            <i class="ti ti-folder-root"></i>
           </button>
-          <label class="example-picker">
-            <i class="ti ti-git-cherry-pick"></i>
-            <select id="example-select">
-              <option value="">examples…</option>
-              <option>Update the retreat dates to March 15–17</option>
-              <option>Add a new FAQ about integration circles</option>
-              <option>Update David's artist bio</option>
-              <option>Change the contact email on the booking page</option>
-              <option>Add a testimonial from a recent retreat</option>
-              <option>Fix a typo in the Plants &amp; Miracles section</option>
-            </select>
-          </label>
+          <div class="example-picker">
+            <button type="button" class="example-trigger" id="example-trigger" aria-haspopup="listbox" aria-expanded="false">
+              <i class="ti ti-git-cherry-pick"></i> <span>Sample prompts</span> <i class="ti ti-selector"></i>
+            </button>
+            <ul class="example-menu" id="example-menu" role="listbox" hidden>
+              <li role="option"><button type="button">Update the retreat dates to March 15–17</button></li>
+              <li role="option"><button type="button">Add a new FAQ about integration circles</button></li>
+              <li role="option"><button type="button">Update David's artist bio</button></li>
+              <li role="option"><button type="button">Change the contact email on the booking page</button></li>
+              <li role="option"><button type="button">Add a testimonial from a recent retreat</button></li>
+              <li role="option"><button type="button">Fix a typo in the Plants &amp; Miracles section</button></li>
+            </ul>
+          </div>
           <div class="chip-track">
             <div class="chip-row" id="chip-row"></div>
           </div>
@@ -452,7 +473,7 @@
             </div>
 
           </aside>
-          <div>
+          <div class="chat-pane">
             <div class="chat" id="chat"></div>
             <div class="composer">
               <span class="hg-cursor-field" style="flex:1 1 auto;min-width:0;"><input type="text" id="chat-input" placeholder="✧ describe what you want changed ⎄" autocomplete="off"><span class="hg-cursor" style="left:14px">|</span></span>

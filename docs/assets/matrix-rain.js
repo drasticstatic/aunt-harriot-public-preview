@@ -39,10 +39,11 @@
   ].map(function (hex) { return String.fromCharCode(parseInt(hex, 16)); });
 
   var fontSize = 15;
-  var speed = 60;
+  var speed = 95;
   var columns = [];
   var drops = [];
   var glyphKind = []; // 'icon' | 'kana' | 'code' per column, re-rolled per drop cycle
+  var lastGlyph = []; // last character drawn per column, so it never repeats twice in a row
   var raf = null;
   var interval = null;
 
@@ -50,6 +51,16 @@
     if (kind === 'icon') return iconCodepoints[(Math.random() * iconCodepoints.length) | 0];
     if (kind === 'kana') return katakana[(Math.random() * katakana.length) | 0];
     return codeChars[(Math.random() * codeChars.length) | 0];
+  }
+
+  function pickGlyphNoRepeat(kind, exclude) {
+    var glyph = pickGlyph(kind);
+    var tries = 0;
+    while (glyph === exclude && tries < 8) {
+      glyph = pickGlyph(kind);
+      tries++;
+    }
+    return glyph;
   }
 
   function rollKind() {
@@ -73,17 +84,18 @@
   }
 
   function resize() {
-    var rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = Math.max(1, Math.floor(rect.width));
-    canvas.height = Math.max(1, Math.floor(rect.height));
+    canvas.width = Math.max(1, window.innerWidth);
+    canvas.height = Math.max(1, window.innerHeight);
     var count = Math.ceil(canvas.width / fontSize);
     columns = [];
     drops = [];
     glyphKind = [];
+    lastGlyph = [];
     for (var i = 0; i < count; i++) {
       columns.push(i);
       drops.push(Math.random() * (canvas.height / fontSize));
       glyphKind.push(rollKind());
+      lastGlyph.push(null);
     }
   }
 
@@ -96,7 +108,8 @@
 
     for (var i = 0; i < drops.length; i++) {
       var kind = glyphKind[i];
-      var glyph = pickGlyph(kind);
+      var glyph = pickGlyphNoRepeat(kind, lastGlyph[i]);
+      lastGlyph[i] = glyph;
       var x = i * fontSize;
       var y = drops[i] * fontSize;
 
@@ -130,11 +143,7 @@
     start();
   }
 
-  var resizeObserver = new ResizeObserver(function () {
-    resize();
-  });
-  resizeObserver.observe(canvas.parentElement);
-
+  window.addEventListener('resize', resize);
   window.addEventListener('hg-motion-change', function () { start(); });
 
   if (document.fonts && document.fonts.ready) {

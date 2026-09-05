@@ -118,31 +118,46 @@ if (notifSwitch) {
   var DEFAULT_VIEWPORT = 'width=device-width, initial-scale=1.0';
   var DESKTOP_VIEWPORT = 'width=1080';
 
-  function isNarrowDevice() { return window.matchMedia('(max-width: 720px)').matches; }
+  // Read once, before anything below can rewrite <meta viewport> — on a real
+  // phone, force-desktop mode itself widens the *layout* viewport, which
+  // would make a live matchMedia re-check here think it's no longer a narrow
+  // device and flip the toggle's branch logic. Caching the true physical
+  // read up front keeps "which mode applies to this device" stable for the
+  // rest of the page's life, so turning the toggle back off always takes the
+  // same branch it took to turn it on.
+  var deviceIsNarrow = window.matchMedia('(max-width: 720px)').matches;
 
   function syncIcon() {
-    var icon = viewportSwitch.parentElement.querySelector('.ti');
+    var icon = document.getElementById('viewport-icon');
     if (!icon) return;
     var forced = document.documentElement.classList.contains('force-mobile')
       || document.documentElement.classList.contains('force-desktop');
-    icon.className = 'ti ' + (isNarrowDevice()
-      ? (forced ? 'ti-device-imac-heart' : 'ti-devices-code')
-      : (forced ? 'ti-device-imac-heart' : 'ti-device-mobile-code'));
+    icon.className = 'ti ' + (forced
+      ? 'ti-device-imac-heart'
+      : (deviceIsNarrow ? 'ti-devices-code' : 'ti-device-mobile-code'));
+  }
+
+  function syncLabel() {
+    var label = document.getElementById('viewport-label');
+    var sub = document.getElementById('viewport-sub');
+    if (label) label.textContent = deviceIsNarrow ? 'Force desktop view' : 'Force mobile view';
+    if (sub) sub.textContent = deviceIsNarrow ? 'Preview the site the way a desktop sees it' : 'Preview the site the way a phone sees it';
   }
 
   // restore persisted state on load
-  if (hgGet('harriot-force-mobile', 'off') === 'on' && !isNarrowDevice()) {
+  if (!deviceIsNarrow && hgGet('harriot-force-mobile', 'off') === 'on') {
     document.documentElement.classList.add('force-mobile');
   }
-  if (hgGet('harriot-force-desktop', 'off') === 'on' && isNarrowDevice() && meta) {
+  if (deviceIsNarrow && hgGet('harriot-force-desktop', 'off') === 'on' && meta) {
     document.documentElement.classList.add('force-desktop');
     meta.setAttribute('content', DESKTOP_VIEWPORT);
   }
   hgSwitchSet(viewportSwitch, document.documentElement.classList.contains('force-mobile') || document.documentElement.classList.contains('force-desktop'));
   syncIcon();
+  syncLabel();
 
   viewportSwitch.addEventListener('click', function () {
-    if (isNarrowDevice()) {
+    if (deviceIsNarrow) {
       var desktopOn = !document.documentElement.classList.contains('force-desktop');
       document.documentElement.classList.toggle('force-desktop', desktopOn);
       if (meta) meta.setAttribute('content', desktopOn ? DESKTOP_VIEWPORT : DEFAULT_VIEWPORT);

@@ -79,6 +79,7 @@
 html.dark {
   --bg: var(--gloaming-950);
   --bg-raised: var(--gloaming-900);
+  --bg-raised-rgb: 30, 17, 56;
   --bg-inset: var(--gloaming-800);
   --ink: #f3ecff;
   --ink-soft: #c3aee0;
@@ -90,6 +91,7 @@ html.dark {
 html.light {
   --bg: var(--paper-100);
   --bg-raised: var(--paper-50);
+  --bg-raised-rgb: 246, 239, 225;
   --bg-inset: #e4d9c1;
   --ink: var(--paper-ink);
   --ink-soft: var(--paper-ink-soft);
