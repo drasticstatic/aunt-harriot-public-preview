@@ -75,6 +75,16 @@
 
   .hero .lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 34px; }
   .hero .lede strong { color: var(--ink); font-weight: 600; }
+  .hero .lede .ti-key { color: var(--hatter-400); margin: 0 2px; }
+
+  .tw-cursor { color: var(--signature); animation: hg-blink 1s steps(1) infinite; }
+
+  .scroll-indicator {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    color: var(--ink-soft); font-size: 1.6rem; animation: scroll-bounce 2s ease-in-out infinite;
+  }
+  .scroll-indicator:hover { color: var(--signature); }
+  @keyframes scroll-bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
 
   .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
@@ -147,12 +157,12 @@
   <div class="hg-modal-overlay" id="settings-modal">
     <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="hg-modal-head">
-        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <h2 id="settings-title"><i class="ti ti-adjustments-heart"></i> Settings</h2>
         <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
       </div>
       <div class="hg-modal-body">
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <span class="label"><i class="ti ti-sun-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
           <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
@@ -164,8 +174,12 @@
           <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
-          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+          <span class="label"><i class="ti ti-bell-ringing" id="notif-icon"></i><span><b>Notification sounds</b><span class="sub">Tap the switch — it's just a demo, but go ahead</span></span></span>
+          <button class="hg-switch on" id="notif-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-device-mobile-code"></i><span><b>Force mobile view</b><span class="sub">Preview the site the way a phone sees it</span></span></span>
+          <button class="hg-switch" id="viewport-switch" type="button" role="switch"></button>
         </div>
       </div>
     </div>
@@ -176,18 +190,23 @@
       <div class="swirl" aria-hidden="true"></div>
       <div class="vignette" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="eyebrow">𐃏 a Claude Code harness, opened just for you</p>
+        <p class="eyebrow">𐃏 <span id="typewriter"></span><span class="tw-cursor">|</span></p>
         <h1><i class="ti ti-access-point"></i>Aunt Harriot</h1>
         <p class="lede">
           <strong>You bring your own Anthropic API key</strong> — Harriot brings the git
-          know-how, opened for whoever she's invited to help.
+          know<i class="ti ti-key"></i>how.
         </p>
         <div class="cta-row">
           <a class="cta primary" href="workspace.html">Enter into the workspace <i class="ti ti-code"></i></a>
           <a class="cta secondary" href="about.html">Read the full story <i class="ti ti-code-ai"></i></a>
         </div>
       </div>
+      <a href="#more" class="scroll-indicator" aria-label="Scroll down">
+        <i class="ti ti-brand-gitlab"></i>
+      </a>
     </section>
+
+    <a id="more"></a>
 
     <section class="explainer">
       <p>
@@ -213,15 +232,41 @@
       </span>
       <span class="sep">⑂</span> <a href="index.html" aria-current="page">home</a>
       <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
-      <span class="sep">⎇</span> <a href="about.html">docs</a>
+      <span class="sep">⎇</span> <a href="about.html">docs</a> ⎈
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
+      <a class="ext-link" href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git <i class="ti ti-folder-code"></i></a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
+      <a class="ext-link" href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev <i class="ti ti-external-link"></i></a>
     </span>
   </div>
 
   <script src="assets/site.js"></script>
+  <script>
+    // terminal-style typewriter cycling through a few honest one-liners
+    (function () {
+      var el = document.getElementById('typewriter');
+      if (!el) return;
+      var lines = [
+        'a Claude Code harness, opened just for you',
+        'you bring the API key, she brings the git know-how',
+        'real UI, honestly-labeled simulated intelligence',
+        'built to be forked, not just used'
+      ];
+      var reduced = document.documentElement.classList.contains('reduce-motion')
+        || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (reduced) { el.textContent = lines[0]; return; }
+      var li = 0, ci = 0, deleting = false;
+      function tick() {
+        var line = lines[li];
+        el.textContent = line.slice(0, ci);
+        if (!deleting && ci < line.length) { ci++; setTimeout(tick, 45); }
+        else if (!deleting && ci === line.length) { deleting = true; setTimeout(tick, 1800); }
+        else if (deleting && ci > 0) { ci--; setTimeout(tick, 22); }
+        else { deleting = false; li = (li + 1) % lines.length; setTimeout(tick, 300); }
+      }
+      tick();
+    })();
+  </script>
 </body>
 </html>

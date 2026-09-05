@@ -82,15 +82,26 @@
       modal.classList.remove('open');
       document.getElementById('workbench').hidden = false;
       var badge = document.getElementById('mode-badge');
-      badge.innerHTML = '⎙ PREVIEW · SIMULATED';
+      badge.innerHTML = '<i class="ti ti-virtual-space"></i> PREVIEW ⎙ SIMULATED';
       renderChips();
       initRepoSwitcher();
       initExamplePicker();
       initFileTree();
       initSidebarDrawer();
-      addMsg('agent', '⎈ ' + msgTypeIcon('agent') + "You're in. Ask for a change in plain English, or try one of the suggestions below.");
+      initNewRequest();
+      addMsg('agent', '⎈ ' + msgTypeIcon('agent') + "You're in — ask for a change in plain English, or try one of the suggestions below");
       document.getElementById('chat-input').focus();
     }
+  }
+
+  function initNewRequest() {
+    var btn = document.getElementById('new-request-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      document.getElementById('chat-input').value = '';
+      document.getElementById('chat-input').focus();
+      addMsg('agent', msgTypeIcon('agent') + "Starting fresh — what would you like to change in <code>" + currentRepo + "</code>?");
+    });
   }
 
   /* ── repo switcher + file tree ──────────────────────────────────────── */

@@ -73,6 +73,13 @@
   details[open] summary .ti { color: var(--signature); }
   details p { margin: 10px 0 0 30px; color: var(--ink-soft); font-size: 0.98rem; max-width: 62ch; }
   details p a { color: var(--signature); }
+
+  .legal-links {
+    max-width: 62ch; margin: 30px 0 0; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 0.85rem; color: var(--ink-soft); display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .legal-links a { color: var(--ink-soft); display: inline-flex; align-items: center; gap: 5px; }
+  .legal-links a:hover { color: var(--signature); }
 </style>
 </head>
 <body>
@@ -102,12 +109,12 @@
   <div class="hg-modal-overlay" id="settings-modal">
     <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="hg-modal-head">
-        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <h2 id="settings-title"><i class="ti ti-adjustments-heart"></i> Settings</h2>
         <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
       </div>
       <div class="hg-modal-body">
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <span class="label"><i class="ti ti-sun-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
           <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
@@ -119,8 +126,12 @@
           <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
-          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+          <span class="label"><i class="ti ti-bell-ringing" id="notif-icon"></i><span><b>Notification sounds</b><span class="sub">Tap the switch — it's just a demo, but go ahead</span></span></span>
+          <button class="hg-switch on" id="notif-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-device-mobile-code"></i><span><b>Force mobile view</b><span class="sub">Preview the site the way a phone sees it</span></span></span>
+          <button class="hg-switch" id="viewport-switch" type="button" role="switch"></button>
         </div>
       </div>
     </div>
@@ -218,10 +229,10 @@
       <details>
         <summary><i class="ti ti-world-heart"></i>Does Harriot treat the codebases she touches carefully?</summary>
         <p>That's the design goal, not a hope. Harriot's first real assignment is helping Kenney
-        edit <a href="https://github.com/drasticstatic/iamoneself" target="_blank" rel="noopener">iamoneself</a>
-        (live at <a href="https://drasticstatic.github.io/iamoneself-public-preview/" target="_blank" rel="noopener">its public preview</a>)
-        and <a href="https://github.com/drasticstatic/david-amaringo" target="_blank" rel="noopener">david-amaringo</a>
-        (live at <a href="https://drasticstatic.github.io/david-amaringo-public-preview/" target="_blank" rel="noopener">its public preview</a>) —
+        edit <a class="ext-link" href="https://github.com/drasticstatic/iamoneself-public-preview" target="_blank" rel="noopener">iamoneself <i class="ti ti-folder-code"></i></a>
+        (live at <a class="ext-link" href="https://drasticstatic.github.io/iamoneself-public-preview/" target="_blank" rel="noopener">its public preview <i class="ti ti-external-link"></i></a>)
+        and <a class="ext-link" href="https://github.com/drasticstatic/david-amaringo-public-preview" target="_blank" rel="noopener">david-amaringo <i class="ti ti-folder-code"></i></a>
+        (live at <a class="ext-link" href="https://drasticstatic.github.io/david-amaringo-public-preview/" target="_blank" rel="noopener">its public preview <i class="ti ti-external-link"></i></a>) —
         two sites that matter to real people, not throwaway test repos. Every change lands on a
         branch scoped to the person who asked for it, never touches <code>main</code> directly,
         and waits for Christopher's review before it's live. Care isn't a value statement here,
@@ -301,6 +312,84 @@
       </details>
 
       <details>
+        <summary><i class="ti ti-shopping-cart-code"></i>Can I buy or sell anything through Harriot?</summary>
+        <p>No — and that's deliberate, not a missing feature. GitHub Pages' terms allow donation
+        links but not sites built around commercial transactions; nothing Harriot touches is
+        set up to process a sale.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-code-dots"></i>Is the code itself tidy?</summary>
+        <p>Plain HTML/CSS/JS, no build step, no framework — deliberately boring so anyone can open
+        a file and read exactly what it does. See <a href="doc.html?doc=how-it-works">how it
+        works</a> for the shape of it.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-device-desktop-analytics"></i>Do you track my usage or analytics?</summary>
+        <p>Not on this site. It's static HTML with no backend to send data to — there's nothing
+        here to phone home to even if it wanted to.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-user-screen"></i>Who can see what I ask Harriot?</summary>
+        <p>In the real workflow: you, Harriot, and Christopher (as the reviewer on the resulting
+        pull request) — nobody else has a reason to be in that loop.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-canary"></i>Do changes get tested before they're real?</summary>
+        <p>The review-gate <em>is</em> the test — a human (Christopher) looks at every diff before
+        it merges. There's no separate staging environment yet; the PR review is what catches
+        a bad change.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-bug-off"></i>What happens if Harriot gets something wrong?</summary>
+        <p>It stays wrong only in a pull request, never on the live site — that's the entire
+        purpose of the review step in <a href="doc.html?doc=how-it-works">how it works</a> Part two.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-microscope"></i>How closely does Christopher actually review changes?</summary>
+        <p>Closely enough that it's the real safety net, not a rubber stamp — see the "What if I
+        don't like a change" answer above; the same review step covers Christopher's own read of it.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-plug-connected-x"></i>What if my API key stops working mid-conversation?</summary>
+        <p>Not built yet, so not yet tested for real — but the intent is a clear error telling you
+        the key failed, not a silent hang. Worth holding Christopher to once the backend exists.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-device-mobile-message"></i>Can I use Harriot from my phone?</summary>
+        <p>This site already works on mobile — try the "Force mobile view" toggle in
+        Settings to see it from a desktop browser. The real workbench should too, once it exists;
+        nothing about the design assumes a desktop-only visitor.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-api-app"></i>Does Harriot expose an API of her own?</summary>
+        <p>No plans to — she's a UI over a Claude Code harness for a specific set of invited repos,
+        not a general-purpose service other software would integrate against.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-stairs"></i>What does onboarding actually look like, step by step?</summary>
+        <p>Magic link → API key → describe a change in plain English → review the proposed diff →
+        approve → Christopher merges. See <a href="doc.html?doc=how-it-works">how it works</a> for
+        the full walkthrough of each step.</p>
+      </details>
+
+      <details>
+        <summary><i class="ti ti-ai-gateway"></i>Will there be a gateway sitting in front of the model?</summary>
+        <p>Not decided — this is exactly the kind of thing the Next.js/Django consideration above
+        would settle, since a gateway is usually how you keep an API key server-side instead of
+        shipping it to a browser.</p>
+      </details>
+
+      <details>
         <summary><i class="ti ti-waterpolo"></i>One more thing, in the spirit of every app's terms of service</summary>
         <p>By using this preview you agree that Harriot will not coach your waterpolo team,
         officiate your fantasy football league, or perform your taxes — she is, at time of
@@ -308,6 +397,12 @@
         is the actual, honest scope. This entry is the joke; the rest isn't.</p>
       </details>
     </section>
+
+    <p class="legal-links">
+      <a href="doc.html?doc=terms"><i class="ti ti-file-description"></i> Terms of Service</a>
+      <span class="sep">·</span>
+      <a href="doc.html?doc=privacy"><i class="ti ti-shield-lock"></i> Privacy Policy</a>
+    </p>
     </div>
   </main>
 
@@ -319,12 +414,12 @@
       </span>
       <span class="sep">⑂</span> <a href="index.html">home</a>
       <span class="sep">⌥</span> <a href="workspace.html">terminal</a>
-      <span class="sep">⎇</span> <a href="about.html" aria-current="page">docs</a>
+      <span class="sep">⎇</span> <a href="about.html" aria-current="page">docs</a> ⎈
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
+      <a class="ext-link" href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git <i class="ti ti-folder-code"></i></a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
+      <a class="ext-link" href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev <i class="ti ti-external-link"></i></a>
     </span>
   </div>
 

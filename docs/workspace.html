@@ -20,23 +20,29 @@
 
   .workspace {
     max-width: 1080px; margin: 18px auto 0; border: 1px solid var(--line);
-    border-radius: 10px; overflow: hidden; background: var(--bg-raised);
+    border-radius: 10px; overflow: hidden; overflow-x: hidden; background: var(--bg-raised);
+    min-width: 0;
   }
 
   .workspace-topbar {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
     padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--bg-inset);
+    flex-wrap: wrap; row-gap: 8px; overflow: hidden;
   }
   .workspace-topbar .brand {
     font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
-    display: flex; align-items: center; gap: 8px; min-width: 0;
+    display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 auto;
+  }
+  .workspace-topbar .brand span {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
   }
   .workspace-topbar .brand .ti { color: var(--signature); flex: 0 0 auto; }
-  .workspace-topbar .right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  .workspace-topbar .right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; min-width: 0; }
   .live-badge {
     font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 4px;
     background: var(--cheshire-900); color: var(--cheshire-300); border: 1px solid var(--cheshire-500);
     font-family: var(--font-mono); letter-spacing: 0.03em; white-space: nowrap;
+    max-width: 45vw; overflow: hidden; text-overflow: ellipsis;
   }
   html.light .live-badge { background: var(--cheshire-100); color: var(--cheshire-900); }
 
@@ -124,17 +130,26 @@
   .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(5,3,10,0.5); z-index: 85; }
 
   .sidebar { border-right: 1px solid var(--line); padding: 16px 14px; }
+  .sidebar-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
   .sidebar .heading {
-    font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 10px; font-family: var(--font-mono);
+    font-size: 0.76rem; color: var(--ink-soft); margin: 0; font-family: var(--font-mono);
     display: flex; align-items: center; gap: 6px;
   }
-  .sidebar .session {
-    display: block; width: 100%; text-align: left; padding: 7px 10px; border-radius: 6px;
-    font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 4px; border: none; background: none;
-    cursor: pointer; font-family: var(--font-body);
+  .new-request {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--signature); background: transparent;
+    color: var(--signature); cursor: pointer; font-family: var(--font-body); white-space: nowrap;
   }
-  .sidebar .session.active { background: var(--bg); color: var(--ink); border-left: 2px solid var(--signature); }
-  .sidebar .session:hover { color: var(--ink); }
+  .new-request:hover { background: var(--signature); color: var(--gloaming-950); }
+  html.light .new-request:hover { color: var(--paper-50); }
+  .sidebar .session {
+    display: flex; align-items: center; gap: 6px; width: 100%; text-align: left; padding: 9px 10px;
+    border-radius: 6px; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 6px;
+    border: 1px solid var(--line); background: var(--bg-raised); cursor: pointer; font-family: var(--font-body);
+  }
+  .sidebar .session .session-glyphs { margin-left: auto; display: flex; gap: 2px; flex: 0 0 auto; opacity: 0.7; }
+  .sidebar .session.active { background: var(--bg); color: var(--ink); border-color: var(--signature); }
+  .sidebar .session:hover { color: var(--ink); border-color: var(--signature); }
 
   .file-tree { margin-top: 16px; font-size: 0.85rem; }
   .file-tree ul { list-style: none; margin: 0; padding-left: 16px; }
@@ -236,12 +251,12 @@
   <div class="hg-modal-overlay" id="settings-modal">
     <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="hg-modal-head">
-        <h2 id="settings-title"><i class="ti ti-settings-question"></i> Settings</h2>
+        <h2 id="settings-title"><i class="ti ti-adjustments-heart"></i> Settings</h2>
         <button class="hg-modal-close" type="button" data-close-modal aria-label="Close">✕</button>
       </div>
       <div class="hg-modal-body">
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
+          <span class="label"><i class="ti ti-sun-moon"></i><span><b>Dark workspace</b><span class="sub">Boots dark by default</span></span></span>
           <button class="hg-switch" id="theme-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
@@ -253,8 +268,12 @@
           <button class="hg-switch" id="motion-switch" type="button" role="switch"></button>
         </div>
         <div class="hg-setting-row">
-          <span class="label"><i class="ti ti-bell"></i><span><b>Notification sounds</b><span class="sub">When Harriot finishes a response</span></span></span>
-          <button class="hg-switch" disabled><span class="hg-badge-soon">Soon</span></button>
+          <span class="label"><i class="ti ti-bell-ringing" id="notif-icon"></i><span><b>Notification sounds</b><span class="sub">Tap the switch — it's just a demo, but go ahead</span></span></span>
+          <button class="hg-switch on" id="notif-switch" type="button" role="switch"></button>
+        </div>
+        <div class="hg-setting-row">
+          <span class="label"><i class="ti ti-device-mobile-code"></i><span><b>Force mobile view</b><span class="sub">Preview the site the way a phone sees it</span></span></span>
+          <button class="hg-switch" id="viewport-switch" type="button" role="switch"></button>
         </div>
       </div>
     </div>
@@ -264,28 +283,28 @@
   <div class="hg-modal-overlay open" id="gate-modal">
     <div class="hg-modal" role="dialog" aria-modal="true" aria-labelledby="gate-title">
       <div class="hg-modal-head">
-        <h2 id="gate-title"><i class="ti ti-terminal-2"></i> Enter the workbench</h2>
+        <h2 id="gate-title"><i class="ti ti-terminal-2"></i> Enter the workbench <i class="ti ti-infinity-2"></i></h2>
       </div>
       <div class="gate-body">
         <div class="steps">
           <div class="step active" id="step-1">
             <div><span class="n">1</span><h3>Sign in ␣</h3></div>
-            <p>Enter any email — this demo simulates the magic link, it doesn't send one.</p>
-            <input type="email" id="gate-email" placeholder="you@example.com" autocomplete="off">
+            <p>Enter any email — this demo simulates the magic link, it doesn't send one</p>
+            <span class="hg-cursor-field"><input type="email" id="gate-email" placeholder="you@example.com" autocomplete="off"><span class="hg-cursor" style="left:12px">|</span></span>
             <button type="button" id="gate-send"><i class="ti ti-mail-spark"></i> Send magic link</button>
             <div id="gate-step1-confirm" hidden>
-              <p class="confirmed">✓ Link "sent" — in the real version, check your inbox.</p>
+              <p class="confirmed">✓ Link "sent" — in the real version, check your inbox</p>
               <button type="button" id="gate-clicked">I clicked the link</button>
             </div>
           </div>
           <div class="step" id="step-2">
             <div><span class="n">2</span><h3>Bring your own key ⎀</h3></div>
-            <p>Your Anthropic API key — kept only in this browser tab for the demo, never sent anywhere.</p>
-            <input type="password" id="gate-key" placeholder="sk-ant-…" autocomplete="off" disabled>
+            <p>Your Anthropic API key — kept only in this browser tab for the demo, never sent anywhere</p>
+            <span class="hg-cursor-field"><input type="password" id="gate-key" placeholder="sk-ant-…" autocomplete="off" disabled><span class="hg-cursor" style="left:12px">|</span></span>
             <button type="button" id="gate-save" disabled><i class="ti ti-user-key"></i> Save key</button>
           </div>
         </div>
-        <p class="gate-skip"><a href="#" id="gate-skip">⎋ <i class="ti ti-queue-pop-in"></i> Skip this — just show me the workspace ⎘</a></p>
+        <p class="gate-skip"><a href="#" id="gate-skip">⎋ Skip this ⎘ just show me the workspace <i class="ti ti-queue-pop-in"></i></a></p>
       </div>
     </div>
   </div>
@@ -300,10 +319,10 @@
 
     <div class="workspace">
       <div class="workspace-topbar">
-        <span class="brand"><i class="ti ti-message-chatbot"></i> Harriot's ⌘ Workbench</span>
+        <span class="brand"><i class="ti ti-message-chatbot"></i><span>Harriot's ⌘ Center</span><i class="ti ti-infinity"></i></span>
         <span class="right">
           <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Repo files"><i class="ti ti-folder-root"></i></button>
-          <span class="live-badge" id="mode-badge">⎉ SIGN-IN DEMO</span>
+          <span class="live-badge" id="mode-badge"><i class="ti ti-augmented-reality"></i> SIGN-IN ⎉ DEMO</span>
         </span>
       </div>
 
@@ -328,9 +347,16 @@
         <div class="workspace-body">
           <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
           <aside class="sidebar" id="sidebar">
-            <p class="heading"><i class="ti ti-folder-root"></i> YOUR REPOS</p>
-            <button type="button" class="session active" data-repo="iamoneself">iamoneself</button>
-            <button type="button" class="session" data-repo="david-amaringo">david-amaringo</button>
+            <div class="sidebar-head">
+              <p class="heading"><i class="ti ti-folder-root"></i> YOUR REPOS</p>
+              <button type="button" class="new-request" id="new-request-btn"><i class="ti ti-git-pull-request-draft"></i> New</button>
+            </div>
+            <button type="button" class="session active" data-repo="iamoneself">
+              <i class="ti ti-folder-heart"></i> iamoneself <span class="session-glyphs"><i class="ti ti-feather"></i><i class="ti ti-leaf"></i></span>
+            </button>
+            <button type="button" class="session" data-repo="david-amaringo">
+              <i class="ti ti-folder-heart"></i> david-amaringo <span class="session-glyphs"><i class="ti ti-brush"></i><i class="ti ti-palette"></i></span>
+            </button>
 
             <div class="file-tree" id="tree-iamoneself">
               <ul>
@@ -378,12 +404,11 @@
               </ul>
             </div>
 
-            <span class="new-request">+ New request</span>
           </aside>
           <div>
             <div class="chat" id="chat"></div>
             <div class="composer">
-              <input type="text" id="chat-input" placeholder="✧ describe what you want changed ⎄" autocomplete="off">
+              <span class="hg-cursor-field" style="flex:1 1 auto;min-width:0;"><input type="text" id="chat-input" placeholder="✧ describe what you want changed ⎄" autocomplete="off"><span class="hg-cursor" style="left:14px">|</span></span>
               <button type="button" id="chat-send"><i class="ti ti-location-code"></i></button>
             </div>
           </div>
@@ -400,12 +425,12 @@
       </span>
       <span class="sep">⑂</span> <a href="index.html">home</a>
       <span class="sep">⌥</span> <a href="workspace.html" aria-current="page">terminal</a>
-      <span class="sep">⎇</span> <a href="about.html">docs</a>
+      <span class="sep">⎇</span> <a href="about.html">docs</a> ⎈
     </span>
     <span class="status-right">
-      <a href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git</a>
+      <a class="ext-link" href="https://github.com/drasticstatic/aunt-harriot-public-preview" target="_blank" rel="noopener">⬢ git <i class="ti ti-folder-code"></i></a>
       <span class="sep">·</span>
-      <a href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev</a>
+      <a class="ext-link" href="https://drasticstatic.github.io" target="_blank" rel="noopener">↯ dev <i class="ti ti-external-link"></i></a>
     </span>
   </div>
 

@@ -1,12 +1,12 @@
 # Aunt Harriot 🧑‍🍳
 
-> A fork of [`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred)'s
+> A fork of [`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred-public-preview)'s
 > Claude Code harness — same admin-agent/skills model, but authenticated by a visitor's own
 > Anthropic API key through a front-end portal instead of Christopher's Claude Pro/Max
 > subscription, so people outside this ecosystem can run their own instance against their own
 > codebases (or, for Kenney specifically, against
-> [`iamoneself`](https://github.com/drasticstatic/iamoneself) and
-> [`david-amaringo`](https://github.com/drasticstatic/david-amaringo) on scoped feature branches
+> [`iamoneself`](https://github.com/drasticstatic/iamoneself-public-preview) and
+> [`david-amaringo`](https://github.com/drasticstatic/david-amaringo-public-preview) on scoped feature branches
 > Christopher reviews and merges).
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey?style=flat)](LICENSE)
@@ -58,7 +58,7 @@
 
 Christopher already has two working, subscription-authenticated harnesses in this ecosystem:
 Mystarch (app-level, Augment Intent) and Alfred
-([`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred), native
+([`anthropas-argus-alfred`](https://github.com/drasticstatic/anthropas-argus-alfred-public-preview), native
 Claude Code CLI, general-purpose). Both assume the person driving the session has Christopher's own
 Claude Pro/Max login. Aunt Harriot removes that assumption — she's the same shape of harness
 (admin dashboard, `.claude/skills`, a `ClaudeCodeHarness`-style agent loop) but front-end,
@@ -69,7 +69,7 @@ update the `pir-devine-news` front end without his help) and a lead-collection c
 agent, both powered by `platform.claude.com`/NVIDIA NIM, but never finished wiring the backend —
 NIM's reliability issues echoed the same ACP flakiness this whole ecosystem has been fighting.
 Kenney is now purchasing `platform.claude.com` access to power a similar admin agent for
-[`iamoneself`](https://github.com/drasticstatic/iamoneself) — Aunt Harriot is the shared, reusable version of that idea: prove the `ws.app.*`
+[`iamoneself`](https://github.com/drasticstatic/iamoneself-public-preview) — Aunt Harriot is the shared, reusable version of that idea: prove the `ws.app.*`
 integration pattern once (see `mystarch_chief-of-staff_acp-spoof`), then give Kenney (and anyone
 else) their own instance instead of rebuilding this per-project.
 

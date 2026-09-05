@@ -119,6 +119,23 @@ a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-v
 img { max-width: 100%; }
 code { font-family: var(--font-mono); }
 
+/* Baseline bump so Tabler glyphs actually read as icons rather than
+   afterthought punctuation — most usages don't set their own size and
+   inherit this; a handful of specific selectors override it deliberately
+   (hero, page headings) and take precedence via specificity. */
+.ti { font-size: 1.3em; vertical-align: -0.12em; }
+
+/* Internal (this site) vs external links get a visibly different color,
+   and external links get a trailing icon — so it's clear before you click
+   whether you're staying on Harriot's own pages or leaving them. */
+a.ext-link, .markdown-body a[target="_blank"] {
+  color: var(--hatter-400) !important;
+}
+html.light a.ext-link, html.light .markdown-body a[target="_blank"] { color: var(--hatter-700) !important; }
+a.ext-link .ti-external-link, .markdown-body a[target="_blank"] .ti-external-link {
+  font-size: 0.85em; margin-left: 3px; vertical-align: -0.05em;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
@@ -238,7 +255,15 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
   border-radius: 6px;
 }
 .mobile-menu a[aria-current] { color: var(--ink); background: var(--bg); }
-.mobile-menu .settings-btn { align-self: flex-start; margin-top: 8px; }
+/* .settings-btn's base rule fixes it at a 34x34 square for the icon-only desktop
+   button — reusing the class here with a text label needs a full override, not
+   just alignment tweaks, or the label overflows that tiny fixed box. */
+.mobile-menu .settings-btn {
+  width: 100%; height: auto; justify-content: flex-start; gap: 8px;
+  padding: 10px 10px; margin-top: 8px; border: none; border-radius: 6px;
+  font-family: var(--font-body); font-size: 0.95rem; color: var(--ink-soft);
+}
+.mobile-menu .settings-btn:hover { color: var(--ink); border-color: transparent; }
 
 @media (max-width: 720px) {
   .tabs { display: none; }
@@ -291,14 +316,26 @@ html.reduce-motion, html.reduce-motion *, html.reduce-motion *::before, html.red
 .hg-setting-row .label b { font-weight: 600; }
 
 .hg-switch {
-  position: relative; width: 42px; height: 24px; border-radius: 999px;
+  position: relative; width: 44px; height: 26px; border-radius: 999px;
   border: 1px solid var(--line); background: var(--bg); cursor: pointer; flex: 0 0 auto;
+  transition: background 0.35s ease, border-color 0.35s ease;
+  overflow: hidden;
 }
 .hg-switch .knob {
-  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
-  background: var(--ink-soft); transition: transform 0.2s ease, background 0.2s ease;
+  position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--ink-soft);
+  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), background 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-.hg-switch.on { border-color: var(--signature); background: var(--signature); }
+/* the "color-switching" part: a gradient wash that only becomes visible as
+   the switch turns on, rather than a flat single-color fill */
+.hg-switch::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(90deg, var(--cheshire-500), var(--signature), var(--hatter-400));
+  opacity: 0; transition: opacity 0.35s ease;
+}
+.hg-switch.on::before { opacity: 1; }
+.hg-switch.on { border-color: transparent; }
 .hg-switch.on .knob { transform: translateX(18px); background: var(--gloaming-950); }
 html.light .hg-switch.on .knob { background: var(--paper-50); }
 .hg-switch[disabled] { opacity: 0.4; cursor: not-allowed; }
@@ -307,6 +344,38 @@ html.light .hg-switch.on .knob { background: var(--paper-50); }
   font-family: var(--font-mono); font-size: 0.65rem; padding: 1px 6px; border-radius: 4px;
   background: var(--bg-inset); color: var(--ink-soft); border: 1px solid var(--line);
 }
+
+/* force-mobile-view: constrain the page to a phone-width column so a desktop
+   visitor can preview it the way a phone sees it. */
+html.force-mobile body {
+  max-width: 400px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line);
+  box-shadow: 0 0 60px rgba(0,0,0,0.35);
+}
+html.force-mobile .statusbar { max-width: 400px; left: 50%; right: auto; transform: translateX(-50%); }
+html.force-mobile .tabs { display: none; }
+html.force-mobile .tb-right > .settings-btn { display: none; }
+html.force-mobile .hamburger { display: flex; }
+
+/* flashing cursor in empty text fields — a small terminal-style affordance
+   shown only while the field is empty; typing (or focusing with content)
+   hides it via the :placeholder-shown check. */
+.hg-cursor-field { position: relative; display: block; width: 100%; }
+.hg-cursor-field input:placeholder-shown ~ .hg-cursor,
+.hg-cursor-field .hg-cursor {
+  position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none;
+  color: var(--signature); font-family: var(--font-mono); animation: hg-blink 1s steps(1) infinite;
+}
+@keyframes hg-blink { 50% { opacity: 0; } }
+
+/* traffic-light easter egg toast */
+.hg-toast {
+  position: fixed; top: 64px; left: 50%; transform: translate(-50%, -10px);
+  background: var(--bg-raised); border: 1px solid var(--signature); color: var(--ink);
+  padding: 9px 18px; border-radius: 999px; font-size: 0.88rem; font-weight: 600;
+  z-index: 200; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 10px 30px -8px rgba(0,0,0,0.4); pointer-events: none;
+}
+.hg-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 main { flex: 1 0 auto; padding-bottom: 44px; }
 

@@ -3,8 +3,8 @@
 Architecture and open-questions doc for the portal/dashboard/harness Christopher asked for on
 2026-09-03: a fork of `anthropas-argus-alfred`'s Claude Code harness pattern, but authenticated by
 a visitor's own Anthropic API key instead of Christopher's subscription, so external collaborators
-(starting with Kenney, for [`iamoneself`](https://github.com/drasticstatic/iamoneself) and
-[`david-amaringo`](https://github.com/drasticstatic/david-amaringo)) can run an admin agent against
+(starting with Kenney, for [`iamoneself`](https://github.com/drasticstatic/iamoneself-public-preview) and
+[`david-amaringo`](https://github.com/drasticstatic/david-amaringo-public-preview)) can run an admin agent against
 scoped repos without needing a GitHub account or ever touching git directly. (Links to source
 throughout this doc point at GitHub, not the live sites — this is a build document, not a tour.)
 

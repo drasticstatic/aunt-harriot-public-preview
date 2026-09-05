@@ -78,6 +78,68 @@ if (autoplaySwitch) {
   });
 }
 
+// notification-sounds demo toggle — no real sound, but the icon genuinely
+// swaps between bell-ringing and bell-x so there's something to interact with
+// instead of a disabled "Soon" placeholder.
+var notifSwitch = document.getElementById('notif-switch');
+if (notifSwitch) {
+  var notifIcon = document.getElementById('notif-icon');
+  notifSwitch.addEventListener('click', function () {
+    var on = !notifSwitch.classList.contains('on');
+    hgSwitchSet(notifSwitch, on);
+    if (notifIcon) notifIcon.className = 'ti ' + (on ? 'ti-bell-ringing' : 'ti-bell-x');
+  });
+}
+
+// force-mobile-view toggle — constrains the page to a phone-width column so a
+// desktop visitor can preview the site the way a phone sees it, without
+// needing real devtools. A real mobile device already has its browser's own
+// "request desktop site" feature, so this only goes one direction.
+var viewportSwitch = document.getElementById('viewport-switch');
+if (viewportSwitch) {
+  hgSwitchSet(viewportSwitch, document.documentElement.classList.contains('force-mobile'));
+  viewportSwitch.addEventListener('click', function () {
+    var on = !document.documentElement.classList.contains('force-mobile');
+    document.documentElement.classList.toggle('force-mobile', on);
+    hgSwitchSet(viewportSwitch, on);
+  });
+}
+(function () {
+  if (hgGet('harriot-force-mobile', 'off') === 'on') document.documentElement.classList.add('force-mobile');
+})();
+if (viewportSwitch) {
+  viewportSwitch.addEventListener('click', function () {
+    hgSet('harriot-force-mobile', document.documentElement.classList.contains('force-mobile') ? 'on' : 'off');
+  });
+}
+
+// traffic-light easter egg — click any of the three title-bar dots
+(function () {
+  var messages = [
+    "🐇 curiouser and curiouser",
+    "🎩 we're all mad here",
+    "♠ off with your bug reports",
+    "🍄 one side makes you taller",
+    "⏳ no time to say hello, goodbye"
+  ];
+  var i = 0;
+  document.querySelectorAll('.dots span').forEach(function (dot) {
+    dot.style.cursor = 'pointer';
+    dot.addEventListener('click', function () {
+      var toast = document.createElement('div');
+      toast.className = 'hg-toast';
+      toast.textContent = messages[i % messages.length];
+      i++;
+      document.body.appendChild(toast);
+      requestAnimationFrame(function () { toast.classList.add('show'); });
+      setTimeout(function () {
+        toast.classList.remove('show');
+        setTimeout(function () { toast.remove(); }, 300);
+      }, 1800);
+    });
+  });
+})();
+
 // settings modal open/close
 (function () {
   var modal = document.getElementById('settings-modal');
