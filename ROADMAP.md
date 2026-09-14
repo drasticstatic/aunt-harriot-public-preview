@@ -51,6 +51,24 @@ wants a single review gate keeping GitHub itself clean, not multiple contributor
    common, revisit whether Harriet needs a lightweight "is anyone else mid-task here" check before
    branching.
 
+### Login-model split from the Holy Earth/PIR contributor pipeline (added 2026-09-14)
+
+This section's magic-link/email model and the newer Holy Earth Foundation/PIR contributor pipeline
+(`mystarch_chief-of-staff/AGENT-SYNC/created-by-mystarch/2026-09-11_holy-earth-pir-handoff-and-cosmos-sneak-peek.md`)
+use **deliberately different** login models for **deliberately different audiences** — this isn't
+silent contradiction, it's a second, later decision for a different case:
+
+- **Aunt Harriot (this repo, §1/§4): email + magic link, no GitHub account at all.** Built for a
+  single client (Kenney) who just wants a site edited and shouldn't need to learn git or manage a
+  GitHub account — "the less the better to not confuse him."
+- **Holy Earth/PIR pipeline: GitHub OAuth ("Sign in with GitHub").** Built for community
+  contributors who likely *want* GitHub profile credit for their work — a PAT or magic-link model
+  would hide their authorship behind a bot commit, defeating the point for that audience.
+
+Both are correct for their own case. If a future contributor to `iamoneself`/`david-amaringo` wants
+GitHub credit specifically, that's a signal to offer them the OAuth path instead of (or alongside)
+the magic-link one — not a sign this section is wrong.
+
 ### What this repo's own remotes look like
 
 - `origin` → `aunt-harriot` (private, this repo) — the framework's own source.
@@ -164,6 +182,37 @@ primary authorization gate.
    secrets and make authenticated git calls server-side. Hosting choice not yet decided; needs its
    own pass once the app itself is being built.
 
+### 2FA is not the gate — PR review/merge denial is (added 2026-09-14)
+
+Worth stating explicitly since it's easy to assume otherwise: this design does **not** require
+invited contributors to have 2FA enabled on any account, because they don't need a GitHub account
+at all (§1) — there's nothing for 2FA to protect on their side. The actual backstop against a bad
+or malicious change is the same one §1.3–1.4 already describe: every change lands as a PR, Harriet
+never pushes to `main` directly, and Christopher (or whoever owns review) can simply **deny the
+merge**. That denial is the real security boundary, not an authentication factor on the
+contributor's end. 2FA matters for *Harriet's own* bot credential and for Christopher's GitHub
+account (both already covered by standard account-security practice, not this pipeline's design),
+not as a requirement imposed on visitors.
+
+### Vision: Web3Auth + x402, not yet decided (added 2026-09-14)
+
+Forward-looking, not scoped or built — recorded so it isn't re-derived from scratch later.
+Two ideas Christopher wants on record as future directions for this access gate:
+
+- **Web3Auth as an alternative login option**, alongside (not necessarily replacing) the
+  magic-link model in §4 — wallet-based authentication instead of email, which would fit
+  contributors who already operate in the fleet's crypto-adjacent projects (`gratitude-token-project`,
+  `Psanctuary`) and may prefer not to hand over an email address at all.
+- **x402 for the API-cost problem**, as an alternative to the current "visitor brings their own
+  Anthropic API key" design in §4.3. x402 (HTTP 402-based machine-payable request protocol) could
+  let a visitor pay per-request in-band instead of managing a separate API key and billing
+  relationship with Anthropic directly — closer to a metered-usage model than a bring-your-own-key
+  one.
+
+Neither is designed yet. Both are worth prototyping once the Next.js/Django stack (§6) is actually
+being built, not before — this is a note to future-proof the access-gate design against, not a
+commitment to build either.
+
 ### Why not just a shared password?
 
 A single shared password (in addition to the API key) is the obvious quick answer, but it doesn't
@@ -230,3 +279,19 @@ paying before there's even a first real user. So, in order:
 3. **Django (or any real backend) is a later-MVP decision**, made once there's an actual paying
    or committed reason to carry a non-free hosting cost — not before. See
    [`SUSTAINABILITY.md`](doc.html?doc=sustainability) for the cost shape if/when that happens.
+
+---
+
+## 7. Donate — hyperlinks only, no custom infrastructure (added 2026-09-14)
+
+This framework doesn't need its own donate mechanism. Two existing surfaces already cover it:
+
+- **GitHub Sponsors** on the `drasticstatic` account/repos — a standard hyperlink, no custom code.
+- **`resume`'s existing donate modal** (`openDonateModal()`, live in `dappu/resume/index.html`) —
+  point to it rather than rebuilding the same UI here. Same reasoning as the sequencing decision
+  above: don't build infrastructure this repo doesn't need yet when a working one already exists
+  elsewhere in the fleet.
+
+If this repo's public-facing site (`aunt-harriot-public-preview` or the eventual `-public` lane)
+wants a donate entry point, it should be a link out to one or both of the above — not a new modal,
+payment integration, or backend endpoint of its own.
