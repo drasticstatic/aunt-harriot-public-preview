@@ -286,12 +286,14 @@ paying before there's even a first real user. So, in order:
 
 This framework doesn't need its own donate mechanism. Two existing surfaces already cover it:
 
-- **GitHub Sponsors** on the `drasticstatic` account/repos — a standard hyperlink, no custom code.
-- **`resume`'s existing donate modal** (`openDonateModal()`, live in `dappu/resume/index.html`) —
-  point to it rather than rebuilding the same UI here. Same reasoning as the sequencing decision
-  above: don't build infrastructure this repo doesn't need yet when a working one already exists
+- **[GitHub Sponsors](https://github.com/sponsors/drasticstatic)** on the `drasticstatic`
+  account — a standard hyperlink, no custom code.
+- **[`resume`'s live donate modal](https://drasticstatic.github.io/resume/)** (click the heart
+  icon / "Donate" — `openDonateModal()`, source in `dappu/resume/index.html`) — point to the live
+  site rather than rebuilding the same UI here. Same reasoning as the sequencing decision above:
+  don't build infrastructure this repo doesn't need yet when a working one already exists
   elsewhere in the fleet.
 
 If this repo's public-facing site (`aunt-harriot-public-preview` or the eventual `-public` lane)
-wants a donate entry point, it should be a link out to one or both of the above — not a new modal,
-payment integration, or backend endpoint of its own.
+wants a donate entry point, it should be a clickable link out to one or both of the above — not a
+new modal, payment integration, or backend endpoint of its own.
